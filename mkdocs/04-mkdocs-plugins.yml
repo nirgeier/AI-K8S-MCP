@@ -3,7 +3,7 @@
 ###
 
 plugins:
-  # - awesome-pages
+  - awesome-pages
   - meta
   # - pdf-export:
   #     combined: true # all pages in one PDF
@@ -16,7 +16,7 @@ plugins:
       branch: main
       docs_path: Labs # set if your docs folder is not root
       enabled: true
-      repository: CodeWizard-IL/Kagent
+      repository: nirgeier/AI-K8S-MCP
   - git-revision-date-localized:
       enable_creation_date: true
       enable_git_follow: false
@@ -28,7 +28,7 @@ plugins:
       separator: '[\s\u200b\-_,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
   - minify:
       minify_html: true
-
+  - mermaid2
   # Leave this one as the last one in the list
-  - print-site
   - include-markdown
+  - print-site

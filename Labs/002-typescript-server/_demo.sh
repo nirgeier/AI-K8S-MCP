@@ -77,7 +77,7 @@ print_success "Project structure created"
 
 # Step 2: Create server code
 print_step "Step 2: Creating Server Code..."
-docker exec kagent-controller bash -c 'cat > /labs-scripts/my-mcp-server/src/index.ts << '\''SERVEREOF'\''
+docker exec kagent-controller bash -c 'cat > /labs-scripts/my-mcp-server/src/mcp.ts << '\''SERVEREOF'\''
 #!/usr/bin/env node
 
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";

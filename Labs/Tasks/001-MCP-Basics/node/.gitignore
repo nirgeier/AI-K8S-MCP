@@ -1,0 +1,6 @@
+*.*
+!.gitignore
+!src/**
+!package.json
+!setup.sh
+!tsconfig.json

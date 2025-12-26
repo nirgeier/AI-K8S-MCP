@@ -25,23 +25,23 @@ bash _demo.sh
 
 ## 📚 Labs Overview
 
-| Lab | Title | Duration | Status |
-|-----|-------|----------|--------|
-| [000](Labs/000-setup/) | Environment Setup | 15 min | ✅ |
-| [001](Labs/001-mcp-basics/) | MCP Basics | 10 min | ✅ |
-| [002](Labs/002-python-server/) | Python MCP Server | 12 min | 🚧 |
-| [003](Labs/003-typescript-server/) | TypeScript MCP Server | 15 min | ✅ |
-| [004](Labs/004-k8s-deploy/) | Kubernetes Deployment | 15 min | 🚧 |
-| [005](Labs/005-kubectl-tool/) | Kubectl Tool | 12 min | 🚧 |
-| [006](Labs/006-cluster-inspector/) | Cluster Inspector | 12 min | 🚧 |
-| [007](Labs/007-helm-tool/) | Helm Integration | 12 min | 🚧 |
-| [008](Labs/008-postgres-tool/) | PostgreSQL Tool | 15 min | 🚧 |
-| [009](Labs/009-configmap-secrets/) | ConfigMaps & Secrets | 12 min | 🚧 |
-| [010](Labs/010-mcp-remote/) | Remote MCP Server | 12 min | 🚧 |
-| [011](Labs/011-gcp-gke/) | Google GKE | 15 min | 🚧 |
-| [012](Labs/012-gcp-tools/) | GCP SDK Tools | 12 min | 🚧 |
-| [013](Labs/013-security-rbac/) | Security & RBAC | 15 min | 🚧 |
-| [014](Labs/014-production-ready/) | Production Deployment | 15 min | 🚧 |
+| Lab                                | Title                 | Duration | Status |
+|------------------------------------|-----------------------|----------|--------|
+| [000](Labs/000-setup/)             | Environment Setup     | 15 min   | ✅      |
+| [001](Labs/001-mcp-basics/)        | MCP Basics            | 10 min   | ✅      |
+| [002](Labs/002-python-server/)     | Python MCP Server     | 12 min   | 🚧     |
+| [003](Labs/003-typescript-server/) | TypeScript MCP Server | 15 min   | ✅      |
+| [004](Labs/004-k8s-deploy/)        | Kubernetes Deployment | 15 min   | 🚧     |
+| [005](Labs/005-kubectl-tool/)      | Kubectl Tool          | 12 min   | 🚧     |
+| [006](Labs/006-cluster-inspector/) | Cluster Inspector     | 12 min   | 🚧     |
+| [007](Labs/007-helm-tool/)         | Helm Integration      | 12 min   | 🚧     |
+| [008](Labs/008-postgres-tool/)     | PostgreSQL Tool       | 15 min   | 🚧     |
+| [009](Labs/009-configmap-secrets/) | ConfigMaps & Secrets  | 12 min   | 🚧     |
+| [010](Labs/010-mcp-remote/)        | Remote MCP Server     | 12 min   | 🚧     |
+| [011](Labs/011-gcp-gke/)           | Google GKE            | 15 min   | 🚧     |
+| [012](Labs/012-gcp-tools/)         | GCP SDK Tools         | 12 min   | 🚧     |
+| [013](Labs/013-security-rbac/)     | Security & RBAC       | 15 min   | 🚧     |
+| [014](Labs/014-production-ready/)  | Production Deployment | 15 min   | 🚧     |
 
 **Total Duration:** ~3 hours
 

@@ -68,8 +68,3 @@ cd /labs-scripts
 ## 06. Next Steps
 
 Continue to Lab 015 to build on these concepts.
-
----
-
-<!-- Navigation Links -->
-[Previous: Lab 013](../013-*/) | [Next: Lab 015](../015-*/)

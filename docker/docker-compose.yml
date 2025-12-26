@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   kagent-controller:
     build:
@@ -8,21 +6,24 @@ services:
     platform: ${TARGET_PLATFORM:-linux/amd64}
     container_name: kagent-controller
     hostname: kagent-controller
-    image: kagent-lab-environment:latest
-    
+    image: kagent-controller:latest
+
+    # Keep the container running
+    command: ["tail", "-f", "/dev/null"]
+
     # Port mappings
     ports:
-      - "2222:22"      # SSH
-      - "3000:3000"    # MCP Server
-      - "5000:5000"    # Application
-      - "8080:8080"    # Web UI
-    
+      - "2222:22" # SSH
+      - "3000:3000" # MCP Server
+      - "5000:5000" # Application
+      - "8080:8080" # Web UI
+
     # Environment variables
     environment:
       - KUBECONFIG=/root/.kube/config
       - NODE_ENV=development
       - PYTHONUNBUFFERED=1
-    
+
     # Volume mounts
     volumes:
       # Mount kubeconfig for kubectl access
@@ -34,26 +35,40 @@ services:
       # Mount SSH keys
       - ${ROOT_FOLDER:-..}/runtime/.ssh:/root/.ssh
       # Mount application code (optional, for development)
-      # - ${ROOT_FOLDER:-..}/k-agent_lab/src:/app/src:ro
-    
+      - ${ROOT_FOLDER:-..}/Labs/Tasks:/labs:ro
+
     # Network mode
     # Use 'host' if you need to access host-network services like Ollama
     network_mode: "host"
-    
+
     # Keep container running
     tty: true
     stdin_open: true
-    
+
     # Restart policy
     restart: unless-stopped
-    
-    # Healthcheck
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/health", "||", "exit", "1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
+
+    # # Healthcheck
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:3000/health", "||", "exit", "1"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 40s
+
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    ports:
+      - "9000:9000" # Portainer web UI
+      - "9443:9443" # Portainer HTTPS
+    volumes:
+      - portainer_data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+
+volumes:
+  portainer_data:
 
 networks:
   default:

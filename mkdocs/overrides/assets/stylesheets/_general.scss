@@ -122,15 +122,23 @@ body {
 }
 
 /* Force sidebar to be visible alongside tabs */
-.md-sidebar {
-  display: block !important;
-  width: 15rem;
+@media screen and (min-width: 76.25em) {
+  .md-sidebar {
+    display: block !important;
+    width: 15rem;
+  }
+
+  /* Make sure content area doesn't overlap */
+  /* .md-main__inner {
+    display: grid;
+    grid-template-columns: minmax(250px, 300px) 1fr;
+  } */
 }
 
-/* Make sure content area doesn't overlap */
-.md-main__inner {
-  display: grid;
-  grid-template-columns: minmax(250px, 300px) 1fr;
+@media screen and (max-width: 76.25em) {
+  /* .md-sidebar {
+    display: none !important;
+  } */
 }
 
 .md-typeset a {
@@ -168,5 +176,41 @@ img.width-24px {
 @for $i from 5 through 25 {
   .border-radius-#{$i} {
     border-radius: #{$i}px;
+  }
+}
+
+.md-footer {
+  padding: 0 0 0 25px;
+}
+
+/* Exclude headings from ToC */
+.toc-exclude {
+  /* Heading remains visible on page but excluded from ToC */
+}
+
+/* Hide ToC entries for .toc-exclude headings */
+.md-nav__item a[href*="#"]:has(.toc-exclude),
+.md-nav__link[href*="#"][title*=""] {
+  display: none;
+}
+
+/* Hero banner styles */
+.hero-banner {
+  text-align: center;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 25px;
+  margin: 2rem 0;
+
+  h2 {
+    color: white;
+    font-size: 2.5rem;
+    margin: 0;
+  }
+
+  p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.2rem;
+    margin-top: 0.25rem;
   }
 }

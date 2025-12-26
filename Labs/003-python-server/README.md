@@ -1,5 +1,4 @@
-
-# Lab 002 - Python MCP Server with FastMCP
+# Lab 003 - Python MCP Server with FastMCP
 
 - In this lab, you'll build MCP servers using Python and the `FastMCP` framework. 
 - `FastMCP` is a high-level Python framework that simplifies the creating of MCP servers with minimal boilerplate code. 
@@ -37,12 +36,12 @@
 
 ### FastMCP vs MCP SDK
 
-| Feature | FastMCP | MCP SDK (TypeScript) |
-|---------|---------|---------------------|
-| Language | Python | TypeScript/JavaScript |
-| API Style | Decorator-based | Class-based |
-| Typing | Type hints | TypeScript types |
-| Best for | Python developers, rapid prototyping | Type safety, large projects |
+| Feature   | FastMCP                              | MCP SDK (TypeScript)        |
+|-----------|--------------------------------------|-----------------------------|
+| Language  | Python                               | TypeScript/JavaScript       |
+| API Style | Decorator-based                      | Class-based                 |
+| Typing    | Type hints                           | TypeScript types            |
+| Best for  | Python developers, rapid prototyping | Type safety, large projects |
 
 ---
 
@@ -615,11 +614,3 @@ def analyze_text(text: str) -> Dict[str, int]:
 ## 10. Next Steps
 
 Now that you can build Python MCP servers with FastMCP, you'll learn how to create TypeScript-based MCP servers for type-safe, production-grade implementations.
-
-**What's next:**
-
-- [Lab 003 - TypeScript MCP Server](../003-typescript-server/) - Build with TypeScript
-- Using the official MCP SDK
-- Type-safe tool development
-- Production-ready server patterns
-

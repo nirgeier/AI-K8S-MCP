@@ -69,7 +69,3 @@ cd /labs-scripts
 
 Continue to Lab 005 to build on these concepts.
 
----
-
-<!-- Navigation Links -->
-[Previous: Lab 003](../003-*/) | [Next: Lab 005](../005-*/)

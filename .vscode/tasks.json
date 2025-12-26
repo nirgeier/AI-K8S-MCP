@@ -1,0 +1,10 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "mkdocs-serve",
+			"type": "shell",
+			"command": "cd /Users/nirg/repositories/Kagent && source .venv/bin/activate && mkdocs serve"
+		}
+	]
+}

@@ -22,7 +22,7 @@ theme:
     - navigation.expand: false
     - navigation.footer
     - navigation.indexes
-    - navigation.instant
+    - navigation.instant # Disabled for live reload during development
     - navigation.instant.prefetch
     - navigation.instant.progress
     - navigation.prune
@@ -37,9 +37,9 @@ theme:
     - toc.follow
     - toc.integrate
     - toc.sticky
-    
+    - mermaid
     #- header.autohide  # Disabled to keep top nav always visible
-    
+
   # 👈 enables avatar display
   palette:
     # Dark mode only
@@ -68,16 +68,14 @@ nav:
       - 002 - TypeScript Server: 002-typescript-server/README.md
       - 003 - Python Server: 003-python-server/README.md
       - 004 - K8s Deploy: 004-k8s-deploy/README.md
-      - 005 - Kubectl Tool: 005-kubectl-tool/README.md
-      - 006 - Cluster Inspector: 006-cluster-inspector/README.md
-      - 007 - Helm Tool: 007-helm-tool/README.md
-      - 008 - Postgres Tool: 008-postgres-tool/README.md
-      - 009 - ConfigMap Secrets: 009-configmap-secrets/README.md
-      - 010 - MCP Remote: 010-mcp-remote/README.md
-      - 011 - GCP GKE: 011-gcp-gke/README.md
-      - 012 - GCP Tools: 012-gcp-tools/README.md
-      - 013 - Security RBAC: 013-security-rbac/README.md
-      - 014 - Production Ready: 014-production-ready/README.md
+      
+  - Tasks:
+      - Tasks/index.md
+      - 000 - Setup RooCode: Tasks/000-Setup-RooCode/000-Setup-RooCode.md
+  
+  - Resources:
+      - 001 - MCP Basics (TS): Resources/001-MCP-Basics/001-MCP-Basics-ts.md
+      - 001 - MCP Basics (PY): Resources/001-MCP-Basics/001-MCP-Basics-py.md
 ###
 ### mkdocs-site.yml
 ###
@@ -100,17 +98,17 @@ extra:
   generator: false
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/CodeWizard-IL/Kagent
+      link: https://github.com/nirgeier/AI-K8S-MCP
       name: View on GitHub
       class: social-class__github
-    
+
     - icon: octicons/repo-forked-16
-      link: https://github.com/CodeWizard-IL/Kagent/network/members
+      link: https://github.com/nirgeier/AI-K8S-MCP/network/members
       name: Fork this repo
       class: social-class__fork
-    
+
     - icon: octicons/star-16
-      link: https://github.com/CodeWizard-IL/Kagent/stargazers
+      link: https://github.com/nirgeier/AI-K8S-MCP/stargazers
       name: Star this repo
       class: social-class__star
 
@@ -123,26 +121,26 @@ extra:
       link: https://discord.gg/U6xW23Ss
       name: Follow me on Discord
       class: social-class__discord
-    
+
     - icon: fontawesome/brands/stack-overflow
       link: https://stackoverflow.com/users/1755598/codewizard
       name: Follow me on Stack Overflow
       class: social-class__stackoverflow
-    
+
     - icon: fontawesome/brands/whatsapp
       link: https://wa.me/972548122310
       name: Follow me on WhatsApp
       class: social-class__whatsapp
-    
+
     - icon: fontawesome/solid/envelope
       link: mailto:nirg@codewizard.co.il
       name: Email me
       class: social-class__email
 
 extra_css:
-  - ./assets/stylesheets/theme.css
+  - ./assets/stylesheets/codewizard.css?v=1766553928
 extra_javascript:
-  - https://buttons.github.io/buttons.js
+  - https://buttons.github.io/buttons.js?v=1766553928
 ###
 ### mkdocs-extensions.yml
 ###
@@ -151,7 +149,7 @@ markdown_extensions:
   - toc:
       permalink: true
       baselevel: 1
-      toc_depth: 3
+      toc_depth: 2
   - abbr
   - tables
   - admonition # For callouts/notes
@@ -182,7 +180,7 @@ markdown_extensions:
       custom_fences:
         - name: mermaid
           class: mermaid
-          format: "!!python/name:pymdownx.superfences.fence_code_format"
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
@@ -191,7 +189,7 @@ markdown_extensions:
 ###
 
 plugins:
-  # - awesome-pages
+  - awesome-pages
   - meta
   # - pdf-export:
   #     combined: true # all pages in one PDF
@@ -204,7 +202,7 @@ plugins:
       branch: main
       docs_path: Labs # set if your docs folder is not root
       enabled: true
-      repository: CodeWizard-IL/Kagent
+      repository: nirgeier/AI-K8S-MCP
   - git-revision-date-localized:
       enable_creation_date: true
       enable_git_follow: false
@@ -216,7 +214,7 @@ plugins:
       separator: '[\s\u200b\-_,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
   - minify:
       minify_html: true
-
+  - mermaid2
   # Leave this one as the last one in the list
-  - print-site
   - include-markdown
+  - print-site

@@ -3,9 +3,6 @@ name: Deploy MKdocs to GitHub Pages
 on:
   push:
     branches: [main]
-    paths:
-      - '/Labs/**'
-      - '/mkdocs/**'
   workflow_dispatch:
 
 permissions:

@@ -1,10 +1,4 @@
-<a href="https://github.com/CodeWizard-IL/Kagent/actions/workflows/003-typescript-server.yaml" target="_blank">
-  <img src="https://github.com/CodeWizard-IL/Kagent/actions/workflows/003-typescript-server.yaml/badge.svg" alt="Lab 003-typescript-server">
-</a>
-
----
-
-# Lab 003 - TypeScript MCP Server
+# Lab 002 - TypeScript MCP Server
 
 In this lab, you'll build your own Model Context Protocol server using TypeScript. You'll create custom tools, define input schemas, and implement tool handlers from scratch.
 
@@ -35,7 +29,7 @@ my-mcp-server/
 ├── package.json          # Project dependencies
 ├── tsconfig.json         # TypeScript configuration
 ├── src/
-│   └── index.ts         # Main server code
+│   └── mcp.ts         # Main server code
 └── build/               # Compiled JavaScript (generated)
 ```
 
@@ -97,7 +91,7 @@ EOF
 
 ## 04. Create MCP Server
 
-Create `src/index.ts` with custom tools:
+Create `src/indmcpex.ts` with custom tools:
 
 ```typescript
 #!/usr/bin/env node
@@ -277,7 +271,7 @@ cat > package.json << 'EOF'
   "scripts": {
     "build": "tsc",
     "start": "node build/index.js",
-    "dev": "ts-node src/index.ts"
+    "dev": "ts-node src/mcp.ts"
   },
   "keywords": ["mcp", "model-context-protocol"],
   "author": "",
@@ -551,13 +545,3 @@ node test-error.js
 ## 10. Next Steps
 
 Now that you can build TypeScript MCP servers, you'll learn about deploying MCP servers to Kubernetes.
-
-**What's next:**
-- [Lab 004 - K8s Deploy](../004-k8s-deploy/) - Deploy MCP servers to Kubernetes
-- Containerizing MCP applications
-- Kubernetes service discovery
-
----
-
-<!-- Navigation Links -->
-[Previous: Lab 002 - Python MCP Server](../002-python-server/) | [Next: Lab 004 - K8s Deploy](../004-k8s-deploy/)

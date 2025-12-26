@@ -197,7 +197,12 @@ extract_title() {
         # Convert hyphens and underscores to spaces and title case
         title=$(echo "$title" | tr '_-' ' ' | sed 's/\b\w/\U&/g')
     fi
-    
+
+    # Quote if contains spaces
+    if [[ "$title" =~ [[:space:]] ]]; then
+        title="\"$title\""
+    fi
+
     echo "$title"
 }
 
@@ -209,12 +214,17 @@ extract_title() {
 generate_dir_title() {
     local dir_name="$1"
     local title=""
-    
+
     # Generate from directory name
     title="$dir_name"
     # Convert hyphens and underscores to spaces and title case
     title=$(echo "$title" | tr '_-' ' ' | awk 'BEGIN{FS=OFS=" "} {for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) substr($i,2)}1')
-    
+
+    # Quote if contains spaces
+    if [[ "$title" =~ [[:space:]] ]]; then
+        title="\"$title\""
+    fi
+
     echo "$title"
 }
 

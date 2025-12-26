@@ -6,32 +6,58 @@
 
 # Lab 000 - Environment Setup
 
-Welcome to K-Agent Labs! In this first lab, you'll set up your development environment with all the tools needed for the K-Agent framework. This lab covers Docker, Kubernetes, and the K-Agent labs environment container.
+* Welcome to `K-Agent` Labs! 
+* In this first lab, you'll set up your development environment with all the tools needed for the `K-Agent` infrastructure. 
+* This lab covers `Docker`, `Kubernetes`, and the `K-Agent` labs environment container.
 
-**What you'll learn:**
+---
 
-- Install and configure required tools (Docker, kubectl, Helm)
-- Build and run the K-Agent labs environment
-- Verify Kubernetes cluster connectivity
-- Test the MCP server setup
+<img src="../assets/images/tldr.png" style="width:100px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
 
-**Estimated time:** 15 minutes
+
+<div class="grid cards" markdown style="text-align: center;border-radius: 20px;">
+
+- ![](../assets/images/docker.png)
+  ```bash
+  cd docker && docker-compose up -d
+  ```
+
+- ![](../assets/images/killercoda.png){: .height-64px}<br/><br/>
+  <a target="_blank" href="https://killercoda.com/codewizard/scenario/Kagent">Launch on KillerCoda</a>
+
+</div>
+
+---
+
+#### What you'll learn in this lab:
+
+- Install and configure required tools (Docker, kubectl, Helm, Ollama, MCP Inspector, K-Agent etc.)
+- Build and run the K-Agent labs environment (Docker container or locally)
+- Verify Kubernetes cluster connectivity 
+- Prepare the MCP server setup
 
 ---
 
 ## Pre-Requirements
 
-- Linux, macOS, or Windows with WSL2
-- At least 4GB RAM available for containers
-- Internet connection for downloading tools
+  | Tool Name                | CentOS                                           | Windows                                                      |
+  | :----------------------- | :----------------------------------------------- | :----------------------------------------------------------- |
+  | **Visual Studio Code**   | `sudo yum install code`                          | [Download Installer](https://code.visualstudio.com/)         |
+  | **Python 3**             | `sudo yum install python3`                       | [Download Installer](https://www.python.org/)                |
+  | **Node.js**              | `sudo yum install -y nodejs`                     | [Download Installer](https://nodejs.org/)                    |
+  | **Git**                  | `sudo yum install git`                           | [Download Installer](https://git-scm.com/)                   |
+  | **Docker**               | `sudo yum install docker-ce`                     | [Download Docker Desktop](https://www.docker.com/)           |
+  | **Kubernetes (kubectl)** | `sudo yum install -y kubectl`                    | [Installation Docs](https://kubernetes.io/docs/tasks/tools/) |
+  | **Ollama**               | `curl -fsSL https://ollama.com/install.sh \| sh` | [Download Installer](https://ollama.ai/)                     |
+  | **MCP Inspector**        | `npm install -g @modelcontextprotocol/inspector` | `npm install -g @modelcontextprotocol/inspector`             |
 
 ---
 
 ## 01. Prerequisites Installation
 
-### Docker Installation
+### 🐳 Docker Installation
 
-=== "macOS"
+=== " macOS"
 
     ```bash
     # Install Docker Desktop
@@ -42,7 +68,7 @@ Welcome to K-Agent Labs! In this first lab, you'll set up your development envir
     open /Applications/Docker.app
     ```
 
-=== "Linux (Ubuntu/Debian)"
+=== "🐧 Linux (Ubuntu/Debian)"
 
     ```bash
     # Update package index
@@ -58,247 +84,360 @@ Welcome to K-Agent Labs! In this first lab, you'll set up your development envir
     newgrp docker
     ```
 
-=== "GCP Cloud Shell"
+=== "🐧 Linux (CentOS)"
+
+    ```bash
+    # Set up the repository
+    sudo yum install -y yum-utils
+    sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+    # Install Docker
+    sudo yum install -y docker-ce docker-ce-cli containerd.io
+    # Start Docker
+    sudo systemctl start docker
+    # Add user to docker group
+    sudo usermod -aG docker $USER
+    # Restart session or run:
+    newgrp docker
+
+    ```
+
+=== "☁️ GCP Cloud Shell"
 
     ```bash
     # Docker is pre-installed in Cloud Shell
     docker --version
     ```
 
-### kubectl Installation
+### ☸️ kubectl Installation
 
-=== "macOS"
+=== " macOS"
 
     ```bash
     brew install kubectl
     ```
 
-=== "Linux"
+=== "🐧 Linux (Ubuntu/Debian)"
 
     ```bash
     curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
     sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
     ```
 
-=== "GCP Cloud Shell"
+=== "🐧 Linux (CentOS)"
+
+    ```bash
+    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" 
+    sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+    ```
+
+=== "☁️ GCP Cloud Shell"
 
     ```bash
     # kubectl is pre-installed
     kubectl version --client
     ```
 
-### Helm Installation
+### ⚓ Helm Installation
 
-=== "macOS"
+=== " macOS"
 
     ```bash
     brew install helm
     ```
 
-=== "Linux / Cloud Shell"
+=== "🐧 Linux (Ubuntu/Debian)"
 
     ```bash
     curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
     ```
 
-### Git Installation
+=== "🐧 Linux (CentOS)"
 
-=== "macOS"
+    ```bash
+    curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+    ```
+
+=== "☁️ GCP Cloud Shell"
+
+    ```bash
+    # Helm is pre-installed
+    helm version
+    ```
+
+### 🐙 Git Installation
+
+=== " macOS"
 
     ```bash
     brew install git
     ```
 
-=== "Linux"
+=== "🐧 Linux (Ubuntu/Debian)"
 
     ```bash
     sudo apt-get install -y git
     ```
 
----
+=== "🐧 Linux (CentOS)"
 
-## 02. Clone the Repository
+    ```bash
+    sudo yum install -y git
+    ```
 
-```bash
-# Clone the K-Agent Labs repository
-git clone https://github.com/CodeWizard-IL/Kagent.git
+=== "☁️ GCP Cloud Shell"
 
-# Navigate to the labs directory
-cd Kagent/
-```
+    ```bash
+    # Git is pre-installed
+    git --version
+    ```
 
----
+### 🐍 Python3 Installation
 
-## 03. Setup Kubernetes Cluster
+=== " macOS"
 
-You need a Kubernetes cluster for these labs. Choose one of the following options:
+    ```bash
+    brew install python
+    ``` 
 
-### Option 1: Kind (Recommended for local development)
+=== "🐧 Linux (Ubuntu/Debian)"
 
-```bash
-# Install Kind
-# macOS
-brew install kind
+    ```bash
+    sudo apt-get install -y python3 python3-pip
+    ```
 
-# Linux
-curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-amd64
-chmod +x ./kind
-sudo mv ./kind /usr/local/bin/kind
+=== "🐧 Linux (CentOS)"
 
-# Create a Kind cluster
-kind create cluster --name kagent-lab
+    ```bash
+    sudo yum install -y python3 python3-pip
+    ```
 
-# Verify cluster
-kubectl cluster-info --context kind-kagent-lab
-```
+=== "☁️ GCP Cloud Shell"
 
-### Option 2: Minikube
+    ```bash
+    # Python3 is pre-installed
+    python3 --version
+    ```
 
-```bash
-# Install Minikube
-# macOS
-brew install minikube
+### 📦 Node.js Installation
 
-# Linux
-curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-sudo install minikube-linux-amd64 /usr/local/bin/minikube
+=== " macOS"
 
-# Start Minikube
-minikube start --driver=docker --cpus=2 --memory=4096
+    ```bash
+    brew install node
+    ```
 
-# Verify cluster
-kubectl cluster-info
-```
+=== "🐧 Linux (Ubuntu/Debian)"
+    ```bash
+    sudo apt-get install -y nodejs npm
+    ``` 
 
-### Option 3: Docker Desktop Kubernetes
+=== "🐧 Linux (CentOS)"
 
-```bash
-# Enable Kubernetes in Docker Desktop:
-# Docker Desktop → Settings → Kubernetes → Enable Kubernetes
+    ```bash
+    sudo yum install -y nodejs npm
+    ```
+=== "☁️ GCP Cloud Shell"
 
-# Verify cluster
-kubectl config use-context docker-desktop
-kubectl cluster-info
-```
+    ```bash
+    # Node.js is pre-installed
+    node --version
+    ```
+ 
+### 🤖 Ollama Installation
 
-### Option 4: GKE (Google Kubernetes Engine)
-
-```bash
-# Create a GKE cluster (requires GCP account)
-gcloud container clusters create kagent-lab \
-    --zone=us-central1-a \
-    --num-nodes=2 \
-    --machine-type=e2-medium
-
-# Get credentials
-gcloud container clusters get-credentials kagent-lab --zone=us-central1-a
-
-# Verify cluster
-kubectl cluster-info
-```
-
----
-
-## 04. Build the K-Agent Labs Environment
-
-The K-Agent labs environment is a Docker container with all tools pre-installed (Node.js, Python, kubectl, Helm, Docker CLI).
-
-```bash
-# Navigate to labs-environment directory
-cd labs-environment
-
-# Detect platform and create .env file
-export TARGET_PLATFORM=$(uname -m | sed 's/x86_64/linux\/amd64/g' | sed 's/arm64/linux\/arm64/g' | sed 's/aarch64/linux\/arm64/g')
-echo "TARGET_PLATFORM=$TARGET_PLATFORM" > .env
-echo "ROOT_FOLDER=$(git rev-parse --show-toplevel)/" >> .env
-
-# Create runtime directories
-mkdir -p ../runtime/labs-scripts
-mkdir -p ../runtime/.ssh
-
-# Build the environment
-docker compose build
-
-# Start the container
-docker compose up -d
-
-# Check container status
-docker compose ps
-```
-
----
-
-## 05. Verify Installation
-
-Let's verify that everything is working correctly.
-
-### Test Container Access
-
-```bash
-# Connect to the container
-docker exec -it kagent-controller bash
-```
-```bash
-# Inside the container, verify tools:
-node --version
-python --version
-kubectl version --client
-helm version
-docker --version
-
-# Exit container
-exit
-```
-
-### Test Kubernetes Connectivity
-
-```bash
-# Copy kubeconfig to runtime directory (if needed)
-mkdir -p $(git rev-parse --show-toplevel)//runtime/.kube
-cp ~/.kube/config $(git rev-parse --show-toplevel)//runtime/.kube/config
-
-# Test kubectl from container
-docker exec kagent-controller kubectl get nodes
-docker exec kagent-controller kubectl get pods -A
-```
-
-### Test MCP Server
-
-```bash
-# Build the MCP server
-docker exec kagent-controller bash -c "cd /app && npm install && npm run build"
-
-# The server is now ready for use in subsequent labs
-```
-
----
-
-## 06. Optional: Ollama Setup
-
-Ollama is needed for AI-powered tools in later labs (012-013). It runs on your host machine.
-
-!!! info "Ollama is Optional"
-    You can skip this step and return to it later when needed.
-
-### Install Ollama
-
-=== "macOS"
+=== " macOS"
 
     ```bash
     brew install ollama
     
     # Start Ollama service
     ollama serve
-    ```
-
-=== "Linux"
-
+    ``` 
+=== "🐧 Linux (Ubuntu/Debian)"
     ```bash
     curl -fsSL https://ollama.ai/install.sh | sh
     
     # Start Ollama service
     ollama serve
     ```
+=== "🐧 Linux (CentOS)"
+    ```bash
+    curl -fsSL https://ollama.ai/install.sh | sh
+
+    # Start Ollama service
+    ollama serve
+    ```
+
+=== "☁️ GCP Cloud Shell"
+
+    ```bash
+    # Ollama is not supported in Cloud Shell
+    echo "Ollama is not supported in Cloud Shell"
+    ```
+    
+### 🔍 MCP Inspector Installation
+
+=== " macOS"
+
+    ```bash
+    npm install -g @modelcontextprotocol/inspector
+    ```
+
+=== "🐧 Linux (Ubuntu/Debian)"
+    ```bash
+    npm install -g @modelcontextprotocol/inspector
+    ```
+
+=== "🐧 Linux (CentOS)"
+    ```bash
+    npm install -g @modelcontextprotocol/inspector
+    ```
+
+=== "☁️ GCP Cloud Shell"
+    ```bash
+    npm install -g @modelcontextprotocol/inspector
+    ``` 
+
+### Kubernetes Cluster Setup (minikube)
+
+=== " macOS"
+
+    ```bash
+    brew install minikube
+    ``` 
+=== "🐧 Linux (Ubuntu/Debian)"
+    ```bash
+    curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+    sudo install minikube-linux-amd64 /usr/local/bin/minikube
+    ``` 
+=== "🐧 Linux (CentOS)"
+    ```bash
+    curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+    sudo install minikube-linux-amd64 /usr/local/bin/minikube
+    ```
+=== "☁️ GCP Cloud Shell"
+
+    ```bash
+    # Minikube is already installed in Cloud Shell
+    minikube version
+    ```
+
+### Kubernetes Cluster Setup (kind)
+
+=== " macOS"
+
+    ```bash
+    brew install kind
+    ``` 
+
+=== "🐧 Linux (Ubuntu/Debian)"
+    ```bash
+    curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-amd64
+    chmod +x ./kind
+    sudo mv ./kind /usr/local/bin/kind
+    ```
+
+=== "🐧 Linux (CentOS)"
+    ```bash
+    curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-amd64
+    chmod +x ./kind
+    sudo mv ./kind /usr/local/bin/kind
+    ```
+
+=== "☁️ GCP Cloud Shell"
+
+    ```bash
+    Kind is not supported in Cloud Shell - Use minikube instead
+    ``` 
+
+---
+
+## 02. Verify Tools Installation
+
+* Verify that all the tools are installed
+```bash
+# Verify Docker
+docker --version
+# Verify kubectl
+kubectl version --client
+# Verify Helm
+helm version
+# Verify Git
+git --version
+# Verify Python3
+python3 --version
+# Verify Node.js
+node --version
+# Verify Ollama (if installed)
+ollama --version
+# Verify MCP Inspector
+mcp-inspector --version 
+# Verify Kind (if installed)
+kind --version
+# Verify Minikube (if installed)
+minikube version
+# Verify Cluster Info (if cluster is running)
+kubectl cluster-info
+```
+
+---
+
+## 03. Install the K-Agent 
+
+* The `K-Agent` labs environment is the fundamental building block for all labs.
+* Its an Open Source framework to write MCP tools and interact with Kubernetes clusters.
+
+=== " macOS" 
+    ```bash
+    brew install kagent
+    ```
+=== "🐧 Linux (Ubuntu/Debian)" 
+    ```bash
+    curl https://raw.githubusercontent.com/kagent-dev/kagent/refs/heads/main/scripts/get-kagent | bash
+=== "🐧 Linux (CentOS)" 
+    ```bash
+    curl https://raw.githubusercontent.com/kagent-dev/kagent/refs/heads/main/scripts/get-kagent | bash
+    ```
+=== "☁️ GCP Cloud Shell" 
+    ```bash
+    curl https://raw.githubusercontent.com/kagent-dev/kagent/refs/heads/main/scripts/get-kagent | bash
+    ```
+
+#### Verifty K-Agent Installation
+
+  ```bash
+  kagent version
+  ```
+
+---
+
+## 04. Ollama Setup
+
+* Ollama will be used as our LLLM model for the labs.
+* Ollama is a local LLM server that allows you to run large language models on your machine.
+* Ollama supports various models, for example: Qwen and Llama.
+* We will ise the `qwen3-coder` model which is optimized for coding tasks or the `gpt-oos` model.  
+
+
+!!! info "Pulling Models (Ollama)"
+    * Pulling models can take a while depending on your internet speed and system performance.
+    * You can skip this step and return to it later when needed.
+
+#### Setup Ollama models
+
+```bash
+# Start Ollama service
+ollama serve
+
+# In a new terminal, pull the qwen3-coder model (optimized for coding tasks)
+ollama pull qwen3-coder:30b
+
+# Alternatively, pull the gpt-oos model
+ollama pull gpt-oos:7b
+
+# Verify
+ollama list
+```
 
 ### Pull a Model
 
@@ -310,36 +449,21 @@ ollama pull qwen3-coder:30b
 ollama list
 ```
 
-### Test Connectivity from Container
-
-```bash
-# Test Ollama from container (using host network)
-docker exec kagent-controller curl http://host.docker.internal:11434/api/tags
-
-# On Linux, you may need to use:
-docker exec kagent-controller curl http://172.17.0.1:11434/api/tags
-```
-
 ---
 
 ## 07. Hands-on Exercise
 
-Let's verify your setup by running a simple test.
+* Let's verify your setup by running a simple test.
 
-**Exercise 1: Check Cluster Information**
+#### Task 01: Check Cluster Information
 
-```bash
-# Use the utility scripts
-cd $(git rev-parse --show-toplevel)/
+  ```bash
 
-# Initialize cluster
-bash _utils/init-cluster.sh
-
-# Check cluster info
-kubectl cluster-info
-kubectl get nodes
-kubectl get namespaces
-```
+  # Check cluster info
+  kubectl cluster-info
+  kubectl get nodes
+  kubectl get namespaces
+  ```
 
 **Exercise 2: Test Container Environment**
 
@@ -405,39 +529,3 @@ Helm: v3.13.x
     # If not, update it manually
     ```
 
----
-
-## 09. Cleanup (Optional)
-
-To clean up your environment:
-
-```bash
-# Stop and remove containers
-cd labs-environment
-docker compose down
-
-# Remove images (optional)
-docker rmi kagent-lab-environment:latest
-
-# Delete Kind cluster (if using Kind)
-kind delete cluster --name kagent-lab
-
-# Delete Minikube cluster (if using Minikube)
-minikube delete
-```
-
----
-
-## 10. Next Steps
-
-Congratulations! Your K-Agent labs environment is ready.
-
-**What's next:**
-- [Lab 001 - MCP Basics](../001-mcp-basics/) - Learn about the Model Context Protocol
-- Understanding MCP tools and communication patterns
-- Building your first MCP tool
-
----
-
-<!-- Navigation Links -->
-[Previous: Welcome](../welcome/) | [Next: Lab 001 - MCP Basics](../001-mcp-basics/)

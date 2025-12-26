@@ -16,17 +16,17 @@
 }
 
 @mixin logo2 {
-  width: 200px;
-  height: 50px;
+  width: 100px;
+  height: 100px;
   margin: auto 20px;
   display: block;
   position: fixed;
   left: 30px;
   bottom: 25px;
-  //background-image: url("../images/commit.png");
+  background-image: url("../../assets/images/dell-logo.jpg");
   background-size: cover;
   background-position: center;
-  border-radius: 15px;
+  border-radius: 50%;
 }
 
 @mixin common-font-style {

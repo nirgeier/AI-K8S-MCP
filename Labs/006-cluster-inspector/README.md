@@ -63,13 +63,3 @@ cd /labs-scripts
     - ✓ Practical hands-on experience
     - ✓ Testing and validation
 
----
-
-## 06. Next Steps
-
-Continue to Lab 007 to build on these concepts.
-
----
-
-<!-- Navigation Links -->
-[Previous: Lab 005](../005-*/) | [Next: Lab 007](../007-*/)
