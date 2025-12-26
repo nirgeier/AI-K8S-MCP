@@ -1,0 +1,23 @@
+###
+### mkdocs-nav.yml
+###
+
+nav:
+  - Welcome: welcome.md
+  - Labs:
+      - index.md
+      - 000 - Setup: 000-setup/README.md
+      - 001 - MCP Basics: 001-mcp-basics/README.md
+      - 002 - TypeScript Server: 002-typescript-server/README.md
+      - 003 - Python Server: 003-python-server/README.md
+      - 004 - K8s Deploy: 004-k8s-deploy/README.md
+      - 005 - Kubectl Tool: 005-kubectl-tool/README.md
+      - 006 - Cluster Inspector: 006-cluster-inspector/README.md
+      - 007 - Helm Tool: 007-helm-tool/README.md
+      - 008 - Postgres Tool: 008-postgres-tool/README.md
+      - 009 - ConfigMap Secrets: 009-configmap-secrets/README.md
+      - 010 - MCP Remote: 010-mcp-remote/README.md
+      - 011 - GCP GKE: 011-gcp-gke/README.md
+      - 012 - GCP Tools: 012-gcp-tools/README.md
+      - 013 - Security RBAC: 013-security-rbac/README.md
+      - 014 - Production Ready: 014-production-ready/README.md

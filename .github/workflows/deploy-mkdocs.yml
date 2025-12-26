@@ -1,0 +1,60 @@
+name: Deploy MKdocs to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '/Labs/**'
+      - '/mkdocs/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Cache pip packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('/mkdocs/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      
+      - name: Install dependencies
+        run: |
+          pip install -r /mkdocs/requirements.txt
+      
+      - name: Configure Git
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email github-actions[bot]@users.noreply.github.com
+      
+      - name: Generate mkdocs.yml
+        working-directory: 
+        run: |
+          cat mkdocs/01-mkdocs-site.yml \
+              mkdocs/02-mkdocs-theme.yml \
+              mkdocs/03-mkdocs-extra.yml \
+              mkdocs/04-mkdocs-plugins.yml \
+              mkdocs/05-mkdocs-extensions.yml \
+              mkdocs/06-mkdocs-nav.yml > mkdocs.yml
+      
+      - name: Build and deploy
+        working-directory: 
+        run: |
+          mkdocs gh-deploy --force --clean --verbose

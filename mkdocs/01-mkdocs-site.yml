@@ -1,0 +1,12 @@
+###
+### mkdocs-site.yml
+###
+docs_dir: Labs
+edit_uri: ""
+repo_name: CodeWizard-IL/Kagent
+repo_url: https://github.com/CodeWizard-IL/Kagent
+site_author: CodeWizard-IL
+site_description: Hands-on labs for the K-Agent framework - Kubernetes-native MCP server
+site_dir: ./mkdocs-site
+site_name: K-Agent Labs
+site_url: https://codewizard-il.github.io/Kagent/
