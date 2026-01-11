@@ -1,4 +1,9 @@
 mcp
+fastmcp
 uvicorn
 httpx
 requests
+starlette
+typing
+
+
