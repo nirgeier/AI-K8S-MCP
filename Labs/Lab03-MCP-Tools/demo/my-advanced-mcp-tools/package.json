@@ -1,0 +1,14 @@
+{
+  "name": "my-advanced-mcp-tools",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Advanced MCP server with weather, file, and database tools",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js"
+  },
+  "keywords": ["mcp", "server", "tools"],
+  "author": "Your Name"
+}

@@ -3,10 +3,10 @@
 ###
 docs_dir: Labs
 edit_uri: ""
-repo_name: CodeWizard-IL/Kagent
-repo_url: https://github.com/CodeWizard-IL/Kagent
+repo_name: nirgeier/AI-K8S-MCP
+repo_url: https://github.com/nirgeier/AI-K8S-MCP.git
 site_author: CodeWizard-IL
 site_description: Hands-on labs for the K-Agent framework - Kubernetes-native MCP server
 site_dir: ./mkdocs-site
 site_name: K-Agent Labs
-site_url: https://codewizard-il.github.io/Kagent/
+site_url: https://nirgeier.github.io/AI-K8S-MCP

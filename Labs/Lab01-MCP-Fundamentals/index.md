@@ -1,28 +1,39 @@
+# Lab 1 - MCP Fundamentals
 
-# Lab 001 - MCP Basics
+## Overview
 
-* In this lab, you'll learn about the Model Context Protocol (MCP), the communication standard that enables AI assistants to interact with external tools and services. 
+* `MCP` is a game-changer for AI application development .
+* In this lab, you'll learn about the Model Context Protocol (`MCP`), the communication standard that enables AI assistants to interact with external tools and services. 
 * You'll explore MCP concepts, test simple tools, and understand the protocol structure.
 * This lab uses the MCP server included in the K-Agent labs environment.
 
     !!! danger "Prerequisites"
         * Make sure you have completed [Lab 000 - Environment Setup](../000-setup/) before starting this lab.
 
-#### What you'll learn:
+---
 
-- Understanding Model Context Protocol (MCP) architecture
-- MCP server and client communication
-- Tool definitions and JSON schemas
+## Learning Objectives
+
+By the end of this lab, you will:
+
+- Understand what `MCP` is and why it was created
+- Learn the core architecture and components of `MCP`
+- Identify the key capabilities `MCP` provides
+- Understand the client-server model in `MCP`
+- Recognize common use cases for `MCP`
+- Learn MCP server and client communication
 - Testing MCP tools with stdio transport
 
 ---
 
-## 01. What is MCP?
+## What is MCP?
 
 * The **Model Context Protocol (MCP)** is an open protocol that standardizes how AI applications interact with external data sources and tools. 
 * It defines a structured way for AI assistants (clients) to discover, call, and receive responses from tools (servers) using JSON-RPC over various transport layers.
 * MCP is designed to be flexible and extensible, allowing developers to create custom tools that can be easily integrated with different AI models.
-  
+
+---
+
 ### What does MCP offer?
 
 <div class="grid cards" markdown>
@@ -52,6 +63,46 @@
 
 ---
 
+### The Problem MCP Solves
+
+Before `MCP`, every AI application had to build custom integrations for each data source or tool it wanted to use. This led to:
+
+- **Fragmentation**: Each app using different methods to connect to the same services
+- **Duplication**: Developers rebuilding the same integrations repeatedly
+- **Limited scalability**: Adding new integrations was time-consuming and error-prone
+- **Inconsistent experiences**: No standard way for LLMs to interact with external systems
+
+---
+
+### The MCP Solution
+
+`MCP` provides a **standardized protocol** that:
+
+- Enables **universal connectivity** between LLMs and data sources
+- Allows **one integration to work across all MCP-compatible applications**
+- Provides a **consistent interface** for accessing tools, resources, and prompts
+- Supports **secure, controlled access** to external systems
+
+---
+
+## MCP Architecture Overview
+
+`MCP` follows a **client-server architecture** with clear separation of concerns:
+
+```mermaid
+graph TD
+    A[MCP Client] --> B[Ollama Module]
+    A --> C[IDEs & Apps]
+    A --> D[AI Tools]
+    B --> E[MCP Protocol]
+    C --> E
+    D --> E
+    E --> F[MCP Server]
+    F --> G[Exposes: Tools, Resources & Prompts]
+    F --> H[Connects to: APIs, Databases, Files, etc.]
+```
+
+---
 
 ### K-Agent Architecture Flow
 
@@ -76,7 +127,7 @@ flowchart TD
 
 ---
 
-## 02. MCP Components
+## MCP Components
 
 <img src="../assets/images/MCP.svg" alt="MCP Components Diagram" class="center" style="max-width:800; border-radius:20px;"/>
 
@@ -145,12 +196,14 @@ flowchart TD
 
 - ### General MCP Client Features
 
+    * The application that hosts the LLM (e.g., Roo Code, VS Code, Visual Studio, etc.)
     * Discovers available tools from MCP servers
     * Sends tool call requests with parameters
     * Receives and processes tool responses
     * Manages tool invocation lifecycle
     * Handles errors and retries
     * Typically embedded in remote AI assistants (Claude, ChatGPT, etc.) or local models (Ollama, etc.)
+    * Presents server capabilities to the user/LLM
 
 </div>
 
@@ -213,9 +266,7 @@ sequenceDiagram
 	Note over C: 6. Process response & continue interaction
 ```
 
----
-
-## 03. MCP Tool Structure
+## MCP Tool Structure
 
 * An MCP tool consists of:
 
@@ -267,6 +318,26 @@ sequenceDiagram
 
 ---
 
+## Core MCP Capabilities
+
+`MCP` servers can expose three main types of capabilities:
+
+### 1. **Tools**
+Functions that the LLM can call to perform actions or retrieve information.
+
+**Examples:**
+
+- Search a database
+- Make an API call
+- Perform calculations
+- Execute system commands
+
+**Characteristics:**
+
+- Defined with JSON Schema for input validation
+- Return structured results
+- Can have side effects (create, update, delete operations)
+
 #### Examples:
 
 * **Tool Definition**:
@@ -305,25 +376,193 @@ sequenceDiagram
 
 ---
 
-## 04. K-Agent MCP Server Overview
+### 2. **Resources**
+Contextual data that can be read by the LLM.
 
-* Let's examine the MCP server included in the labs environment.
-* We will use all the tools locally, but we also have the option to use Docker.
-* The Example MCP server is implemented in TypeScript using the MCP SDK.
-* It listens for MCP requests over stdio.
+**Examples:**
 
-* The server implements two simple tools:
+- File contents
+- Database records
+- API responses
+- Documentation
 
-1. **hello**: Greets a user by name
-2. **add**: Adds two numbers
+**Characteristics:**
+
+- Identified by URI (Uniform Resource Identifier)
+- Can be text, binary, or structured data
+- Typically read-only
+- Support for templates and subscriptions
 
 ---
 
-## 05. Testing MCP Tools (TS)
+### 3. **Prompts**
+Pre-built prompt templates that users can invoke.
+
+**Examples:**
+
+- Code review templates
+- Documentation generation prompts
+- Analysis frameworks
+- Interaction patterns
+
+**Characteristics:**
+
+- Can include embedded resources
+- Support arguments for customization
+- Help standardize common tasks
+- Improve consistency and quality
+
+
+---
+
+## The MCP Lifecycle
+
+Understanding how `MCP` clients and servers interact:
+
+### 1. **Initialization**
+- Client connects to server via transport layer
+- Handshake to establish protocol version and capabilities
+- Server sends initial tool/resource/prompt listings
+- Client acknowledges and prepares for interaction
+    
+### 2. **Capability Discovery**
+- Client requests list of available tools, resources, or prompts
+- Server responds with detailed descriptions
+- Client presents these to the user/LLM
+- Client selects tools/resources/prompts to use
+
+### 3. **Execution**
+- Client sends requests to invoke tools, read resources, or render prompts
+- Server processes the request
+- Server returns results in standardized format
+- Client handles the response and continues interaction
+
+### 4. **Cleanup**
+- Either party can close the connection
+- Graceful shutdown with notifications
+
+---
+
+## MCP Communication Model
+
+`MCP` uses **three types of messages**:
+
+### 1. **Requests**
+- Require a response
+- Include a unique request ID
+- Examples: `tools/list`, `resources/read`, `tools/call`
+
+### 2. **Responses**
+- Match to requests by ID
+- Contain either results or errors
+- Must be sent for every request
+
+### 3. **Notifications**
+- One-way messages
+- Don't require responses
+- Examples: `notifications/initialized`, `notifications/cancelled`
+
+---
+
+
+## Security Considerations
+
+When working with `MCP`, keep these best practices in mind:
+
+1. **Authentication & Authorization**
+   
+      - Servers should validate requests
+      - Use appropriate credentials management
+      - Implement least-privilege access
+
+2. **Data Privacy**
+   
+      - Be mindful of what data is exposed
+      - Implement proper access controls
+      - Consider encryption for sensitive data
+
+3. **Rate Limiting**
+   
+      - Protect against abuse
+      - Implement appropriate throttling
+      - Monitor usage patterns
+
+4. **Input Validation**
+   
+      - Always validate tool inputs
+      - Sanitize user-provided data
+      - Prevent injection attacks
+
+
+
+---
+
+## Common Use Cases
+
+`MCP` is ideal for:
+
+### Enterprise Integration
+- Connect LLMs to internal databases
+- Access corporate knowledge bases
+- Integrate with business tools (CRM, ERP, etc.)
+
+### Developer Tools
+- File system access
+- Git operations
+- Database queries
+- API testing and documentation
+
+### Data Analysis
+- Query and visualize data
+- Generate reports
+- Perform statistical analysis
+- Access multiple data sources
+
+### Productivity
+- Calendar and email management
+- Task and project tracking
+- Document processing
+- Automated workflows
+
+---
+
+## MCP vs. Other Approaches
+
+| Approach | Pros | Cons |
+|----------|------|------|
+| **Function Calling** | Simple, direct | Requires custom implementation per app |
+| **API Integration** | Flexible | No standard, duplicated effort |
+| **MCP** | Universal standard, reusable, scalable | Requires initial setup |
+
+---
+
+## Hands-On Exercise
+
+### Explore an MCP Server Configuration
+
+Look at how an `MCP` server is configured in a client application (like Roo Code):
+
+```json
+{
+  "mcpServers": {
+    "example-server": {
+      "command": "node",
+      "args": ["/path/to/server/index.js"],
+      "env": {
+        "API_KEY": "your-api-key"
+      }
+    }
+  }
+}
+```
+
+---
+
+## Testing MCP Tools (TS)
 
 ### Using MCP Inspector
 
-* MCP Inspector is a tool for testing MCP servers interactively.
+`MCP Inspector` is a tool for testing MCP servers interactively.
 
   ```bash
   # Install mcp-inspector (if not already installed)
@@ -369,31 +608,9 @@ sequenceDiagram
 5. Explore Available Tools:
   
       - Once connected, click on the **"Tools"** tab at the top of the interface, and the on **"List Tools"** button
-      - You'll see a list of available tools from your MCP server:
-        - `hello`: Returns a friendly greeting message
-        - `add`: Adds two numbers together
+      - You'll see a list of available tools from your MCP server
 
-6. Test the Hello Tool 
- 
-      - Click the `hello` tool from the list
-      - You'll see an input form for the tool's parameters
-      - In the **name** field, enter: `K-Agent User`
-      - Click **"Run Tool"**
-      - **Expected Result** - You should see:
-        - **Tool Result: Success**
-        - **Message**: `Hello, K-Agent User! Welcome to K-Agent Labs.`
-
-7. Test the Add Tool  
-
-      - In the Tools tab, find and click the `add` tool
-      - You'll see input fields for two parameters:
-        - **a**: Enter `5`
-        - **b**: Enter `3`
-      - Click **"Run Tool"**
-      - **Expected Result**: You should see:
-        - **Tool Result: Success**
-        - **Message**: `The sum of 5 and 3 is 8`
-
+        
 !!! warning "Authentication Required"
     * The MCP Inspector requires authentication by default. 
     * Always use the URL with the token (shown in the terminal when you start the inspector), or manually enter the token in the Configuration settings. 
@@ -421,360 +638,4 @@ sequenceDiagram
 
 ---
 
-### Testing Tools via Command Line
-
-Let's test the MCP tools using a simple Node.js script.
-
-!!! info "Running Multiple Sessions"
-    You can run this command-line test **while keeping the MCP Inspector running**. The script creates its own MCP server process, so it won't interfere with the Inspector.
-
-**Create test script:**
-
-```bash
-# Open a new terminal and connect to the container
-docker exec -it kagent-controller bash
-
-# Inside the container, create and run the test script
-cat > /labs-scripts/test-index.js << 'EOF'
-const { spawn } = require('child_process');
-
-// Start MCP server process
-const mcpServer = spawn('node', ['/app/build/index.js']);
-
-let responseData = '';
-
-// Send ListTools request
-const listToolsRequest = {
-  jsonrpc: "2.0",
-  id: 1,
-  method: "tools/list",
-  params: {}
-};
-
-// Send request to server
-mcpServer.stdin.write(JSON.stringify(listToolsRequest) + '\n');
-
-// Collect response
-mcpServer.stdout.on('data', (data) => {
-  responseData += data.toString();
-  console.log('Server response:', data.toString());
-});
-
-// Wait and send tool call
-setTimeout(() => {
-  const toolCallRequest = {
-    jsonrpc: "2.0",
-    id: 2,
-    method: "tools/call",
-    params: {
-      name: "hello",
-      arguments: {
-        name: "K-Agent User"
-      }
-    }
-  };
-  
-  mcpServer.stdin.write(JSON.stringify(toolCallRequest) + '\n');
-}, 1000);
-
-// Cleanup after 3 seconds
-setTimeout(() => {
-  mcpServer.kill();
-  process.exit(0);
-}, 3000);
-EOF
-
-# Run the test
-node /labs-scripts/test-index.js
-```
-
-!!! tip "Expected Output"
-    When you run this script, you should see JSON-RPC responses from the MCP server, showing the raw protocol communication that happens behind the scenes in MCP Inspector.
-
----
-
-## 06. Understanding JSON-RPC Protocol
-
-* MCP uses JSON-RPC 2.0 for communication. 
-* Every request/response follows this structure:
-
-### Request Format
-
-```json
-{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "method": "tools/call",
-  "params": {
-    "name": "hello",
-    "arguments": {
-      "name": "Alice"
-    }
-  }
-}
-```
-
-### Response Format
-
-```json
-{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "result": {
-    "content": [
-      {
-        "type": "text",
-        "text": "Hello, Alice!"
-      }
-    ]
-  }
-}
-```
-
----
-
-## 07. Hands-on Exercise
-
-!!! info "Hands-on JSON-RPC Testing"
-    * These exercises provide direct interaction with the MCP server using JSON-RPC protocol over stdio. 
-    * This gives you a deeper understanding of how MCP communication works at the protocol level.
-
-### Exercise 1: List Available Tools
-
-Test listing tools from the MCP server using direct JSON-RPC communication:
-
-```bash
-# Connect to container
-docker exec -it kagent-controller bash
-
-# Inside the container, create a test script
-cat > /labs-scripts/test-list-tools.js << 'EOF'
-const { spawn } = require("child_process");
-
-console.log("Starting MCP server test...");
-
-try {
-  // Start MCP server
-  const server = spawn("node", ["/app/build/index.js"], {
-    stdio: ["pipe", "pipe", "pipe"]
-  });
-
-  console.log("Server spawned, PID:", server.pid);
-
-  server.stdout.on("data", (data) => {
-    console.log("RESPONSE:", data.toString().trim());
-  });
-
-  server.stderr.on("data", (data) => {
-    console.log("SERVER:", data.toString().trim());
-  });
-
-  // Send tools/list request
-  const listRequest = {
-    jsonrpc: "2.0",
-    id: 1,
-    method: "tools/list",
-    params: {}
-  };
-
-  setTimeout(() => {
-    console.log("Sending:", JSON.stringify(listRequest));
-    server.stdin.write(JSON.stringify(listRequest) + "\n");
-  }, 1000);
-
-  // Exit after 5 seconds
-  setTimeout(() => {
-    server.kill();
-    process.exit(0);
-  }, 5000);
-
-} catch (error) {
-  console.error("Error:", error.message);
-}
-EOF
-
-# Run the test
-node /labs-scripts/test-list-tools.js
-```
-
-**Expected Output:**
-```
-Starting MCP server test...
-Server spawned, PID: 18211
-SERVER: K-Agent MCP Server running on stdio
-Sending: {"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}
-RESPONSE: {"result":{"tools":[{"name":"hello","description":"Returns a friendly greeting message","inputSchema":{"type":"object","properties":{"name":{"type":"string","description":"Name to greet"}},"required":["name"]}},{"name":"add","description":"Adds two numbers together","inputSchema":{"type":"object","properties":{"a":{"type":"number","description":"First number"},"b":{"type":"number","description":"Second number"}},"required":["a","b"]}}]},"jsonrpc":"2.0","id":1}
-```
-
-### Exercise 2: Call the Hello Tool
-
-* Test calling the hello tool using direct JSON-RPC communication:
-
-```bash
-# Connect to container
-docker exec -it kagent-controller bash
-
-# Inside the container, create a test script
-cat > /labs-scripts/test-hello-tool.js << 'EOF'
-const { spawn } = require("child_process");
-
-console.log("Testing hello tool...");
-
-try {
-  const server = spawn("node", ["/app/build/index.js"], {
-    stdio: ["pipe", "pipe", "pipe"]
-  });
-
-  console.log("Server spawned, PID:", server.pid);
-
-  server.stdout.on("data", (data) => {
-    console.log("RESPONSE:", data.toString().trim());
-  });
-
-  server.stderr.on("data", (data) => {
-    console.log("SERVER:", data.toString().trim());
-  });
-
-  const helloRequest = {
-    jsonrpc: "2.0",
-    id: 2,
-    method: "tools/call",
-    params: {
-      name: "hello",
-      arguments: {
-        name: "K-Agent Lab User"
-      }
-    }
-  };
-
-  setTimeout(() => {
-    console.log("Sending:", JSON.stringify(helloRequest));
-    server.stdin.write(JSON.stringify(helloRequest) + "\n");
-  }, 1000);
-
-  setTimeout(() => {
-    server.kill();
-    process.exit(0);
-  }, 5000);
-
-} catch (error) {
-  console.error("Error:", error.message);
-}
-EOF
-
-# Run the test
-node /labs-scripts/test-hello-tool.js
-```
-
-**Expected Output:**
-```
-Testing hello tool...
-Server spawned, PID: 18237
-SERVER: K-Agent MCP Server running on stdio
-Sending: {"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"hello","arguments":{"name":"K-Agent Lab User"}}}
-RESPONSE: {"result":{"content":[{"type":"text","text":"Hello, K-Agent Lab User! Welcome to K-Agent Labs."}]},"jsonrpc":"2.0","id":2}
-```
-
-### Exercise 3: Call the Add Tool
-
-Test calling the add tool using direct JSON-RPC communication:
-
-```bash
-# Connect to container
-docker exec -it kagent-controller bash
-
-# Inside the container, create a test script
-cat > /labs-scripts/test-add-tool.js << 'EOF'
-const { spawn } = require("child_process");
-
-console.log("Testing add tool...");
-
-try {
-  const server = spawn("node", ["/app/build/index.js"], {
-    stdio: ["pipe", "pipe", "pipe"]
-  });
-
-  console.log("Server spawned, PID:", server.pid);
-
-  server.stdout.on("data", (data) => {
-    console.log("RESPONSE:", data.toString().trim());
-  });
-
-  server.stderr.on("data", (data) => {
-    console.log("SERVER:", data.toString().trim());
-  });
-
-  const addRequest = {
-    jsonrpc: "2.0",
-    id: 3,
-    method: "tools/call",
-    params: {
-      name: "add",
-      arguments: {
-        a: 5,
-        b: 3
-      }
-    }
-  };
-
-  setTimeout(() => {
-    console.log("Sending:", JSON.stringify(addRequest));
-    server.stdin.write(JSON.stringify(addRequest) + "\n");
-  }, 1000);
-
-  setTimeout(() => {
-    server.kill();
-    process.exit(0);
-  }, 5000);
-
-} catch (error) {
-  console.error("Error:", error.message);
-}
-EOF
-
-# Run the test
-node /labs-scripts/test-add-tool.js
-```
-
-**Expected Output:**
-```
-Testing add tool...
-Server spawned, PID: 18263
-SERVER: K-Agent MCP Server running on stdio
-Sending: {"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"add","arguments":{"a":5,"b":3}}}
-RESPONSE: {"result":{"content":[{"type":"text","text":"The sum of 5 and 3 is 8"}]},"jsonrpc":"2.0","id":3}
-```
-
----
-
-## 08. Key Takeaways
-
-!!! success "What You Learned"
-    - ✓ MCP is a standardized protocol for AI-tool communication
-    - ✓ MCP servers expose tools with defined schemas
-    - ✓ Tools have names, descriptions, input schemas, and handlers
-    - ✓ JSON-RPC 2.0 is the communication format
-    - ✓ Transport can be stdio, HTTP, or WebSocket
-
-!!! info "MCP in Practice"
-    MCP servers are typically used by AI assistants like Claude, ChatGPT with plugins, or custom AI applications. The stdio transport allows them to run as local processes.
-
----
-
-## 09. Additional Resources
-
-- [MCP Specification](https://modelcontextprotocol.io/docs)
-- [MCP SDK Documentation](https://github.com/modelcontextprotocol/sdk)
-- [JSON-RPC 2.0 Specification](https://www.jsonrpc.org/specification)
-
----
-
-## 10. Next Steps
-
-Now that you understand MCP basics, you'll learn how to build your own MCP server with Python.
-
-**What's next:**
-
-- [Lab 002 - Python MCP Server](../002-python-server/) - Build a custom MCP server
-- Creating custom tools with Python
-- Implementing tool handlers
+**Ready to build your first MCP server? [Continue to Lab 2!](../Lab02-First-MCP-Server/index.md)**

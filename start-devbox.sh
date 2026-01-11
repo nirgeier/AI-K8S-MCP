@@ -6,7 +6,7 @@ set -e
 
 # Function to check if devbox is installed
 check_devbox() {
-    if command -v devbox &> /dev/null; then
+    if command -v devbox &>/dev/null; then
         echo "Devbox is already installed."
         return 0
     else

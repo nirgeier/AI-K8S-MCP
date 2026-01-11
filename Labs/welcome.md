@@ -1,11 +1,12 @@
 
 <!-- header start -->
 <div class="header" markdown="1" class="text-center">
-# K8S - MCP (K-Agent Labs)
+# K8S - MCP (K-Agent Workshop)
 </div>
 
 
 <img src="../assets/images/k8s-kagent-lab.jpg" style="width:100%; border-radius: 20px;">
+<img src="../../assets/images/mcp-feature-image.jpg" alt="MCP Feature" class="center" style="max-width:800; border-radius:20px;"/>
 
 ---
 
@@ -55,16 +56,33 @@ graph TD
 
 ## Required Tools
 
-| Tool Name                | CentOS                                           | Windows                                                      |
-| :----------------------- | :----------------------------------------------- | :----------------------------------------------------------- |
-| **Visual Studio Code**   | `sudo yum install code`                          | [Download Installer](https://code.visualstudio.com/)         |
-| **Python 3**             | `sudo yum install python3`                       | [Download Installer](https://www.python.org/)                |
-| **Node.js**              | `sudo yum install -y nodejs`                     | [Download Installer](https://nodejs.org/)                    |
-| **Git**                  | `sudo yum install git`                           | [Download Installer](https://git-scm.com/)                   |
-| **Docker**               | `sudo yum install docker-ce`                     | [Download Docker Desktop](https://www.docker.com/)           |
-| **Kubernetes (kubectl)** | `sudo yum install -y kubectl`                    | [Installation Docs](https://kubernetes.io/docs/tasks/tools/) |
-| **Ollama**               | `curl -fsSL https://ollama.com/install.sh \| sh` | [Download Installer](https://ollama.ai/)                     |
-| **MCP Inspector**        | `npm install -g @modelcontextprotocol/inspector` | `npm install -g @modelcontextprotocol/inspector`             |
+<div class="grid cards" markdown>
+
+- #### Visual Studio Code
+  An integrated development environment (IDE) for coding, debugging, and version control.
+
+- #### Python 3
+  A versatile programming language essential for scripting and building MCP servers.
+
+- #### Node.js
+  A JavaScript runtime for building scalable network applications and MCP tools.
+
+- #### Git
+  A version control system for tracking changes in source code during development.
+
+- #### Docker
+  A platform for developing, shipping, and running applications in containers.
+
+- #### Kubernetes (kubectl)
+  A command-line tool for deploying and managing containerized applications on Kubernetes clusters.
+
+- #### Ollama
+  A tool for running large language models locally for AI assistance.
+
+- #### MCP Inspector
+  A utility for inspecting and debugging MCP protocol interactions.
+
+</div>
 
 ---
 

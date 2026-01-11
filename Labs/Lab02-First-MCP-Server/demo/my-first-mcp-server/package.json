@@ -1,0 +1,14 @@
+{
+  "name": "my-first-mcp-server",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "My first MCP server",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js"
+  },
+  "keywords": ["mcp", "server"],
+  "author": "Your Name"
+}
