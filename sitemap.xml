@@ -1,307 +1,147 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/explanations/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/welcome/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/labs/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/000-setup/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/resources/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/000-setup/usage/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/welcome/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/001-mcp-basics/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/001-mcp-basics/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/002-typescript-server/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/002-typescript-server/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/003-python-server/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/003-python-server/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/004-k8s-deploy/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/004-k8s-deploy/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/005-kubectl-tool/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/005-kubectl-tool/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/006-cluster-inspector/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/006-cluster-inspector/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/007-helm-tool/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/007-helm-tool/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/008-postgres-tool/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/008-postgres-tool/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/009-configmap-secrets/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/009-configmap-secrets/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/010-mcp-remote/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/010-mcp-remote/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/011-gcp-gke/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/011-gcp-gke/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/012-gcp-tools/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/012-gcp-tools/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/013-security-rbac/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/013-security-rbac/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/014-production-ready/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/014-production-ready/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/Resources/001-MCP-Basics/001-MCP-Basics-py/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab00-Setup/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/Resources/001-MCP-Basics/001-MCP-Basics-ts/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab01-MCP-Fundamentals/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab01-MCP-Fundamentals/lab1-tasks/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/000-Setup-RooCode/000-Setup-RooCode/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab02-First-MCP-Server/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/%40cspotcode/source-map-support/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab02-First-MCP-Server/lab2-tasks/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/%40cspotcode/source-map-support/LICENSE/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab03-MCP-Tools/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/%40jridgewell/resolve-uri/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab03-MCP-Tools/lab3-tasks/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/%40jridgewell/sourcemap-codec/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab04-MCP-Resources/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/%40jridgewell/trace-mapping/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab04-MCP-Resources/lab4-tasks/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/%40modelcontextprotocol/sdk/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab05-MCP-Prompts/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/%40tsconfig/node10/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab05-MCP-Prompts/lab5-tasks/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/%40tsconfig/node12/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab06-K-Agent/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/%40tsconfig/node14/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab06-K-Agent/lab6-tasks/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/%40tsconfig/node16/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/001-MCP-Basics/001-MCP-Basics-py/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/%40types/node/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/001-MCP-Basics/002-MCP-Basics-ts/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/acorn/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/001-MCP-Basics/003-MCP-Advanced-py/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/acorn/CHANGELOG/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Tasks/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
     <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/acorn-walk/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/acorn-walk/CHANGELOG/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/arg/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/arg/LICENSE/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/bytes/History/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/bytes/Readme/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/content-type/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/content-type/HISTORY/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/create-require/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/create-require/CHANGELOG/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/depd/History/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/depd/Readme/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/diff/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/diff/CONTRIBUTING/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/diff/release-notes/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/http-errors/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/http-errors/HISTORY/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/iconv-lite/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/iconv-lite/Changelog/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/inherits/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/make-error/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/raw-body/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/safer-buffer/Porting-Buffer/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/safer-buffer/Readme/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/setprototypeof/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/statuses/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/statuses/HISTORY/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/toidentifier/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/toidentifier/HISTORY/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/ts-node/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/ts-node/dist-raw/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/ts-node/dist-raw/NODE-LICENSE/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/typescript/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/typescript/SECURITY/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/undici-types/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/unpipe/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/unpipe/HISTORY/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/v8-compile-cache-lib/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/v8-compile-cache-lib/CHANGELOG/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/yn/readme/</loc>
-         <lastmod>2025-12-28</lastmod>
-    </url>
-    <url>
-         <loc>https://codewizard-il.github.io/Kagent/Tasks/001-MCP-Basics/node/node_modules/zod/</loc>
-         <lastmod>2025-12-28</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Tasks/000-Setup-RooCode/000-Setup-RooCode/</loc>
+         <lastmod>2026-01-11</lastmod>
     </url>
 </urlset>
