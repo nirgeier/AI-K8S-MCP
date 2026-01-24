@@ -1,187 +1,218 @@
+# Welcome to the MCP Labs
 
-<!-- header start -->
-<div class="header" markdown="1" class="text-center">
-# K8S - MCP (K-Agent Workshop)
+**Here you'll Learn and Build Model Context Protocol (MCP) from Scratch**
+
+
+
+<img src="../assets/images/mcp-feature-image.jpg" alt="MCP Feature" class="center" style="max-width:800; border-radius:20px;"/>
+
+---
+
+
+## Introduction
+
+Welcome to the MCP Labs - a comprehensive, hands-on guide to mastering the Model Context Protocol! 
+
+Whether you're new to MCP or looking to deepen your understanding, this learning series will take you from fundamentals to building production-ready MCP servers.
+
+---
+
+## What is MCP?
+
+The **Model Context Protocol (MCP)** is an open protocol that standardizes how applications provide context to Large Language Models (LLMs). 
+
+Think of it as a universal adapter that allows AI applications to connect to various data sources, tools, and services in a consistent and scalable way.
+
+---
+
+## What You'll Learn
+
+Through hands-on labs, you'll:
+
+-  **Understand MCP Architecture** - Master the client-server model and protocol fundamentals
+-  **Build MCP Servers** - Create servers from scratch using TypeScript and the official SDK
+-  **Implement Tools** - Develop functions that LLMs can call to perform actions
+-  **Expose Resources** - Provide contextual data that LLMs can read and reference
+-  **Create Prompts** - Build reusable templates for common tasks
+-  **Deploy to Production** - Apply best practices for real-world applications
+
+---
+
+## Learning Path
+
+This course consists of **5 progressive labs**, each building on the previous one:
+
+### [Lab 1: MCP Fundamentals](Lab01-MCP-Fundamentals/index.md)
+**Duration:** 30-45 minutes
+
+Understand what MCP is, why it exists, and learn the core architecture and concepts.
+
+<br>
+
+### [Lab 2: Building Your First MCP Server](Lab02-First-MCP-Server/index.md)
+**Duration:** 1-1.5 hours
+
+Build a complete, working MCP server from the ground up with hands-on coding.
+
+<br>
+
+
+### [Lab 3: Implementing MCP Tools](Lab03-MCP-Tools/index.md)
+**Duration:** 1.5-2 hours
+
+Master creating sophisticated tools that interact with external systems like APIs, files, and databases.
+
+<br>
+
+
+### [Lab 4: Implementing MCP Resources](Lab04-MCP-Resources/index.md)
+**Duration:** 1-1.5 hours
+
+Learn to expose contextual data through resources and understand the difference between tools and resources.
+
+<br>
+
+
+### [Lab 5: MCP Prompts and Complete Integration](Lab05-MCP-Prompts/index.md)
+**Duration:** 1.5-2 hours
+
+Complete your MCP education with prompts, production best practices, and deployment strategies.
+
+<br>
+
+### [Lab 6: K-Agent Integration](Lab06-K-Agent/index.md)
+**Duration:** 2-3 hours
+
+Implement a specialized MCP server (K-Agent) that interacts with Kubernetes clusters to provide AI-driven log collection and analysis.
+
+---
+
+### [Tasks](Lab01-MCP-Fundamentals/lab1-tasks.md/)
+**Duration:** Varies
+
+A dedicated section with exercises and challenges to reinforce your learning from all labs.
+
+---
+
+## Who Is This For?
+
+This learning series is designed for:
+
+- **Developers** building AI-powered applications
+- **Engineers** integrating LLMs with existing systems
+- **Technical Architects** designing AI infrastructure
+- **DevOps Professionals** deploying and maintaining MCP servers
+- **AI Enthusiasts** wanting to understand standardized AI application development
+- **Anyone** curious about standardized AI application development
+
+---
+
+## Prerequisites
+
+To get the most out of these labs, you should have:
+
+- **Basic Programming Knowledge** - Familiarity with JavaScript/TypeScript
+- **Node.js Experience** - Understanding of npm and basic Node.js concepts
+- **Command Line Skills** - Comfortable with terminal/shell commands
+- **Code Editor** - VS Code or similar IDEs (VS Code recommended)
+
+---
+
+### Required Software
+
+Before starting, ensure you have installed:
+
+- **Node.js** v18 or later ([download](https://nodejs.org/))
+- **npm** or **yarn** package manager
+- **Git** for version control
+- A code editor (VS Code with TypeScript is support recommended)
+
+---
+
+## Tools You'll Use
+
+Throughout the labs, you'll work with:
+
+- **[@modelcontextprotocol/sdk](https://github.com/modelcontextprotocol/typescript-sdk)** - Official TypeScript SDK
+- **[MCP Inspector](https://github.com/modelcontextprotocol/inspector)** - Essential testing tool
+- **TypeScript** - Type-safe server development
+- **JSON-RPC 2.0** - Communication protocol
+
+---
+
+## Learning Approach
+
+Each lab includes:
+
+-  **Clear Objectives** - Know what you'll learn before you start
+-  **Detailed Explanations** - Understand the "why" behind the code
+-  **Complete Code Examples** - Working, tested code you can run
+-  **Hands-on Exercises** - Practice what you've learned
+-  **Key Takeaways** - Reinforce important concepts
+-  **Additional Resources** - Dive deeper on specific topics
+
+In addition, you'll find a complete [Tasks](Lab01-MCP-Fundamentals/lab1-tasks.md/) section dedicated just to exercises and challenges to solidify your understanding.
+
+---
+
+## Getting Started
+
+Ready to begin your MCP journey? 
+
+Here's how to start:
+
+1. **[Browse the Labs](index.md)** - See an overview of all available labs
+2. **[Start with Lab 1](Lab01-MCP-Fundamentals/index.md)** - Begin with the fundamentals
+3. **Complete the various labs in Order** - Each lab builds on previous knowledge
+4. **Practice & Experiment** - Try variations and explore beyond examples in the **[Tasks](Lab01-MCP-Fundamentals/lab1-tasks.md/)** section
+
+---
+
+## Community & Support
+
+Join the growing MCP community:
+
+- **[MCP Discord](https://discord.gg/modelcontextprotocol)** - Ask questions, share projects
+- **[GitHub Organization](https://github.com/modelcontextprotocol)** - Contribute to the ecosystem
+- **[Official Documentation](https://modelcontextprotocol.io)** - Comprehensive reference
+- **[MCP Specification](https://spec.modelcontextprotocol.io)** - Protocol details
+
+---
+
+## Why Learn MCP?
+
+MCP is revolutionizing how we build AI applications:
+
+- **Universal Connectivity** - One integration works across all MCP-compatible apps
+- **Reusability** - Build once, use everywhere
+- **Scalability** - Add new capabilities without rebuilding integrations
+- **Standardization** - Consistent patterns and best practices
+- **Growing Ecosystem** - Join a vibrant, expanding community
+
+
+---
+
+## After This Course
+
+Upon completion, you'll be able to:
+
+- Build custom MCP servers for your specific needs
+- Integrate LLMs with your company's tools and data sources
+- Contribute to the MCP open source ecosystem
+- Create servers that others can use
+- Help others learn and adopt MCP
+
+---
+
+## Next Steps
+
+**[View All Labs →](index.md)** - See the complete learning path
+
+**[Start Lab 1 →](Lab01-MCP-Fundamentals/index.md)** - Begin your MCP journey!
+
+---
+
+<div style="text-align: center; padding: 2em 0;">
+  <h2>Ready to Build the Future of AI Applications?</h2>
+  <p style="font-size: 1.2em; margin: 1em 0;">Let's get started!</p>
 </div>
-
-
-<img src="../assets/images/k8s-kagent-lab.jpg" style="width:100%; border-radius: 20px;">
-<img src="../../assets/images/mcp-feature-image.jpg" alt="MCP Feature" class="center" style="max-width:800; border-radius:20px;"/>
-
----
-
-!!! success "Getting Started Tip"
-    * Choose the preferred way to run the labs. 
-    * If you encounter any issues, please check the documentation or ask for assistance.
-
-
----
-<img src="../assets/images/tldr.png" style="width:100px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-
-## Intro
-
-- This tutorial is a custom made workshop for teaching AI In focus on MCP development.
-- The lab is based upon **K-Agent framework** through hands-on labs designed as practical exercises.
-- Each lab is packaged in its own folder and includes the files, manifests, and assets required to complete the lab.
-- Every lab folder includes a `README` that describes the lab's objectives, tasks, and how to verify the solution.
-- The K-Agent Labs are a series of Kubernetes and MCP automation exercises designed to teach Model Context Protocol skills & features.
-- The inspiration for this project is to provide practical learning experiences for K-Agent and MCP.
-
-## Architecture Overview
-
-```mermaid
-graph TD
-    A[K-Agent Labs] --> B[MCP Server]
-    B --> C[Kubernetes Cluster]
-    C --> D[Pods & Services]
-    B --> E[AI Models]
-```
-
----
-
-## Pre-Requirements
-
-- This tutorial will test your `Kubernetes`, `MCP`, and `Python` skills.
-- You should be familiar with the following topics:
-    - Basic Docker and container concepts
-    - Kubernetes fundamentals (pods, deployments, services)
-    - Basic knowledge of YAML
-    - Node.js or Python programming basics
-- For advanced Labs: 
-    - `MCP` protocol basics
-    - `Kubernetes` advanced concepts (RBAC, ConfigMaps, Secrets)
-    - `GCP` (Google Cloud Platform) basics
-
----
-
-## Required Tools
-
-<div class="grid cards" markdown>
-
-- #### Visual Studio Code
-  An integrated development environment (IDE) for coding, debugging, and version control.
-
-- #### Python 3
-  A versatile programming language essential for scripting and building MCP servers.
-
-- #### Node.js
-  A JavaScript runtime for building scalable network applications and MCP tools.
-
-- #### Git
-  A version control system for tracking changes in source code during development.
-
-- #### Docker
-  A platform for developing, shipping, and running applications in containers.
-
-- #### Kubernetes (kubectl)
-  A command-line tool for deploying and managing containerized applications on Kubernetes clusters.
-
-- #### Ollama
-  A tool for running large language models locally for AI assistance.
-
-- #### MCP Inspector
-  A utility for inspecting and debugging MCP protocol interactions.
-
-</div>
-
----
-
-!!! debug "Before You Begin"
-    - Ensure you have the the above tools, permissions to run `Docker` commands && `Kubernetes`  on your system.
-    - Enjoy, and don't forget to star the project on GitHub!
-
----
-
-## Preface
-
-### What is K-Agent?
-
-- `K-Agent` is a Kubernetes-native tool to write `Model Context Protocol` (`MCP`) server(s), tool(s) and more.
-- `K-Agent` enables AI assistants to interact with Kubernetes clusters and cloud services through standardized tools.
-- `K-Agent` provides a set of MCP tools for cluster management, monitoring, and operations.
-- `K-Agent` framework supports multiple transport protocols: stdio, HTTP, and WebSocket.
-- `K-Agent` can be deployed as a containerized service in Kubernetes or run locally for development.
-
----
-
-### What is MCP
-
-- `MCP` - Model Context Protocol
-- `MCP` is an **open standard protocol** for connecting AI assistants to **external tools** and data sources.
-- `MCP` defines a standard way for AI models to discover, invoke, and interact with tools.
-- `MCP` uses JSON-RPC 2.0 protocol over various transports (stdio, HTTP, WebSocket).
-- `MCP` enables AI assistants to perform actions beyond text generation, such as API calls, database queries, and system operations.
-
----
-
-### How Does `K-Agent` Work
-
-- `K-Agent` acts as an `MCP server` that exposes `Kubernetes` and `cloud management capabilities` as tools.
-- AI assistants connect to `K-Agent` using the `MCP protocol`.
-- `K-Agent` translates MCP tool invocations into `Kubernetes API` calls or `cloud service` operations.
-- Results are returned to the AI assistant in a structured format.
-
----
-
-### K-Agent Architecture Flow
-
-```mermaid
-flowchart TD
-    assistant[AI Assistant] -->|MCP tool request| kagent[K-Agent MCP Server]
-    kagent --> toolRouter[K-Agent Tool Router]
-    toolRouter -->|kubeclient| k8s[Kubernetes API]
-    toolRouter -->|cloud sdk| clouds[Cloud Providers]
-    kagent -->|context updates| datastore[State & Context Store]
-    datastore -->|observability| observ[Logs & Metrics]
-    k8s -->|responses| kagent
-    clouds -->|responses| kagent
-    kagent -->|MCP response| assistant
-    subgraph cluster [Kubernetes Cluster]
-        direction LR
-        k8s
-        datastore
-        observ
-    end
-```
-
----
-
-### How tDo we use this K-Agent Labs
-
-- Here's a brief overview of how this `K-Agent Labs` work:
-
-<div class="grid cards" markdown>
-
-- #### Lab Structure
-    * Each `lab` is a self-contained learning module with README, demo scripts, and resources.
-    * Labs build upon each other (piled), starting with MCP basics and progressing to production deployments.
-    * Each lab includes hands-on exercises and verification steps.
-
-- #### Environment
-
-    * Refer to the "Environment Setup" section for detailed instructions.
-    * The environment is consistent across all platforms (macOS, Linux, Windows).
-    * Automated scripts initialize clusters and deploy resources.
-
-- #### Progressive Learning
-
-    * Start with MCP fundamentals and simple tools.
-
-    * Progress through TypeScript and Python MCP server development.
-
-    * Learn Kubernetes deployment and management.
-
-- #### Hands-On Practice
-  
-    * Each lab includes executable demo scripts for automation.
-
-    * Verify your work with provided test scripts.
-
-    * Build real-world MCP tools that interact with Kubernetes.
-
-</div>
-  
-- The K-Agent Labs are **designed for practical learning** with a focus on hands-on experience.
-  - They guide you from MCP basics to production-ready deployments.
-  - Labs can be completed in any supported environment (Docker Desktop, Minikube, Kind, GKE).
-  

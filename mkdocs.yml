@@ -77,8 +77,8 @@ nav:
               - 000 - Setup RooCode: Tasks/000-Setup-RooCode/000-Setup-RooCode.md
 
       - Resources:
-              - 001 - MCP Basics (TS): Resources/001-MCP-Basics/001-MCP-Basics-py.md
-              - 002 - MCP Basics (PY): Resources/001-MCP-Basics/002-MCP-Basics-ts.md
+              - 001 - MCP Basics (PY): Resources/001-MCP-Basics/001-MCP-Basics-py.md
+              - 002 - MCP Basics (TS): Resources/001-MCP-Basics/002-MCP-Basics-ts.md
               - 003 - MCP Advanced (PY): Resources/001-MCP-Basics/003-MCP-Advanced-py.md
 
       # - Start Here: welcome2.md

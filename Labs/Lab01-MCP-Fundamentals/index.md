@@ -594,7 +594,7 @@ Look at how an `MCP` server is configured in a client application (like Roo Code
    Copy the complete URL with the token (the second line starting with `http://`)
 
 3. Open MCP Inspector in Your Browser  
-   Paste the complete URL from step 2 into your browser. You'll be authenticated immediately.
+   Paste the complete URL with the token from step 2 into your browser. You'll be authenticated immediately.
 
 4. Configure the Server Connection  
    In the MCP Inspector interface:
@@ -635,6 +635,551 @@ Look at how an `MCP` server is configured in a client application (like Roo Code
     * The Inspector displays tool results in a readable format. 
     * Internally, MCP uses JSON-RPC 2.0 protocol with structured responses, but the UI shows you the human-readable content. 
     * For JSON view, see the "History" section below the UI
+
+---
+
+## Deep Dive: MCP Base Components (Python Focus)
+
+Now let's examine the essential building blocks of MCP and how they're implemented in Python. We'll focus on the Python implementation since it's often clearer and more accessible than TypeScript.
+
+### 1. **MCP Server Framework (FastMCP)**
+
+The foundation of any MCP server is the server framework. In Python, we use `FastMCP`:
+
+```python
+from mcp.server.fastmcp import FastMCP
+
+# Create the MCP server instance
+mcp = FastMCP("my-mcp-server", port=8889)
+```
+
+**What it does:**
+
+- Provides the HTTP server infrastructure
+- Handles JSON-RPC communication
+- Manages tool, resource, and prompt registration
+- Implements the MCP protocol handshake
+
+**What's inside:**
+
+- HTTP request handlers for all MCP endpoints
+- Tool execution engine
+- Resource serving system
+- Prompt template management
+
+### 2. **Tool Registration Decorator**
+
+Tools are the core functionality exposed by MCP servers:
+
+```python
+@mcp.tool()
+def hello(name: str) -> str:
+    """Returns a friendly greeting message"""
+    return f"Hello, {name}! Welcome to K-Agent Labs."
+```
+
+**What it produces:**
+
+- A callable function registered with the MCP server
+- JSON Schema for input validation
+- Metadata for client discovery
+
+**What's inside:**
+
+- Function signature inspection
+- Automatic parameter validation
+- Execution tracking and logging
+
+### 3. **Resource Handlers**
+
+Resources provide read-only data access:
+
+```python
+@mcp.resource("mcp://server-info")
+def get_server_info() -> str:
+    """Returns information about this MCP server"""
+    return """K-Agent MCP Server
+    
+Version: 0.1.0
+Capabilities:
+- Tools: hello, add
+- Prompts: code_review_prompt, debug_prompt
+- Resources: code, server-info
+"""
+```
+
+**What it produces:**
+
+- A resource accessible via a URI
+- Content generation logic
+- MIME type specification
+- URI-addressable data endpoints
+- Structured metadata for discovery
+- MIME type information
+
+### 4. **Prompt Templates**
+
+Reusable prompt templates for consistent interactions:
+
+```python
+@mcp.prompt()
+def code_review_prompt(code: str, language: str = "python") -> str:
+    """Generate a code review prompt for the given code"""
+    # Create the prompt template with proper markdown formatting
+    template = f"""Please review this {language} code and provide feedback:
+
+``` + language + f"""
+""" + code + f"""
+
+Focus on:
+- Code quality and best practices
+- Potential bugs or issues
+- Performance improvements
+- Security concerns
+"""
+    return template
+```
+
+**What it produces:**
+
+- A prompt template registered with the MCP server
+- Argument definitions for dynamic rendering
+- Metadata for client discovery
+- Parameterized prompt templates
+- Standardized interaction patterns
+- Consistent output formatting
+
+**Example output when called:**
+```
+Please review this python code and provide feedback:
+
+&#96;&#96;&#96;python
+def hello(): pass
+&#96;&#96;&#96;
+
+Focus on:
+- Code quality and best practices
+- Potential bugs or issues
+- Performance improvements
+- Security concerns
+```
+
+
+### 5. **Transport Layer (HTTP Routes)**
+
+Custom routes handle the MCP protocol communication:
+
+```python
+@mcp.custom_route("/.well-known/mcp", methods=["GET", "OPTIONS"])
+async def mcp_manifest(request: Request) -> JSONResponse:
+    manifest = {
+        "name": "kagent-mcp-server",
+        "version": "0.1.0",
+        "capabilities": {
+            "tools": True,
+            "prompts": True,
+            "resources": True,
+            "sampling": True
+        }
+    }
+    return JSONResponse(manifest)
+```
+
+**What it does:**
+
+- Implements MCP protocol endpoints
+- Handles client-server negotiation
+- Provides capability discovery
+
+---
+
+## MCP Method Flow with Echo Commands
+
+Let's trace through the Python methods called during a typical MCP interaction, with echo commands to show what's happening:
+
+```python
+# 1. Server Initialization
+def main():
+    print("🔧 Initializing MCP server...")
+    mcp = FastMCP("kagent-mcp-server", port=8889)
+    print("✅ Server instance created with port 8889")
+    
+    # Register tools
+    print("🛠️  Registering tools...")
+    @mcp.tool()
+    def hello(name: str) -> str:
+        print(f"👋 Executing hello tool for {name}")
+        return f"Hello, {name}!"
+    print("✅ Tool 'hello' registered")
+    
+    # Start the server
+    print("🚀 Starting MCP server...")
+    mcp.run(transport="streamable-http", mount_path="/mcp")
+    print("✅ Server running on http://localhost:8889")
+
+# 2. Client Connection Process
+async def connect_to_server():
+    print("🔗 Connecting to MCP server...")
+    
+    # Get manifest
+    print("📋 Fetching server manifest...")
+    manifest = await client.get(f"{base_url}/.well-known/mcp")
+    print(f"✅ Got manifest: {manifest['name']} v{manifest['version']}")
+    
+    # Negotiate connection
+    print("🤝 Negotiating connection...")
+    negotiate_response = await client.get(f"{base_url}/negotiate")
+    print(f"✅ Negotiation complete: {negotiate_response['transport']}")
+    
+    # List tools
+    print("📋 Listing available tools...")
+    tools = await client.post(f"{base_url}/tools")
+    print(f"✅ Found {len(tools['tools'])} tools")
+    
+    return True
+
+# 3. Tool Execution Flow
+async def execute_tool_flow():
+    print("🎯 Executing tool 'hello'...")
+    
+    # Validate arguments
+    print("🔍 Validating tool arguments...")
+    # (validation logic here)
+    print("✅ Arguments valid")
+    
+    # Execute tool
+    print("⚡ Calling tool function...")
+    result = await execute_tool("hello", {"name": "Alice"})
+    print(f"✅ Tool executed successfully: {result['result']}")
+    
+    # Track execution
+    print("📊 Recording execution metrics...")
+    # (tracking logic here)
+    print("✅ Execution tracked")
+    
+    return result
+
+# 4. Resource Access Flow
+async def access_resource_flow():
+    print("📖 Accessing resource...")
+    
+    # Resolve resource URI
+    print("🔗 Resolving resource URI...")
+    # (URI resolution logic)
+    print("✅ Resource resolved")
+    
+    # Fetch resource content
+    print("📥 Fetching resource content...")
+    content = await get_resource_content("mcp://server-info")
+    print(f"✅ Resource content retrieved ({len(content)} chars)")
+    
+    return content
+
+# 5. Prompt Usage Flow
+async def use_prompt_flow():
+    print("📝 Using prompt template...")
+    
+    # Get prompt template
+    print("🔍 Finding prompt template...")
+    template = await get_prompt_template("code_review_prompt", 
+                                       code="def test(): pass")
+    print(f"✅ Template retrieved ({len(template)} chars)")
+    
+    # Render with arguments
+    print("🎨 Rendering prompt with arguments...")
+    final_prompt = template  # Already rendered
+    print("✅ Prompt rendered")
+    
+    # Send to LLM
+    print("🤖 Sending to LLM for processing...")
+    response = await sample_llm(final_prompt)
+    print(f"✅ LLM response received ({len(response)} chars)")
+    
+    return response
+```
+
+**Method Call Order:**
+
+1. `FastMCP.__init__()` - Server initialization
+2. `@mcp.tool()` decorator - Tool registration
+3. `mcp.run()` - Start HTTP server
+4. `/.well-known/mcp` GET - Client discovery
+5. `/negotiate` GET - Connection negotiation
+6. `/tools` POST - Tool discovery
+7. `/tools/execute` POST - Tool execution
+8. `/resources` GET - Resource discovery
+9. `/sampling` POST - LLM interaction
+
+---
+
+## What Realizes MCP
+
+### What Makes MCP Work
+
+MCP is realized through several key mechanisms:
+
+#### 1. **Protocol Standardization**
+- **JSON-RPC 2.0** as the communication protocol
+- **HTTP transport** for reliable message delivery
+- **Capability negotiation** during connection establishment
+- **Structured error handling** and response formatting
+
+#### 2. **Component Integration**
+- **Server frameworks** (FastMCP, MCP SDK) that implement the protocol
+- **Client libraries** that know how to communicate with servers
+- **Tool execution engines** that safely run server-provided functions
+- **Resource resolution systems** that handle URI-based data access
+
+#### 3. **Security Boundaries**
+- **Process isolation** between client and server
+- **Input validation** using JSON Schema
+- **Access control** through authentication tokens
+- **Rate limiting** and abuse prevention
+
+### What's Still Missing
+
+While MCP provides a solid foundation, some aspects are still evolving:
+
+#### 1. **Advanced Authentication**
+- OAuth 2.0 integration patterns
+- Role-based access control (RBAC)
+- Token refresh mechanisms
+
+#### 2. **Streaming and Real-time Updates**
+- Server-sent events for live data
+- WebSocket support for bidirectional streaming
+- Real-time resource subscriptions
+
+#### 3. **Performance Optimization**
+- Connection pooling
+- Caching strategies
+- Batch operation optimizations
+
+#### 4. **Enterprise Features**
+- Audit logging and compliance
+- Multi-tenant isolation
+- Service mesh integration
+
+### Extra Value MCP Provides
+
+Beyond basic integration, MCP adds significant value:
+
+#### 1. **Developer Experience**
+- **Consistent APIs** across different tools and services
+- **Auto-discovery** of capabilities
+- **Type safety** through schema validation
+- **Rich tooling** (debuggers, inspectors, documentation)
+
+#### 2. **Operational Benefits**
+- **Centralized management** of AI integrations
+- **Version compatibility** checking
+- **Health monitoring** and metrics
+- **Graceful degradation** when services are unavailable
+
+#### 3. **Security Advantages**
+- **Controlled access** to external systems
+- **Audit trails** of AI actions
+- **Input sanitization** and validation
+- **Isolation** between different integrations
+
+#### 4. **Scalability Features**
+- **Horizontal scaling** of MCP servers
+- **Load balancing** across multiple instances
+- **Caching layers** for performance
+- **Circuit breakers** for resilience
+
+---
+
+## Core Primitive Operations
+
+Let's examine the fundamental MCP operations that make everything work:
+
+### 1. **wellknown/mcp** - Server Discovery
+
+**Location:** `/.well-known/mcp` endpoint  
+**When it happens:** During initial client connection  
+**How it works:**
+```python
+@mcp.custom_route("/.well-known/mcp", methods=["GET"])
+async def mcp_manifest(request: Request) -> JSONResponse:
+    manifest = {
+        "name": "kagent-mcp-server",
+        "version": "0.1.0",
+        "capabilities": {
+            "tools": True,
+            "prompts": True,
+            "resources": True,
+            "sampling": True
+        },
+        "endpoints": {
+            "negotiate": "/negotiate",
+            "tools": "/tools",
+            "resources": "/resources",
+            "sampling": "/sampling"
+        }
+    }
+    return JSONResponse(manifest)
+```
+
+**Outcome:** Client learns server capabilities and available endpoints
+
+### 2. **negotiate** - Connection Establishment
+
+**Location:** `/negotiate` endpoint  
+**When it happens:** After manifest discovery, before using server  
+**How it works:**
+```python
+@mcp.custom_route("/negotiate", methods=["GET", "POST"])
+async def negotiate(request: Request) -> JSONResponse:
+    token = request.headers.get("x-proxy-token")
+    response = {
+        "transport": "streamable-http",
+        "url": f"{request.url.scheme}://{request.host}/mcp"
+    }
+    if token:
+        response["proxy_token"] = token
+    return JSONResponse(response)
+```
+
+**Outcome:** Establishes authenticated connection parameters
+
+### 3. **tool/call** - Tool Execution
+
+**Location:** `/tools/execute` endpoint  
+**When it happens:** When client wants to execute a tool function  
+**How it works:**
+```python
+@mcp.custom_route("/tools/execute", methods=["POST"])
+async def tool_execute(request: Request) -> JSONResponse:
+    body = await request.json()
+    tool_name = body.get("tool")
+    arguments = body.get("arguments", {})
+    
+    # Validate and execute
+    result = await execute_tool(tool_name, arguments)
+    return JSONResponse(result)
+```
+
+**Outcome:** Executes server-side function and returns structured result
+
+### 4. **resource/read** - Resource Access
+
+**Location:** `/resources` endpoint (for listing) or direct URI resolution  
+**When it happens:** When client needs to access data resources  
+**How it works:**
+```python
+@mcp.resource("mcp://server-info")
+def get_server_info() -> str:
+    return "Server information content"
+
+# Or via endpoint:
+@mcp.custom_route("/resources", methods=["GET"])
+async def resources_list(request: Request) -> JSONResponse:
+    resources = [
+        {
+            "uri": "mcp://server-info",
+            "name": "Server Information",
+            "mimeType": "text/plain"
+        }
+    ]
+    return JSONResponse({"resources": resources})
+```
+
+**Outcome:** Provides access to structured data through URI-based addressing
+
+### 5. **sampling** - LLM Integration
+
+**Location:** `/sampling` endpoint  
+**When it happens:** When client needs LLM processing  
+**How it works:**
+```python
+@mcp.custom_route("/sampling", methods=["POST"])
+async def sampling(request: Request) -> JSONResponse:
+    body = await request.json()
+    prompt = body.get("prompt")
+    
+    # Call LLM API
+    response = await call_llm_api(prompt)
+    return JSONResponse({
+        "completion": response,
+        "model": "llama3.2:latest"
+    })
+```
+
+**Outcome:** Enables AI processing through standardized interface
+
+---
+
+## Building Your Own MCP Components
+
+### Step-by-Step: Creating a Basic Tool
+
+```python
+from mcp.server.fastmcp import FastMCP
+
+mcp = FastMCP("my-basic-server")
+
+@mcp.tool()
+def calculate_area(length: float, width: float) -> str:
+    """Calculate the area of a rectangle"""
+    area = length * width
+    return f"The area of a rectangle with length {length} and width {width} is {area}"
+
+@mcp.resource("mcp://math-constants")
+def get_math_constants() -> str:
+    """Returns common mathematical constants"""
+    return """
+Pi: 3.14159
+E: 2.71828
+Golden Ratio: 1.61803
+"""
+
+if __name__ == "__main__":
+    mcp.run()
+```
+
+**What this produces:**
+- A tool that can be called by MCP clients
+- A resource that can be read by clients
+- A complete MCP server ready to run
+
+**What's inside each component:**
+- **Tool:** Function + JSON schema + metadata
+- **Resource:** URI + content generator + MIME type
+- **Server:** HTTP handlers + protocol implementation + capability management
+
+---
+
+## Key Takeaways
+
+✅ MCP consists of **server frameworks**, **tool decorators**, **resource handlers**, and **transport layers**
+
+✅ Python methods follow a **clear execution flow**: init → register → run → handle requests
+
+✅ MCP is realized through **protocol standardization**, **component integration**, and **security boundaries**
+
+✅ Core primitives handle **discovery** (`wellknown/mcp`), **connection** (`negotiate`), **execution** (`tool/call`), and **data access** (`resource/read`)
+
+✅ Each step produces **structured outputs** with **clear interfaces** and **validation**
+
+✅ **Extra value** comes from **consistency**, **security**, **scalability**, and **developer experience**
+
+## Next Steps
+
+In **Lab 2**, you'll get hands-on experience by building your first MCP server from scratch. You'll learn:
+
+- Setting up the development environment
+- Creating a basic MCP server structure
+- Implementing the initialization handshake
+- Testing your server with an MCP client
+
+## Additional Resources
+
+- [MCP Official Documentation](https://modelcontextprotocol.io)
+- [MCP Specification](https://spec.modelcontextprotocol.io)
+- [MCP GitHub Repository](https://github.com/modelcontextprotocol)
+- [JSON-RPC 2.0 Specification](https://www.jsonrpc.org/specification)
+- [FastMCP Python Library](https://github.com/jlowin/fastmcp)
 
 ---
 

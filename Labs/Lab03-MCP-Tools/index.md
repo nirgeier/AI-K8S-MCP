@@ -175,8 +175,7 @@ Every `MCP` tool consists of the following key components:
 
 #### Complete Weather Tool Implementation with Ollama
 
-* Here is the complete `src/index.ts` file with the Ollama-based weather tool added. 
-* **Copy this entire code and overwrite your existing `src/index.ts` file:**
+Here is the complete `src/index.ts` file with the Ollama-based weather tool added. **Copy this entire code and overwrite your existing `src/index.ts` file:**
 
 ```typescript
 #!/usr/bin/env node
