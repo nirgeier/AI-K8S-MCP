@@ -1,3 +1,33 @@
+#!/bin/bash
+
+# Configuration
+PROJECT_DIR="../../lab_solution/my-first-mcp-server"
+SRC_FILE="$PROJECT_DIR/src/index.ts"
+DB_FILE="$PROJECT_DIR/data.db"
+
+# Colors for output
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+echo -e "${BLUE}Starting Lab 3 Setup...${NC}"
+
+# Navigate to project directory
+cd "$PROJECT_DIR" || exit
+
+echo -e "${BLUE}Installing dependencies...${NC}"
+npm install better-sqlite3
+npm install --save-dev @types/better-sqlite3
+
+# Backup existing index.ts
+if [ -f "src/index.ts" ]; then
+  echo -e "${BLUE}Backing up existing src/index.ts...${NC}"
+  cp src/index.ts src/index.ts.bak
+fi
+
+echo -e "${BLUE}Creating updated src/index.ts with Lab 3 tools...${NC}"
+
+cat >src/index.ts <<'EOF'
 #!/usr/bin/env node
 
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
@@ -423,3 +453,120 @@ main().catch((error) => {
   console.error("Fatal error:", error);
   process.exit(1);
 });
+EOF
+
+echo -e "${BLUE}Setting up SQLite database...${NC}"
+
+# Check for sqlite3
+if ! command -v sqlite3 &>/dev/null; then
+  echo "Warning: sqlite3 command not found. Skipping database creation."
+  echo "Please install sqlite3 and run the database creation commands manually."
+else
+  rm -f data.db
+  sqlite3 data.db <<'SQL'
+CREATE TABLE users (
+  id INTEGER PRIMARY KEY,
+  name TEXT NOT NULL,
+  email TEXT UNIQUE,
+  age INTEGER,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE products (
+  id INTEGER PRIMARY KEY,
+  name TEXT NOT NULL,
+  price REAL,
+  category TEXT,
+  in_stock BOOLEAN DEFAULT 1
+);
+
+INSERT INTO users (name, email, age) VALUES 
+  ('Alice Johnson', 'alice@example.com', 28),
+  ('Bob Smith', 'bob@example.com', 34),
+  ('Charlie Brown', 'charlie@example.com', 22);
+
+INSERT INTO products (name, price, category, in_stock) VALUES 
+  ('Laptop', 999.99, 'Electronics', 1),
+  ('Book', 19.99, 'Education', 1),
+  ('Coffee Mug', 12.50, 'Kitchen', 0);
+SQL
+  echo -e "${GREEN}Database created successfully.${NC}"
+fi
+
+echo -e "${BLUE}Building project...${NC}"
+npm run build
+
+echo -e "${BLUE}Performing Self-Check...${NC}"
+# Run simple check using node to start server, wait 1s, then kill it.
+# (macOS/some environments lack 'timeout' command)
+node dist/index.js >/dev/null 2>server.log &
+SERVER_PID=$!
+sleep 1
+kill $SERVER_PID 2>/dev/null
+
+if grep -q "My First MCP Server running on stdio" server.log; then
+  echo -e "${GREEN}✅ Server passed self-check: Stdio transport active.${NC}"
+  rm server.log
+else
+  echo -e "${RED}❌ Server self-check failed. Could not verify Stdio transport.${NC}"
+  echo "Logs:"
+  cat server.log
+  rm server.log
+  # Continue anyway let user debug
+fi
+
+echo -e "${GREEN}Lab 3 Setup Complete!${NC}"
+echo -e "${GREEN}Your MCP server is ready with Weather, File, and Database tools.${NC}"
+
+echo ""
+echo -e "${BLUE}=== Next Steps ===${NC}"
+echo "1. Navigate to the project directory:"
+echo "   cd $PROJECT_DIR"
+echo ""
+echo "2. Start the MCP Inspector:"
+echo "   npx @modelcontextprotocol/inspector node dist/index.js"
+echo ""
+echo -e "${BLUE}=== Test Examples ===${NC}"
+echo "1. Weather Tool:"
+echo "   Tool: get_weather"
+echo "   Args: { \"city\": \"Paris\" }"
+echo ""
+echo "2. File Tool: (Try reading package.json)"
+echo "   Tool: read_file"
+echo "   Args: { \"filepath\": \"$(readlink -f $PROJECT_DIR/package.json 2>/dev/null || echo "$PROJECT_DIR/package.json")\" }"
+echo ""
+echo "3. Database Tool:"
+echo "   Tool: query_database"
+echo "   Args: { \"query\": \"SELECT * FROM products\" }"
+
+echo ""
+echo -e "${BLUE}=== Interactive Mode ===${NC}"
+read -p "Do you want to start the MCP Inspector now? (y/n) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+  echo -e "${BLUE}Starting MCP Inspector...${NC}"
+
+  # Check for existing process on port 6277 (Inspector Proxy)
+  if lsof -i :6277 >/dev/null 2>&1; then
+    echo "Port 6277 is in use. Attempting to free it..."
+    # Get PID and kill
+    PID=$(lsof -ti :6277)
+    if [ -n "$PID" ]; then
+      kill -9 $PID 2>/dev/null
+      echo "Freed port 6277."
+    fi
+  fi
+
+  # Check for existing process on port 6274 (Inspector UI)
+  if lsof -i :6274 >/dev/null 2>&1; then
+    echo "Port 6274 is in use. Attempting to free it..."
+    PID=$(lsof -ti :6274)
+    if [ -n "$PID" ]; then
+      kill -9 $PID 2>/dev/null
+      echo "Freed port 6274."
+    fi
+  fi
+
+  # Use npx with -y to automatically accept installation if needed
+  npx -y @modelcontextprotocol/inspector node dist/index.js
+fi

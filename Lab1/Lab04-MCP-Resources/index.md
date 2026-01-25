@@ -83,14 +83,14 @@ Before diving into implementation, it's crucial to understand when to use tools 
 
 ### Decision Framework
 
-| Scenario | Use Tool | Use Resource | Why |
-|----------|----------|--------------|-----|
-| Current weather | ✅ Tool | ❌ Resource | Data changes constantly |
-| API documentation | ❌ Tool | ✅ Resource | Static reference material |
-| Database search | ✅ Tool | ❌ Resource | Requires query parameters |
-| User profile | ❌ Tool | ✅ Resource | Direct data access needed |
-| File contents | ❌ Tool | ✅ Resource | Static file data |
-| Generate report | ✅ Tool | ❌ Resource | Computation required |
+| Scenario          | Use Tool | Use Resource | Why                       |
+|-------------------|----------|--------------|---------------------------|
+| Current weather   | ✅ Tool   | ❌ Resource   | Data changes constantly   |
+| API documentation | ❌ Tool   | ✅ Resource   | Static reference material |
+| Database search   | ✅ Tool   | ❌ Resource   | Requires query parameters |
+| User profile      | ❌ Tool   | ✅ Resource   | Direct data access needed |
+| File contents     | ❌ Tool   | ✅ Resource   | Static file data          |
+| Generate report   | ✅ Tool   | ❌ Resource   | Computation required      |
 
 ---
 

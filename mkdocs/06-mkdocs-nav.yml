@@ -3,42 +3,54 @@
 ###
 
 nav:
-      - Welcome: welcome.md
-      - Setup: Lab00-Setup/README.md
-      - Labs:
-              - labs.md
-              - Lab 0 - Environment Setup: Lab00-Setup/README.md
-              - Lab 1 - MCP Fundamentals: Lab01-MCP-Fundamentals/index.md
-              - Lab 2 - Building Your First MCP Server: Lab02-First-MCP-Server/index.md
-              - Lab 3 - Implementing MCP Tools: Lab03-MCP-Tools/index.md
-              - Lab 4 - Implementing MCP Resources: Lab04-MCP-Resources/index.md
-              - Lab 5 - MCP Prompts and Integration: Lab05-MCP-Prompts/index.md
-              - Lab 6 - K-Agent Integration: Lab06-K-Agent/index.md
+  - Welcome: welcome.md
+  #- Setup: Lab00-Setup/README.md
+  #- Labs:
+  #- labs.md
+  #   - Lab 0 - Environment Setup: Lab00-Setup/README.md
+  #   - Lab 1 - MCP Fundamentals: Lab01-MCP-Fundamentals/index.md
+  #   - Lab 2 - Building Your First MCP Server: Lab02-First-MCP-Server/index.md
+  #   - Lab 3 - Implementing MCP Tools: Lab03-MCP-Tools/index.md
+  #   - Lab 4 - Implementing MCP Resources: Lab04-MCP-Resources/index.md
+  #   - Lab 5 - MCP Prompts and Integration: Lab05-MCP-Prompts/index.md
+  #   - Lab 6 - K-Agent Integration: Lab06-K-Agent/index.md
+  - "MCP Workflow": 01-MCP-Workflow/README.md
+  - "MCP Ollama": 02-MCP-Ollama/README.md
 
-      - Tasks:
-              - Tasks/index.md
-              - 000 - Setup RooCode: Tasks/000-Setup-RooCode/000-Setup-RooCode.md
+  # - Tasks:
+  #     - Tasks/index.md
+  #     - 000 - Setup RooCode: Tasks/000-Setup-RooCode/000-Setup-RooCode.md
 
-      - Resources:
-              - 001 - MCP Basics (PY): Resources/001-MCP-Basics/001-MCP-Basics-py.md
-              - 002 - MCP Basics (TS): Resources/001-MCP-Basics/002-MCP-Basics-ts.md
-              - 003 - MCP Advanced (PY): Resources/001-MCP-Basics/003-MCP-Advanced-py.md
+  - Resources:
+      - Resources/resources.md
+      - Step01: Resources/01-MCP-Workflow/step01-imports.md
+      - Step02: Resources/01-MCP-Workflow/step02-ctor.md
+      - Step03: Resources/01-MCP-Workflow/step03-init.md
+      - Step04: Resources/01-MCP-Workflow/step04-tools.md
+      - Step05: Resources/01-MCP-Workflow/step05-tool-handlers.md
+      - Step06: Resources/01-MCP-Workflow/step06-resources.md
+      - Step07: Resources/01-MCP-Workflow/step07-resource-handlers.md
+      - Step08: Resources/01-MCP-Workflow/step08-prompts.md
+      - Step09: Resources/01-MCP-Workflow/step09-prompt-handlers.md
+      - Step10: Resources/01-MCP-Workflow/step10-lifecycle.md
+      - Step11: Resources/01-MCP-Workflow/step11-main.md
+      - Test-MCP: Resources/01-MCP-Workflow/test_client.md
 
-      # - Start Here: welcome2.md
-      # - Labs2:
-      #         - Lab 1 - MCP Fundamentals: Lab01-MCP-Fundamentals/index.md
-      #         - Lab 2 - Building Your First MCP Server: Lab02-First-MCP-Server/index.md
-      #         - Lab 3 - Implementing MCP Tools: Lab03-MCP-Tools/index.md
-      #         - Lab 4 - Implementing MCP Resources: Lab04-MCP-Resources/index.md
-      #         - Lab 5 - MCP Prompts and Integration: Lab05-MCP-Prompts/index.md
-      #         - Lab 6 - K-Agent Integration: Lab06-K-Agent/index.md
+  # - Start Here: welcome2.md
+  # - Labs2:
+  #         - Lab 1 - MCP Fundamentals: Lab01-MCP-Fundamentals/index.md
+  #         - Lab 2 - Building Your First MCP Server: Lab02-First-MCP-Server/index.md
+  #         - Lab 3 - Implementing MCP Tools: Lab03-MCP-Tools/index.md
+  #         - Lab 4 - Implementing MCP Resources: Lab04-MCP-Resources/index.md
+  #         - Lab 5 - MCP Prompts and Integration: Lab05-MCP-Prompts/index.md
+  #         - Lab 6 - K-Agent Integration: Lab06-K-Agent/index.md
 
-      # - Tasks:
-      #         - Lab 1 - MCP Fundamentals: Lab01-MCP-Fundamentals/lab1-tasks.md
-      #         - Lab 2 - Building Your First MCP Server: Lab02-First-MCP-Server/lab2-tasks.md
-      #         - Lab 3 - Implementing MCP Tools: Lab03-MCP-Tools/lab3-tasks.md
-      #         - Lab 4 - Implementing MCP Resources: Lab04-MCP-Resources/lab4-tasks.md
-      #         - Lab 5 - MCP Prompts and Integration: Lab05-MCP-Prompts/lab5-tasks.md
-      #         - Lab 6 - K-Agent Integration: Lab06-K-Agent/lab6-tasks.md
-      # - Resources: resources.md
-      # - Explanations: explanations.md
+  # - Tasks:
+  #         - Lab 1 - MCP Fundamentals: Lab01-MCP-Fundamentals/lab1-tasks.md
+  #         - Lab 2 - Building Your First MCP Server: Lab02-First-MCP-Server/lab2-tasks.md
+  #         - Lab 3 - Implementing MCP Tools: Lab03-MCP-Tools/lab3-tasks.md
+  #         - Lab 4 - Implementing MCP Resources: Lab04-MCP-Resources/lab4-tasks.md
+  #         - Lab 5 - MCP Prompts and Integration: Lab05-MCP-Prompts/lab5-tasks.md
+  #         - Lab 6 - K-Agent Integration: Lab06-K-Agent/lab6-tasks.md
+  # - Resources: resources.md
+  # - Explanations: explanations.md

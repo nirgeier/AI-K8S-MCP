@@ -15,6 +15,10 @@
   ],
   "author": "Your Name",
   "dependencies": {
-    "@modelcontextprotocol/inspector": "^0.18.0"
+    "@modelcontextprotocol/inspector": "^0.18.0",
+    "better-sqlite3": "^12.6.2"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13"
   }
 }
