@@ -1,147 +1,107 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/</loc>
+         <lastmod>2026-01-25</lastmod>
+    </url>
+    <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/explanations/</loc>
-         <lastmod>2026-01-11</lastmod>
+         <lastmod>2026-01-25</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/labs/</loc>
-         <lastmod>2026-01-11</lastmod>
+         <lastmod>2026-01-25</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/resources/</loc>
-         <lastmod>2026-01-11</lastmod>
+         <lastmod>2026-01-25</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/welcome/</loc>
-         <lastmod>2026-01-11</lastmod>
+         <lastmod>2026-01-25</lastmod>
     </url>
     <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/001-mcp-basics/</loc>
-         <lastmod>2026-01-11</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/01-MCP-Workflow/</loc>
+         <lastmod>2026-01-25</lastmod>
     </url>
     <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/002-typescript-server/</loc>
-         <lastmod>2026-01-11</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/02-MCP-Ollama/</loc>
+         <lastmod>2026-01-25</lastmod>
     </url>
     <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/003-python-server/</loc>
-         <lastmod>2026-01-11</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/02-MCP-Ollama/tasks/</loc>
+         <lastmod>2026-01-25</lastmod>
     </url>
     <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/004-k8s-deploy/</loc>
-         <lastmod>2026-01-11</lastmod>
-    </url>
-    <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/005-kubectl-tool/</loc>
-         <lastmod>2026-01-11</lastmod>
-    </url>
-    <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/006-cluster-inspector/</loc>
-         <lastmod>2026-01-11</lastmod>
-    </url>
-    <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/007-helm-tool/</loc>
-         <lastmod>2026-01-11</lastmod>
-    </url>
-    <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/008-postgres-tool/</loc>
-         <lastmod>2026-01-11</lastmod>
-    </url>
-    <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/009-configmap-secrets/</loc>
-         <lastmod>2026-01-11</lastmod>
-    </url>
-    <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/010-mcp-remote/</loc>
-         <lastmod>2026-01-11</lastmod>
-    </url>
-    <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/011-gcp-gke/</loc>
-         <lastmod>2026-01-11</lastmod>
-    </url>
-    <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/012-gcp-tools/</loc>
-         <lastmod>2026-01-11</lastmod>
-    </url>
-    <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/013-security-rbac/</loc>
-         <lastmod>2026-01-11</lastmod>
-    </url>
-    <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/014-production-ready/</loc>
-         <lastmod>2026-01-11</lastmod>
-    </url>
-    <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab00-Setup/</loc>
-         <lastmod>2026-01-11</lastmod>
-    </url>
-    <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab01-MCP-Fundamentals/</loc>
-         <lastmod>2026-01-11</lastmod>
-    </url>
-    <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab01-MCP-Fundamentals/lab1-tasks/</loc>
-         <lastmod>2026-01-11</lastmod>
-    </url>
-    <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab02-First-MCP-Server/</loc>
-         <lastmod>2026-01-11</lastmod>
-    </url>
-    <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab02-First-MCP-Server/lab2-tasks/</loc>
-         <lastmod>2026-01-11</lastmod>
-    </url>
-    <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab03-MCP-Tools/</loc>
-         <lastmod>2026-01-11</lastmod>
-    </url>
-    <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab03-MCP-Tools/lab3-tasks/</loc>
-         <lastmod>2026-01-11</lastmod>
-    </url>
-    <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab04-MCP-Resources/</loc>
-         <lastmod>2026-01-11</lastmod>
-    </url>
-    <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab04-MCP-Resources/lab4-tasks/</loc>
-         <lastmod>2026-01-11</lastmod>
-    </url>
-    <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab05-MCP-Prompts/</loc>
-         <lastmod>2026-01-11</lastmod>
-    </url>
-    <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab05-MCP-Prompts/lab5-tasks/</loc>
-         <lastmod>2026-01-11</lastmod>
-    </url>
-    <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab06-K-Agent/</loc>
-         <lastmod>2026-01-11</lastmod>
-    </url>
-    <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab06-K-Agent/lab6-tasks/</loc>
-         <lastmod>2026-01-11</lastmod>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/resources/</loc>
+         <lastmod>2026-01-25</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/001-MCP-Basics/001-MCP-Basics-py/</loc>
-         <lastmod>2026-01-11</lastmod>
+         <lastmod>2026-01-25</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/001-MCP-Basics/002-MCP-Basics-ts/</loc>
-         <lastmod>2026-01-11</lastmod>
+         <lastmod>2026-01-25</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/001-MCP-Basics/003-MCP-Advanced-py/</loc>
-         <lastmod>2026-01-11</lastmod>
+         <lastmod>2026-01-25</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/01-MCP-Workflow/step01-imports/</loc>
+         <lastmod>2026-01-25</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/01-MCP-Workflow/step02-ctor/</loc>
+         <lastmod>2026-01-25</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/01-MCP-Workflow/step03-init/</loc>
+         <lastmod>2026-01-25</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/01-MCP-Workflow/step04-tools/</loc>
+         <lastmod>2026-01-25</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/01-MCP-Workflow/step05-tool-handlers/</loc>
+         <lastmod>2026-01-25</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/01-MCP-Workflow/step06-resources/</loc>
+         <lastmod>2026-01-25</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/01-MCP-Workflow/step07-resource-handlers/</loc>
+         <lastmod>2026-01-25</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/01-MCP-Workflow/step08-prompts/</loc>
+         <lastmod>2026-01-25</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/01-MCP-Workflow/step09-prompt-handlers/</loc>
+         <lastmod>2026-01-25</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/01-MCP-Workflow/step10-lifecycle/</loc>
+         <lastmod>2026-01-25</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/01-MCP-Workflow/step11-main/</loc>
+         <lastmod>2026-01-25</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/01-MCP-Workflow/test_client/</loc>
+         <lastmod>2026-01-25</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Tasks/</loc>
-         <lastmod>2026-01-11</lastmod>
+         <lastmod>2026-01-25</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Tasks/000-Setup-RooCode/000-Setup-RooCode/</loc>
-         <lastmod>2026-01-11</lastmod>
+         <lastmod>2026-01-25</lastmod>
     </url>
 </urlset>

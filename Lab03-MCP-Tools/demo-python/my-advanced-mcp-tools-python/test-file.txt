@@ -1,3 +1,0 @@
-This is a test file for the read_file tool.
-It contains multiple lines of text.
-You can test reading this file with the MCP Inspector!
