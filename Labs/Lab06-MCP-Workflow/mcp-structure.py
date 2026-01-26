@@ -433,15 +433,20 @@ class CompleteMCPServer:
         print("  → Connects resource URIs to actual data")
         print("\nMETHOD CODE:")
         print("  @self.server.read_resource()")
-        print("  async def read_resource(uri: str) -> str:")
+        print("  async def read_resource(uri: Any) -> str:")
         print("      if uri == 'resource://server-info':")
         print("          return json.dumps({'name': 'complete-mcp-server', ...})")
         
         @self.server.read_resource()
-        async def read_resource(uri: str) -> str:
-            """Handle resource read requests."""
+        async def read_resource(uri: Any) -> str:
+            """
+            Handle resource read requests.
+            This is called when a client wants to read a resource.
+            """
+            # Extract the URI string from the AnyUrl object
+            uri_str = str(uri)
             
-            if uri == "resource://server-info":
+            if uri_str == "resource://server-info":
                 info = {
                     "name": "complete-mcp-server",
                     "version": "1.0.0",
@@ -454,10 +459,10 @@ class CompleteMCPServer:
                 }
                 return json.dumps(info, indent=2)
             
-            elif uri == "resource://data-store":
+            elif uri_str == "resource://data-store":
                 return json.dumps(self.data_store, indent=2)
             
-            elif uri == "resource://welcome":
+            elif uri_str == "resource://welcome":
                 return """
 Welcome to the Complete MCP Server!
 
@@ -469,7 +474,7 @@ This server demonstrates all MCP protocol capabilities:
 Explore the available tools and resources to see what this server can do.
                 """.strip()
             
-            return f"Resource not found: {uri}"
+            return f"Resource not found: {uri_str}"
         
         print("\nResource handlers implemented:")
         print("  → Each resource returns appropriate content")
@@ -1069,14 +1074,21 @@ if __name__ == "__main__":
                 ]
             
             @silent_server.read_resource()
-            async def read_resource(uri: str) -> str:
-                if uri == "resource://server-info":
+            async def read_resource(uri: Any) -> str:
+                """
+                Handle resource read requests.
+                This is called when a client wants to read a resource.
+                """
+                # Extract the URI string from the AnyUrl object
+                uri_str = str(uri)
+                
+                if uri_str == "resource://server-info":
                     return json.dumps({"name": "complete-mcp-server", "version": "1.0.0", "capabilities": {"tools": 4, "resources": 3, "prompts": 2}})
-                elif uri == "resource://data-store":
+                elif uri_str == "resource://data-store":
                     return json.dumps(data_store)
-                elif uri == "resource://welcome":
+                elif uri_str == "resource://welcome":
                     return "Welcome to the Complete MCP Server!"
-                return f"Resource not found: {uri}"
+                return f"Resource not found: {uri_str}"
             
             @silent_server.list_prompts()
             async def list_prompts() -> list[Prompt]:

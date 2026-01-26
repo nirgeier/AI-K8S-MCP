@@ -13,12 +13,12 @@ from typing import Any, Optional
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
 from mcp.types import (
-    Tool,
-    Resource,
-    Prompt,
-    TextContent,
-    ImageContent,
-    EmbeddedResource,
+  Tool,
+  Resource,
+  Prompt,
+  TextContent,
+  ImageContent,
+  EmbeddedResource,
 )
 import sys
 

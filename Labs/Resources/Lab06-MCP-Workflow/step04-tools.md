@@ -25,7 +25,7 @@ import sys
 class CompleteMCPServer:
   """
   A comprehensive MCP Server implementation showcasing all protocol features.
-  
+
   This class demonstrates:
   - Server initialization
   - Tool registration and execution
@@ -33,16 +33,16 @@ class CompleteMCPServer:
   - Prompt templates
   - Request handling
   """
-  
+
   def __init__(self):
     """Initialize the MCP Server instance."""
     self.server = Server("complete-mcp-server")
     self.data_store = {}  # Simple in-memory data storage
     print("Server instance created successfully!")
-  
+
   def register_tools(self):
     """Register all available tools with the MCP server."""
-    
+
     @self.server.list_tools()
     async def list_tools() -> list[Tool]:
       """
@@ -120,14 +120,14 @@ class CompleteMCPServer:
           }
         )
       ]
-    
+
     print("Tools registered: calculate, store_data, retrieve_data, echo")
 
   async def run(self):
     """Run the MCP server."""
     # Initialize everything
     self.register_tools()
-    
+
     # Connect to stdio
     async with stdio_server() as (read_stream, write_stream):
       print("Server running on stdio...")
