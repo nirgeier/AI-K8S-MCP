@@ -3,7 +3,7 @@
 """
 Complete MCP (Model Context Protocol) Server Implementation
 Built step by step for learning purposes.
-Step 7: Register Resource Handlers
+Step 10: Lifecycle Handlers
 """
 
 import asyncio
@@ -269,4 +269,130 @@ Explore the available tools and resources to see what this server can do."""
                 raise ValueError(f"Unknown resource: {uri}")
         
         print("Resource handlers implemented")
+
+    def register_prompts(self):
+        """Register prompt templates for clients."""
+        
+        @self.server.list_prompts()
+        async def list_prompts() -> list[Prompt]:
+            """
+            Return the list of available prompts.
+            This is called when clients want to discover what prompts are available.
+            """
+            return [
+                Prompt(
+                    name="analyze-data",
+                    description="Analyze data stored in the server",
+                    arguments=[
+                        {
+                            "name": "key",
+                            "description": "The key of the data to analyze",
+                            "required": True
+                        }
+                    ]
+                ),
+                Prompt(
+                    name="calculate-scenario",
+                    description="Walk through a calculation scenario",
+                    arguments=[
+                        {
+                            "name": "operation",
+                            "description": "The operation to demonstrate (add, subtract, multiply, divide)",
+                            "required": True
+                        }
+                    ]
+                )
+            ]
+        
+        print("Prompts registered: analyze-data, calculate-scenario")
+
+    def register_prompt_handlers(self):
+        """Implement prompt generation logic."""
+        
+        @self.server.get_prompt()
+        async def get_prompt(name: str, arguments: dict) -> list[TextContent]:
+            """
+            Handle prompt generation requests.
+            This is called when a client wants to get a prompt.
+            """
+            if name == "analyze-data":
+                key = arguments.get("key", "unknown")
+                value = self.data_store.get(key, "not found")
+                
+                prompt_text = f"""Analyze the following data from the server:
+
+Key: {key}
+Value: {value}
+
+Please provide:
+1. A description of what this data represents
+2. Any patterns or insights you notice
+3. Suggestions for how this data could be used
+
+Use the retrieve_data tool if you need to fetch additional context."""
+                
+                return [TextContent(type="text", text=prompt_text)]
+            
+            elif name == "calculate-scenario":
+                operation = arguments.get("operation", "add")
+                
+                prompt_text = f"""Let's work through a {operation} calculation scenario.
+
+Use the calculate tool with the operation '{operation}'.
+For example:
+- Choose two numbers (a and b)
+- Execute: calculate(operation="{operation}", a=10, b=5)
+- Explain the result
+
+This demonstrates how to use computational tools in the MCP server."""
+                
+                return [TextContent(type="text", text=prompt_text)]
+            
+            else:
+                return [TextContent(
+                    type="text",
+                    text=f"Error: Unknown prompt '{name}'"
+                )]
+        
+        print("Prompt handlers implemented")
+
+    def setup_lifecycle_handlers(self):
+        """Setup lifecycle management (conceptual for MCP)."""
+        # Note: MCP servers typically don't have explicit lifecycle hooks
+        # This is a conceptual method showing where such logic would go
+        print("Lifecycle management configured")
+
+    async def run(self):
+        """Run the MCP server."""
+        # Initialize everything
+        self.register_tools()
+        self.register_tool_handlers()
+        self.register_resources()
+        self.register_resource_handlers()
+        self.register_prompts()
+        self.register_prompt_handlers()
+        self.setup_lifecycle_handlers()
+        
+        # Connect to stdio
+        async with stdio_server() as (read_stream, write_stream):
+            print("Server running on stdio...")
+            await self.server.run(
+                read_stream,
+                write_stream,
+                self.server.create_initialization_options()
+            )
+
+async def main():
+    """Main entry point."""
+    server = CompleteMCPServer()
+    await server.run()
+
+if __name__ == "__main__":
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print("Server stopped by user")
+    except Exception as e:
+        print(f"Error: {e}")
+        sys.exit(1)
 ```

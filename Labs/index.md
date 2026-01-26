@@ -30,8 +30,6 @@ Get started with the basics! Learn what MCP is, why it exists, and understand it
 - MCP communication model and lifecycle
 - Common use cases
 
-**Duration:** 30-45 minutes
-
 ---
 
 ### [Lab 2: Building Your First MCP Server](Lab02-First-MCP-Server/index.md)
@@ -45,8 +43,6 @@ Build a complete, working MCP server from the ground up.
 - Creating your first tool
 - Testing with MCP Inspector
 - Connecting to Claude Desktop
-
-**Duration:** 1-1.5 hours
 
 ---
 
@@ -62,8 +58,6 @@ Master the art of creating sophisticated, production-ready tools.
 - Error handling patterns
 - Performance optimization and caching
 
-**Duration:** 1.5-2 hours
-
 ---
 
 ### [Lab 4: Working with MCP Resources](Lab04-MCP-Resources/index.md)
@@ -77,8 +71,6 @@ Learn to expose contextual data that LLMs can read and reference.
 - Resource URI schemes and templates
 - Resource subscriptions for live updates
 - Combining tools and resources
-
-**Duration:** 1-1.5 hours
 
 ---
 
@@ -94,8 +86,6 @@ Complete your MCP education with prompts and production best practices.
 - Production deployment and configuration
 - Debugging and troubleshooting
 
-**Duration:** 1.5-2 hours
-
 ---
 
 ### [Lab 6: K-Agent Integration](Lab06-K-Agent/index.md)
@@ -110,12 +100,9 @@ Implement a specialized MCP server (K-Agent) that interacts with Kubernetes clus
 - Collecting and structuring logs for LLM consumption
 - Containerizing and deploying the K-Agent server
 
-**Duration:** 2-3 hours
-
 ---
 
 ### [Tasks](Lab01-MCP-Fundamentals/lab1-tasks.md/)
-**Duration:** Varies
 
 A dedicated section with exercises and challenges to reinforce your learning from all labs.
 

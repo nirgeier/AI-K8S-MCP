@@ -3,7 +3,7 @@
 """
 Complete MCP (Model Context Protocol) Server Implementation
 Built step by step for learning purposes.
-Step 5: Register Tool Handlers
+Step 6: Register Resources
 """
 
 import asyncio
@@ -197,4 +197,66 @@ class CompleteMCPServer:
                 )]
         
         print("Tool handlers implemented")
+
+    def register_resources(self):
+        """Register resources that clients can access."""
+        
+        @self.server.list_resources()
+        async def list_resources() -> list[Resource]:
+            """
+            Return the list of available resources.
+            This is called when clients want to discover what resources are available.
+            """
+            return [
+                Resource(
+                    uri="resource://server-info",
+                    name="Server Information",
+                    description="Information about this MCP server",
+                    mimeType="application/json"
+                ),
+                Resource(
+                    uri="resource://data-store",
+                    name="Data Store",
+                    description="Current contents of the data store",
+                    mimeType="application/json"
+                ),
+                Resource(
+                    uri="resource://welcome",
+                    name="Welcome Message",
+                    description="Welcome message and server capabilities",
+                    mimeType="text/plain"
+                )
+            ]
+        
+        print("Resources registered: server-info, data-store, welcome")
+
+    async def run(self):
+        """Run the MCP server."""
+        # Initialize everything
+        self.register_tools()
+        self.register_tool_handlers()
+        self.register_resources()
+        
+        # Connect to stdio
+        async with stdio_server() as (read_stream, write_stream):
+            print("Server running on stdio...")
+            await self.server.run(
+                read_stream,
+                write_stream,
+                self.server.create_initialization_options()
+            )
+
+async def main():
+    """Main entry point."""
+    server = CompleteMCPServer()
+    await server.run()
+
+if __name__ == "__main__":
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print("Server stopped by user")
+    except Exception as e:
+        print(f"Error: {e}")
+        sys.exit(1)
 ```

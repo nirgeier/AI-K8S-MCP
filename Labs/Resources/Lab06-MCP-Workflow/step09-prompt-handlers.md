@@ -355,4 +355,37 @@ This demonstrates how to use computational tools in the MCP server."""
                 )]
         
         print("Prompt handlers implemented")
+
+    async def run(self):
+        """Run the MCP server."""
+        # Initialize everything
+        self.register_tools()
+        self.register_tool_handlers()
+        self.register_resources()
+        self.register_resource_handlers()
+        self.register_prompts()
+        self.register_prompt_handlers()
+        
+        # Connect to stdio
+        async with stdio_server() as (read_stream, write_stream):
+            print("Server running on stdio...")
+            await self.server.run(
+                read_stream,
+                write_stream,
+                self.server.create_initialization_options()
+            )
+
+async def main():
+    """Main entry point."""
+    server = CompleteMCPServer()
+    await server.run()
+
+if __name__ == "__main__":
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print("Server stopped by user")
+    except Exception as e:
+        print(f"Error: {e}")
+        sys.exit(1)
 ```

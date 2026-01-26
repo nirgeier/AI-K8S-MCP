@@ -3,7 +3,7 @@
 """
 Complete MCP (Model Context Protocol) Server Implementation
 Built step by step for learning purposes.
-Step 6: Register Resources
+Step 8: Register Prompts
 """
 
 import asyncio
@@ -16,8 +16,7 @@ from mcp.types import (
     Tool,
     Resource,
     Prompt,
-    TextContent,
-    ImageContent,
+    TextContent,    ImageContent,
     EmbeddedResource,
 )
 import sys
@@ -229,4 +228,112 @@ class CompleteMCPServer:
             ]
         
         print("Resources registered: server-info, data-store, welcome")
+
+    def register_resource_handlers(self):
+        """Implement resource retrieval logic."""
+        
+        @self.server.read_resource()
+        async def read_resource(uri: str) -> str:
+            """
+            Handle resource read requests.
+            This is called when a client wants to read a resource.
+            """
+            if uri == "resource://server-info":
+                info = {
+                    "name": "complete-mcp-server",
+                    "version": "1.0.0",
+                    "description": "A comprehensive MCP server implementation",
+                    "capabilities": {
+                        "tools": 4,
+                        "resources": 3,
+                        "prompts": 2
+                    }
+                }
+                return json.dumps(info, indent=2)
+            
+            elif uri == "resource://data-store":
+                return json.dumps(self.data_store, indent=2)
+            
+            elif uri == "resource://welcome":
+                return """Welcome to the Complete MCP Server!
+
+This server demonstrates all MCP protocol capabilities:
+- Tools: Execute operations and computations
+- Resources: Access data and information
+- Prompts: Get structured prompt templates
+
+Explore the available tools and resources to see what this server can do."""
+            
+            else:
+                raise ValueError(f"Unknown resource: {uri}")
+        
+        print("Resource handlers implemented")
+
+    def register_prompts(self):
+        """Register prompt templates for clients."""
+        
+        @self.server.list_prompts()
+        async def list_prompts() -> list[Prompt]:
+            """
+            Return the list of available prompts.
+            This is called when clients want to discover what prompts are available.
+            """
+            return [
+                Prompt(
+                    name="analyze-data",
+                    description="Analyze data stored in the server",
+                    arguments=[
+                        {
+                            "name": "key",
+                            "description": "The key of the data to analyze",
+                            "required": True
+                        }
+                    ]
+                ),
+                Prompt(
+                    name="calculate-scenario",
+                    description="Walk through a calculation scenario",
+                    arguments=[
+                        {
+                            "name": "operation",
+                            "description": "The operation to demonstrate (add, subtract, multiply, divide)",
+                            "required": True
+                        }
+                    ]
+                )
+            ]
+        
+        print("Prompts registered: analyze-data, calculate-scenario")
+
+    async def run(self):
+        """Run the MCP server."""
+        # Initialize everything
+        self.register_tools()
+        self.register_tool_handlers()
+        self.register_resources()
+        self.register_resource_handlers()
+        self.register_prompts()
+        
+        # Connect to stdio
+        async with stdio_server() as (read_stream, write_stream):
+            print("Server running on stdio...")
+            await self.server.run(
+                read_stream,
+                write_stream,
+                self.server.create_initialization_options()
+            )
+
+async def main():
+    """Main entry point."""
+    server = CompleteMCPServer()
+    await server.run()
+
+if __name__ == "__main__":
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print("Server stopped by user")
+    except Exception as e:
+        print(f"Error: {e}")
+        sys.exit(1)
 ```

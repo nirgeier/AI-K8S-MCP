@@ -3,7 +3,7 @@
 """
 Complete MCP (Model Context Protocol) Server Implementation
 Built step by step for learning purposes.
-Step 4: Register Tools
+Step 5: Register Tool Handlers
 """
 
 import asyncio
@@ -122,4 +122,108 @@ class CompleteMCPServer:
             ]
         
         print("Tools registered: calculate, store_data, retrieve_data, echo")
+
+    def register_tool_handlers(self):
+        """Implement the actual logic for each tool."""
+        
+        @self.server.call_tool()
+        async def call_tool(name: str, arguments: Any) -> list[TextContent]:
+            """
+            Handle tool execution requests.
+            This is called when a client wants to execute a tool.
+            """
+            if name == "calculate":
+                operation = arguments.get("operation")
+                a = arguments.get("a")
+                b = arguments.get("b")
+                
+                if operation == "add":
+                    result = a + b
+                elif operation == "subtract":
+                    result = a - b
+                elif operation == "multiply":
+                    result = a * b
+                elif operation == "divide":
+                    if b == 0:
+                        return [TextContent(
+                            type="text",
+                            text="Error: Cannot divide by zero"
+                        )]
+                    result = a / b
+                else:
+                    return [TextContent(
+                        type="text",
+                        text=f"Error: Unknown operation '{operation}'"
+                    )]
+                
+                return [TextContent(
+                    type="text",
+                    text=f"Result: {a} {operation} {b} = {result}"
+                )]
+            
+            elif name == "store_data":
+                key = arguments.get("key")
+                value = arguments.get("value")
+                self.data_store[key] = value
+                return [TextContent(
+                    type="text",
+                    text=f"Stored: {key} = {value}"
+                )]
+            
+            elif name == "retrieve_data":
+                key = arguments.get("key")
+                value = self.data_store.get(key)
+                if value is None:
+                    return [TextContent(
+                        type="text",
+                        text=f"Error: Key '{key}' not found"
+                    )]
+                return [TextContent(
+                    type="text",
+                    text=f"Retrieved: {key} = {value}"
+                )]
+            
+            elif name == "echo":
+                text = arguments.get("text")
+                return [TextContent(
+                    type="text",
+                    text=f"Echo: {text}"
+                )]
+            
+            else:
+                return [TextContent(
+                    type="text",
+                    text=f"Error: Unknown tool '{name}'"
+                )]
+        
+        print("Tool handlers implemented")
+
+    async def run(self):
+        """Run the MCP server."""
+        # Initialize everything
+        self.register_tools()
+        self.register_tool_handlers()
+        
+        # Connect to stdio
+        async with stdio_server() as (read_stream, write_stream):
+            print("Server running on stdio...")
+            await self.server.run(
+                read_stream,
+                write_stream,
+                self.server.create_initialization_options()
+            )
+
+async def main():
+    """Main entry point."""
+    server = CompleteMCPServer()
+    await server.run()
+
+if __name__ == "__main__":
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print("Server stopped by user")
+    except Exception as e:
+        print(f"Error: {e}")
+        sys.exit(1)
 ```

@@ -20,7 +20,7 @@
 
 ### Step 1: Create Your Project File
 
-1. Create a new file called `my_mcp_server.py`
+1. Create a new file called `mcp_server.py`
 2. Open it in your favorite text editor
 3. We'll build this server step by step!
 
@@ -140,36 +140,31 @@
 
 ## Skeleton 01: `Imports`
 
-  * Set thfollowing  imports inside the `my_mcp_server.py`:
+  * Set the following imports inside the `mcp_server.py`:
 
       ```python
+    
+      #!/usr/bin/env python3
+      """
+      Complete MCP (Model Context Protocol) Server Implementation
+      Built step by step for learning purposes.
+      - Enables clients to get ready-to-use prompts
+      - Connects prompt templates to actual content
       
-        #!/usr/bin/env python3
-        """
-        Complete MCP (Model Context Protocol) Server Implementation
-        Built step by step for learning purposes.
-        - Enables clients to get ready-to-use prompts
-        - Connects prompt templates to actual content
-        
-        """
-
-      
-        import asyncio
-        import json
-        from typing import Any, Optional
-
-- Defines the behavior of each prompt
-- Handlers make prompts functional
-
-        from mcp.server import Server
+      """
+    
+      import asyncio
+      import json
+      from typing import Any, Optional
+      from mcp.server import Server
       from mcp.server.stdio import stdio_server
       from mcp.types import (
-          Tool,
-          Resource,
-          Prompt,
-          TextContent,
-          ImageContent,
-          EmbeddedResource,
+        Tool,
+        Resource,
+        Prompt,
+        TextContent,
+        ImageContent,
+        EmbeddedResource,
       )
       import sys
       ```
@@ -190,28 +185,28 @@
 
 ## Skeleton 02: `Class`
 
-* Add thislass definition after the imports in your `my_mcp_server.py` file:
+* Add thislass definition after the imports in your `mcp_server.py` file:
 
     
-      ```python
-      class CompleteMCPServer:
-          """
-          A comprehensive MCP Server implementation showcasing all 
-          - Enables clients to get ready-to-use prompts
-          - Connects prompt templates to actual content
-          protocol features.
-        
-        This class demonstrates:
-        
-          - Server initialization
-          - Tool registration and execution
-          - Resource management
-          - Prompt templates
-          - Defines the behavior of each prompt
-          - Handlers make prompts functional
+    ```python
+    class CompleteMCPServer:
+        """
+        A comprehensive MCP Server implementation showcasing all 
+        - Enables clients to get ready-to-use prompts
+        - Connects prompt templates to actual content
+        protocol features.
+      
+      This class demonstrates:
+      
+        - Server initialization
+        - Tool registration and execution
+        - Resource management
+        - Prompt templates
+        - Defines the behavior of each prompt
+        - Handlers make prompts functional
 
-          - Request handling
-        """ 
+        - Request handling
+      """ 
     ``` 
 
 ---
@@ -405,7 +400,7 @@
   - Try to implement it on your own before looking at the solution below!
   
   <details>
-  <summary>💡 Solution for Greeting Tool</summary> 
+  <summary>Solution for Greeting Tool</summary> 
 
   ```python
   Tool(
@@ -1277,7 +1272,226 @@
 
 ---
 
-## Skeleton 12: Main / Entry Point
+## Skeleton 12: RAG 
+
+**What is RAG?**
+
+* RAG = Retrieval Augmented Generation
+* A technique that enhances AI responses by retrieving relevant information from a knowledge base before generating answers
+* Think of it like giving the AI access to a reference library
+* Combines information retrieval with text generation
+* Enables accurate, context-aware responses based on specific data
+* Examples: Customer support bots, domain-specific Q&A systems, documentation assistants
+* Critical for providing factually accurate responses from your own data sources
+
+**Why Add RAG to Your MCP Server?**
+
+* Makes your server more intelligent and context-aware
+* Allows retrieval of relevant information from local data sources
+* Provides accurate responses based on your specific domain knowledge
+* Enables filtering and querying of structured data
+* Enhances the server's ability to answer domain-specific questions
+* No heavy vector database dependencies required for simple implementations
+
+---
+
+#### 1. Install Dependencies
+
+* No heavy dependencies (like vector databases) are required for this simple implementation. 
+* We will use standard Python libraries.
+
+#### 2. Update the MCP Server
+
+* Open your MCP server file and add the following imports and initialization code to set up a simple in-memory users. 
+* We will also add a helper function to load data from a CSV file.
+
+```python
+import csv
+
+# Initialize an in-memory users
+users = []
+
+def load_users(csv_file_path: str):
+    """Load users from a CSV file."""
+    global users
+    users = []
+    
+    try:
+        with open(csv_file_path, 'r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            for i, row in enumerate(reader):
+                # Load all fields from the CSV
+                first_name = row.get('first_name', '')
+                last_name = row.get('last_name', '')
+                age = row.get('age', '')
+                city = row.get('city', '')
+                
+                # Create full name and content
+                full_name = f"{first_name} {last_name}".strip()
+                content = f"{full_name} from {city}" if city else full_name
+                
+                # Create user dict with all available fields
+                user = {
+                    "id": str(i + 1),
+                    "first_name": first_name,
+                    "last_name": last_name,
+                    "full_name": full_name,
+                    "content": content,
+                    "age": age,
+                    "city": city
+                }
+                users.append(user)
+        
+        print(f"Loaded {len(users)} users from CSV.")
+    except Exception as e:
+        print(f"Error loading users: {e}")
+
+# Load the users
+# Make sure you have a 'users.csv' file in the same directory
+# Format: first_name,last_name,city,age
+load_users("users.csv") 
+```
+
+#### 3. Register the RAG Tool(s)
+
+* Add new tools to your MCP server that allow the agent to query this collection using simple keyword matching.
+* Here are two example tools: one to filter users by city and another to filter users by age.
+* Add these tool definitions to the list in your `register_tools` method (inside the `list_tools` return array):
+
+```python
+Tool(
+    name="filter_users_by_city",
+    description="Filter and return users who live in a specific city",
+    inputSchema={
+        "type": "object",
+        "properties": {
+            "city": {
+                "type": "string",
+                "description": "The city to filter users by"
+            }
+        },
+        "required": ["city"]
+    }
+),
+Tool(
+    name="filter_users_by_age",
+    description="Filter and return users who are older than the specified minimum age",
+    inputSchema={
+        "type": "object",
+        "properties": {
+            "min_age": {
+                "type": "number",
+                "description": "The minimum age to filter users by"
+            }
+        },
+        "required": ["min_age"]
+    }
+)
+```
+
+* Then add the corresponding handlers in your `register_tool_handlers` method (inside the `call_tool` function):
+
+```python
+elif name == "filter_users_by_city":
+    city = arguments.get("city", "")
+    filtered_users = []
+    target_city = city.lower().strip()
+    
+    for user in users:
+        # Get city from user dict
+        u_city = user.get("city", "").lower().strip()
+        
+        if u_city == target_city:
+            full_name = user.get('full_name', 'Unknown')
+            age = user.get('age', 'N/A')
+            filtered_users.append(f"User {user.get('id')}: {full_name}, Age: {age}, City: {user.get('city')}")
+    
+    if not filtered_users:
+        result = f"No users found in {city}."
+    else:
+        result = "\n".join(filtered_users)
+    
+    return [TextContent(type="text", text=result)]
+
+elif name == "filter_users_by_age":
+    min_age = int(arguments.get("min_age", 0))
+    filtered_users = []
+    
+    for user in users:
+        # Get age from user dict
+        u_age = user.get("age", "")
+        
+        # Skip if no age
+        if not u_age:
+            continue
+        
+        try:
+            u_age = int(u_age)
+        except (ValueError, TypeError):
+            continue
+        
+        if u_age > min_age:
+            full_name = user.get('full_name', 'Unknown')
+            city = user.get('city', 'Unknown')
+            filtered_users.append(f"User {user.get('id')}: {full_name}, Age: {u_age}, City: {city}")
+    
+    if not filtered_users:
+        result = f"No users found older than {min_age}."
+    else:
+        result = "\n".join(filtered_users)
+    
+    return [TextContent(type="text", text=result)]
+```
+
+#### 4. Test the RAG Capabilities
+
+1.  Restart your MCP server.
+2.  Use the MCP Inspector or Client to call `query_users` with a question like "What is a Pod?".
+3.  Verify that the tool returns the specific definition we added to the database.
+
+---
+
+## Skeleton 13: Roots
+
+
+
+
+---
+
+## Skeleton 14: Main / Entry Point
+
+**What is the Main Entry Point?**
+
+* The main entry point is the starting point of your Python script
+* It's the function that orchestrates the entire server setup and execution
+* Think of it like the conductor of an orchestra - it coordinates all the pieces
+* The `main()` function calls all setup methods in the correct order
+* The `if __name__ == "__main__"` block is what runs when you execute the script directly
+* Examples: Starts server, initializes components, handles graceful shutdown
+* Essential for any Python application that needs to run as a standalone program
+
+**Why This is Important:**
+
+* Ensures all components are initialized in the correct order
+* Provides a clear execution flow that's easy to understand
+* Handles errors and graceful shutdown (like Ctrl+C)
+* Makes your code modular and testable
+* Standard Python pattern for executable scripts
+* Without this, your server would just be a collection of classes with no way to run
+
+**Orchestration Order:**
+
+1. Create server instance (constructor)
+2. Register tools
+3. Register tool handlers
+4. Register resources
+5. Register resource handlers
+6. Register prompts
+7. Register prompt handlers
+8. Setup lifecycle handlers
+9. Run the server
+
+---
 
 * Now we need to create the main function that orchestrates everything and the entry point that runs when the script is executed.
 * This is where we call all the setup methods in order and start the server.
@@ -1344,7 +1558,7 @@
         """
         Entry point when script is run directly.
         
-        This runs when you execute: python my_mcp_server.py
+        This runs when you execute: python mcp_server.py
         """
         try:
             asyncio.run(main())
@@ -1365,32 +1579,15 @@
 
 ---
 
+
 #### Code Review
 
-At this point, your `my_mcp_server.py` file should have:
+At this point, your `mcp_server.py` file should have:
 
 1. All imports at the top
 2. `CompleteMCPServer` class with all 9 methods
 3. `main()` function
 4. Entry point with `if __name__ == "__main__"`
-
-Your file structure should look like:
-```
-#!/usr/bin/env python3
-# Imports
-# Class definition
-#   __init__
-#   register_tools
-#   register_tool_handlers
-#   register_resources
-#   register_resource_handlers
-#   register_prompts
-#   register_prompt_handlers
-#   setup_lifecycle_handlers
-#   run
-# main() function
-# if __name__ == "__main__" block
-```
 
 ---
 
@@ -1421,7 +1618,7 @@ Open a terminal and run:
   npm install -g @modelcontextprotocol/inspector
 
   # Run the MCP Inspector
-  npx @modelcontextprotocol/inspector python3 "my_mcp_server.py"
+  npx @modelcontextprotocol/inspector python3 "mcp_server.py"
   ```
 
 ---
@@ -1437,7 +1634,7 @@ Follow these steps in the MCP Inspector:
 3. If not connected, set the following:
    * transport: `stdio`
    * Command: `python3`
-   * Arguments: `my_mcp_server.py`
+   * Arguments: `mcp_server.py`
 4. Click **"Connect"** again
 5. You should see the server name and version in the top right corner
 6. Success! 
@@ -1448,7 +1645,7 @@ Follow these steps in the MCP Inspector:
 
 1. Click the **"Tools"** tab in the upper menu
 2. Click **"List tools"** to see all available tools
-3. You should see: `calculate`, `store_data`, `retrieve_data`, `echo`
+3. You should see: `calculate`, `store_data`, `retrieve_data`, `echo` + RAG tools if added
 4. If you added the `greeting` tool, you should see that too!
 
 ---
@@ -1597,5 +1794,163 @@ Add support for:
 Add support for:
 - Listing files in a directory (referencing client roots)
 - Reading file contents (referencing client roots)
+
+---
+
+## Bonus Task: Hands-On Exercise
+
+### Add Pagination Support for Listing Users
+
+**Objective:** Implement a new tool called `list_all_users` that returns all users with pagination support.
+
+**Requirements:**
+
+1. **Tool Name:** `list_all_users`
+2. **Parameters:**
+   - `page` (optional, default: 1) - The page number to retrieve
+   - `per_page` (optional, default: 10) - Number of users per page
+3. **Functionality:**
+   - Return users for the specified page
+   - Include metadata: total users, total pages, current page
+   - Handle edge cases (invalid page numbers, empty results)
+
+**Your Task:**
+
+1. Add the tool definition to `register_tools()` method
+2. Implement the tool handler in `register_tool_handlers()` method
+3. Test your implementation using MCP Inspector
+
+**Hints:**
+- Use Python's list slicing for pagination: `users[start:end]`
+- Calculate start index: `(page - 1) * per_page`
+- Calculate total pages: `math.ceil(len(users) / per_page)`
+- Return both the user list and metadata
+
+---
+
+### Walkthrough Solution
+
+#### Step 1: Add Tool Definition
+
+<details>
+<summary>Click here for the solution</summary>
+
+Add this to your `register_tools()` method in the tools list:
+
+  ```python
+  Tool(
+      name="list_all_users",
+      description="List all users with pagination support",
+      inputSchema={
+          "type": "object",
+          "properties": {
+              "page": {
+                  "type": "number",
+                  "description": "Page number (default: 1)",
+                  "default": 1
+              },
+              "per_page": {
+                  "type": "number",
+                  "description": "Number of users per page (default: 10)",
+                  "default": 10
+              }
+          }
+      }
+  )
+  ```
+</details>
+
+---
+
+#### Step 2: Add Tool Handler
+
+<details>
+<summary>Click here for the solution</summary>
+
+Add this to your `register_tool_handlers()` method in the `call_tool` function:
+
+    ```python
+    elif name == "list_all_users":
+        import math
+        
+        # Get pagination parameters
+        page = int(arguments.get("page", 1))
+        per_page = int(arguments.get("per_page", 10))
+        
+        # Validate parameters
+        if page < 1:
+            page = 1
+        if per_page < 1:
+            per_page = 10
+        if per_page > 100:  # Max limit
+            per_page = 100
+        
+        # Calculate pagination
+        total_users = len(users)
+        total_pages = math.ceil(total_users / per_page) if total_users > 0 else 1
+        
+        # Ensure page doesn't exceed total pages
+        if page > total_pages:
+            page = total_pages
+        
+        # Calculate slice indices
+        start_idx = (page - 1) * per_page
+        end_idx = start_idx + per_page
+        
+        # Get paginated users
+        paginated_users = users[start_idx:end_idx]
+        
+        # Format output
+        user_list = []
+        for user in paginated_users:
+            full_name = user.get('full_name', 'Unknown')
+            age = user.get('age', 'N/A')
+            city = user.get('city', 'Unknown')
+            user_list.append(f"User {user.get('id')}: {full_name}, Age: {age}, City: {city}")
+        
+        # Build result with metadata
+        metadata = f"Page {page} of {total_pages} | Total Users: {total_users} | Showing: {len(paginated_users)}"
+        result = f"{metadata}\n\n" + "\n".join(user_list)
+        
+        return [TextContent(type="text", text=result)]
+    ```
+</details>
+
+---
+
+### Step 3: Test in MCP Inspector
+
+1. Restart your MCP server
+2. Open MCP Inspector
+3. Go to the **Tools** tab
+4. Click on **"list_all_users"**
+5. Test with different parameters:
+   - Default (page: 1, per_page: 10)
+   - Page 2 with 5 users per page
+   - Page 5 with 20 users per page
+
+**Expected Output Format:**
+```
+Page 1 of 10 | Total Users: 100 | Showing: 10
+
+User 1: James Smith, Age: 24, City: New York
+User 2: Maria Garcia, Age: 31, City: Los Angeles
+...
+```
+
+</details>
+
+---
+
+## Congratulations! 🎉
+
+You've successfully built a complete MCP server with:
+- Multiple tools (calculate, data storage, echo, user filters, pagination)
+- Resources (server info, data store, welcome message)
+- Prompts (data analysis, calculation scenarios)
+- RAG capabilities (user filtering and search)
+- Pagination support (bonus feature)
+
+Keep exploring and building more advanced MCP servers!
 
 

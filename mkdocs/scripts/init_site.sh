@@ -1,6 +1,4 @@
 #!/bin/bash
-# Setup script for The specific MkDocs project
-
 set -euo pipefail # Exit on error, undefined vars, pipe failures
 
 # Get the root of the Git Project
@@ -395,6 +393,50 @@ setup_python_env() {
 }
 
 #######################################
+# Optimize MkDocs configuration for local development
+#######################################
+optimize_mkdocs_config() {
+    # Only optimize if not deploying
+    if [[ "$DEPLOY" == true ]]; then
+        return 0
+    fi
+
+    print_info "Optimizing mkdocs.yml for local development (removing slow plugins: print-site, minify, git-committers)..."
+
+    # Use python to manipulate YAML reliably
+    python3 -c "
+import yaml
+import sys
+
+try:
+    with open('mkdocs.yml', 'r') as f:
+        config = yaml.safe_load(f)
+
+    if 'plugins' in config:
+        # List of slow plugins to remove in development
+        slow_plugins = ['print-site', 'minify', 'git-committers', 'git-revision-date-localized', 'pdf-export']
+        
+        new_plugins = []
+        for plugin in config.get('plugins', []):
+            name = plugin if isinstance(plugin, str) else list(plugin.keys())[0]
+            if name not in slow_plugins:
+                new_plugins.append(plugin)
+            else:
+                print(f' - Removing plugin: {name}')
+        
+        config['plugins'] = new_plugins
+
+    with open('mkdocs.yml', 'w') as f:
+        # sort_keys=False requires PyYAML 5.1+
+        yaml.dump(config, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+
+except Exception as e:
+    print(f'Warning: Failed to optimize mkdocs.yml: {e}')
+"
+    print_success "Optimized mkdocs.yml for faster reload"
+}
+
+#######################################
 # Build MkDocs documentation
 #######################################
 build_docs() {
@@ -441,7 +483,7 @@ serve_docs() {
     print_info "Press Ctrl+C to stop the server"
 
     # Use exec to replace the current shell process
-    exec mkdocs serve # --watch-theme
+    exec mkdocs serve --dirty
 }
 
 #######################################
@@ -483,6 +525,9 @@ main() {
 
     # Setup Python environment
     setup_python_env
+
+    # Optimize MkDocs configuration
+    #optimize_mkdocs_config
 
     # Build documentation
     if build_docs; then

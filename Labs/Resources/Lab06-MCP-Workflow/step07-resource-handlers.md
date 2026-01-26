@@ -3,7 +3,7 @@
 """
 Complete MCP (Model Context Protocol) Server Implementation
 Built step by step for learning purposes.
-Step 8: Register Prompts
+Step 7: Register Resource Handlers
 """
 
 import asyncio
@@ -16,7 +16,8 @@ from mcp.types import (
     Tool,
     Resource,
     Prompt,
-    TextContent,    ImageContent,
+    TextContent,
+    ImageContent,
     EmbeddedResource,
 )
 import sys
@@ -269,39 +270,34 @@ Explore the available tools and resources to see what this server can do."""
         
         print("Resource handlers implemented")
 
-    def register_prompts(self):
-        """Register prompt templates for clients."""
+    async def run(self):
+        """Run the MCP server."""
+        # Initialize everything
+        self.register_tools()
+        self.register_tool_handlers()
+        self.register_resources()
+        self.register_resource_handlers()
         
-        @self.server.list_prompts()
-        async def list_prompts() -> list[Prompt]:
-            """
-            Return the list of available prompts.
-            This is called when clients want to discover what prompts are available.
-            """
-            return [
-                Prompt(
-                    name="analyze-data",
-                    description="Analyze data stored in the server",
-                    arguments=[
-                        {
-                            "name": "key",
-                            "description": "The key of the data to analyze",
-                            "required": True
-                        }
-                    ]
-                ),
-                Prompt(
-                    name="calculate-scenario",
-                    description="Walk through a calculation scenario",
-                    arguments=[
-                        {
-                            "name": "operation",
-                            "description": "The operation to demonstrate (add, subtract, multiply, divide)",
-                            "required": True
-                        }
-                    ]
-                )
-            ]
-        
-        print("Prompts registered: analyze-data, calculate-scenario")
+        # Connect to stdio
+        async with stdio_server() as (read_stream, write_stream):
+            print("Server running on stdio...")
+            await self.server.run(
+                read_stream,
+                write_stream,
+                self.server.create_initialization_options()
+            )
+
+async def main():
+    """Main entry point."""
+    server = CompleteMCPServer()
+    await server.run()
+
+if __name__ == "__main__":
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print("Server stopped by user")
+    except Exception as e:
+        print(f"Error: {e}")
+        sys.exit(1)
 ```

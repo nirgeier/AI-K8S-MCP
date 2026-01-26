@@ -3,10 +3,11 @@
 """
 Complete MCP (Model Context Protocol) Server Implementation
 Built step by step for learning purposes.
-Step 11: Main Execution
+Step 12: RAG (Retrieval Augmented Generation)
 """
 
 import asyncio
+import csv
 import json
 from typing import Any, Optional
 
@@ -24,6 +25,35 @@ from mcp.types import (
 )
 import sys
 
+# Initialize an in-memory users
+users = []
+
+def load_users(csv_file_path: str):
+    """Load users from a CSV file."""
+    global users
+    users = []
+    
+    try:
+        with open(csv_file_path, 'r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            for i, row in enumerate(reader):
+                # Assuming CSV has 'content' and 'id' columns or similar
+                # Adjust column names as needed
+                content = row.get('content') or row.get('text') or list(row.values())[0]
+                doc_id = row.get('id') or f"doc_{i}"
+                
+                if content:
+                    users.append({"id": doc_id, "content": content})
+        
+        print(f"Loaded {len(users)} documents into users.")
+    except Exception as e:
+        print(f"Error loading users: {e}")
+
+# Load the users
+# Make sure you have a 'users.csv' file in the same directory
+# Format: id,content
+load_users("users.csv") 
+
 class CompleteMCPServer:
     """
     A comprehensive MCP Server implementation showcasing all protocol features.
@@ -34,6 +64,7 @@ class CompleteMCPServer:
     - Resource management
     - Prompt templates
     - Request handling
+    - RAG capabilities
     """
     
     def __init__(self):
@@ -120,10 +151,38 @@ class CompleteMCPServer:
                         },
                         "required": ["text"]
                     }
+                ),
+                Tool(
+                    name="filter_users_by_city",
+                    description="Filter and return users who live in a specific city",
+                    inputSchema={
+                        "type": "object",
+                        "properties": {
+                            "city": {
+                                "type": "string",
+                                "description": "The city to filter users by"
+                            }
+                        },
+                        "required": ["city"]
+                    }
+                ),
+                Tool(
+                    name="filter_users_by_age",
+                    description="Filter and return users who are older than the specified minimum age",
+                    inputSchema={
+                        "type": "object",
+                        "properties": {
+                            "min_age": {
+                                "type": "number",
+                                "description": "The minimum age to filter users by"
+                            }
+                        },
+                        "required": ["min_age"]
+                    }
                 )
             ]
         
-        print("Tools registered: calculate, store_data, retrieve_data, echo")
+        print("Tools registered: calculate, store_data, retrieve_data, echo, filter_users_by_city, filter_users_by_age")
 
     def register_tool_handlers(self):
         """Implement the actual logic for each tool."""
@@ -192,6 +251,48 @@ class CompleteMCPServer:
                     text=f"Echo: {text}"
                 )]
             
+            elif name == "filter_users_by_city":
+                city = arguments.get("city", "")
+                filtered_users = []
+                target_city = city.lower().strip()
+                
+                for user in users:
+                    # Assuming user dict has 'city' key (loaded from CSV)
+                    u_city = user.get("city", "").lower()
+                    
+                    if u_city == target_city:
+                         filtered_users.append(f"User {user.get('id')}: {user.get('content')} (City: {u_city})")
+                
+                if not filtered_users:
+                    result = f"No users found in {city}."
+                else:
+                    result = "\n".join(filtered_users)
+                    
+                return [TextContent(type="text", text=result)]
+
+            elif name == "filter_users_by_age":
+                min_age = arguments.get("min_age", 0)
+                filtered_users = []
+                
+                for user in users:
+                    # Assuming user dict has 'age' (or 'value') key
+                    u_age = user.get("age", user.get("value", 0))
+                    
+                    try:
+                        u_age = int(u_age)
+                    except ValueError:
+                        continue
+                        
+                    if u_age > min_age:
+                         filtered_users.append(f"User {user.get('id')}: {user.get('content')} (Age: {u_age})")
+                
+                if not filtered_users:
+                    result = f"No users found older than {min_age}."
+                else:
+                    result = "\n".join(filtered_users)
+                    
+                return [TextContent(type="text", text=result)]
+            
             else:
                 return [TextContent(
                     type="text",
@@ -248,7 +349,7 @@ class CompleteMCPServer:
                     "version": "1.0.0",
                     "description": "A comprehensive MCP server implementation",
                     "capabilities": {
-                        "tools": 4,
+                        "tools": 6,
                         "resources": 3,
                         "prompts": 2
                     }
@@ -265,6 +366,7 @@ This server demonstrates all MCP protocol capabilities:
 - Tools: Execute operations and computations
 - Resources: Access data and information
 - Prompts: Get structured prompt templates
+- RAG: Retrieval Augmented Generation for user filtering
 
 Explore the available tools and resources to see what this server can do."""
             
@@ -366,7 +468,6 @@ This demonstrates how to use computational tools in the MCP server."""
                 )
             
             else:
-                # Helper to create error message in correct format
                 return GetPromptResult(
                     messages=[
                         PromptMessage(
@@ -383,8 +484,6 @@ This demonstrates how to use computational tools in the MCP server."""
 
     def setup_lifecycle_handlers(self):
         """Setup lifecycle management (conceptual for MCP)."""
-        # Note: MCP servers typically don't have explicit lifecycle hooks
-        # This is a conceptual method showing where such logic would go
         print("Lifecycle management configured")
 
     async def run(self):
