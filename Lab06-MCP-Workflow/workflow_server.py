@@ -127,18 +127,25 @@ class WorkflowMCPServer:
     def register_resource_handlers(self):
         # 5. Register resource handlers (implementation)
         @self.server.read_resource()
-        async def read_resource(uri: str) -> str:
-            if uri == "resource://server-info":
+        async def read_resource(uri: Any) -> str:
+            """
+            Handle resource read requests.
+            This is called when a client wants to read a resource.
+            """
+            # Extract the URI string from the AnyUrl object
+            uri_str = str(uri)
+
+            if uri_str == "resource://server-info":
                 return json.dumps({
                     "name": "workflow-mcp-server",
                     "version": "1.0.0",
                     "status": "active"
                 }, indent=2)
             
-            elif uri == "resource://data-store":
+            elif uri_str == "resource://data-store":
                 return json.dumps(self.data_store, indent=2)
             
-            elif uri == "resource://welcome":
+            elif uri_str == "resource://welcome":
                 return "Welcome to the Workflow MCP Server!"
             
             return f"Resource not found: {uri}"

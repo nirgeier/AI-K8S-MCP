@@ -235,13 +235,15 @@ class CompleteMCPServer:
         """Implement resource retrieval logic."""
         
         @self.server.read_resource()
-        async def read_resource(uri: str) -> str:
+        async def read_resource(uri: Any) -> str:
             """
             Handle resource read requests.
             This is called when a client wants to read a resource.
             """
+        
             uri = str(uri)  # Ensure uri is a string
-            if uri == "resource://server-info":
+        
+            if uri_str == "resource://server-info":
                 info = {
                     "name": "complete-mcp-server",
                     "version": "1.0.0",
@@ -254,10 +256,10 @@ class CompleteMCPServer:
                 }
                 return json.dumps(info, indent=2)
             
-            elif uri == "resource://data-store":
+            elif uri_str == "resource://data-store":
                 return json.dumps(self.data_store, indent=2)
             
-            elif uri == "resource://welcome":
+            elif uri_str == "resource://welcome":
                 return """Welcome to the Complete MCP Server!
 
 This server demonstrates all MCP protocol capabilities:
