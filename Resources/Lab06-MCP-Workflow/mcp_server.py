@@ -457,7 +457,7 @@ This server demonstrates all MCP protocol capabilities:
 Explore the available tools and resources to see what this server can do."""
       
       else:
-        raise ValueError(f"Unknown resource: {uri}")
+        raise ValueError(f"Unknown resource: {uri_str}")
     
     print("Resource handlers implemented")
 
