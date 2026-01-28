@@ -6,14 +6,14 @@
 
 * Welcome to the Model Context Protocol (MCP) hands-on learning series! 
 * This comprehensive set of labs will take you from MCP fundamentals to building production-ready MCP servers.
-* **Here you'll Learn and Build Model Context Protocol (MCP) from Scratch**
+* **Here you'll learn and build the Model Context Protocol (MCP) from scratch**
 * Whether you're new to MCP or looking to deepen your understanding, this learning series will take you from fundamentals to building production-ready MCP servers.
 
 ---
 
 ## What You'll Learn 
 
-Through these 6 progressive [labs](labs.md), you'll master:
+Through these 8 progressive labs, you'll master:
 
 | Topic | Description |
 |-------|-------------|
@@ -28,7 +28,20 @@ Through these 6 progressive [labs](labs.md), you'll master:
 
 ## Labs Overview
 
-### [Lab 1: MCP Fundamentals](Lab01-MCP-Fundamentals/index.md)
+### [Lab 0: Environment Setup](Lab00-Setup/lab.md)
+
+Get your development environment ready for MCP server development.
+
+**Topics:**
+
+- Install and configure required tools (Docker, kubectl, Helm, Ollama, MCP Inspector, K-Agent etc.)
+- Build and run the K-Agent labs environment (Docker container or locally)
+- Verify Kubernetes cluster connectivity
+- Prepare the MCP server setup
+
+---
+
+### [Lab 1: MCP Fundamentals](Lab01-MCP-Fundamentals/lab.md)
 
 Get started with the basics! Learn what MCP is, why it exists, and understand its architecture and core components.
 
@@ -42,7 +55,7 @@ Get started with the basics! Learn what MCP is, why it exists, and understand it
 
 ---
 
-### [Lab 2: Building Your First MCP Server](Lab02-First-MCP-Server/index.md)
+### [Lab 2: Building Your First MCP Server](Lab02-First-MCP-Server/lab.md)
 
 Build a complete, working MCP server from the ground up.
 
@@ -56,7 +69,7 @@ Build a complete, working MCP server from the ground up.
 
 ---
 
-### [Lab 3: Implementing MCP Tools](Lab03-MCP-Tools/index.md)
+### [Lab 3: Implementing MCP Tools](Lab03-MCP-Tools/lab.md)
 
 Master the art of creating sophisticated, production-ready tools.
 
@@ -70,7 +83,7 @@ Master the art of creating sophisticated, production-ready tools.
 
 ---
 
-### [Lab 4: Working with MCP Resources](Lab04-MCP-Resources/index.md)
+### [Lab 4: Working with MCP Resources](Lab04-MCP-Resources/lab.md)
 
 Learn to expose contextual data that LLMs can read and reference.
 
@@ -84,7 +97,7 @@ Learn to expose contextual data that LLMs can read and reference.
 
 ---
 
-### [Lab 5: MCP Prompts and Complete Integration](Lab05-MCP-Prompts/index.md)
+### [Lab 5: MCP Prompts and Complete Integration](Lab05-MCP-Prompts/lab.md)
 
 Complete your MCP education with prompts and production best practices.
 
@@ -98,7 +111,34 @@ Complete your MCP education with prompts and production best practices.
 
 ---
 
-### [Lab 6: K-Agent Integration](Lab06-K-Agent/index.md)
+### [Lab 6: Complete MCP Server Implementation](Lab06-MCP-Workflow/lab.md)
+
+Build a complete MCP server from scratch, learning each component.
+
+**Topics:**
+
+- Project setup with Python
+- Implementing the MCP protocol
+- Creating tools, resources, and prompts
+- Testing and debugging
+
+---
+
+### [Lab 7: MCP Tools with Ollama Integration](Lab07-MCP-Ollama/lab.md)
+
+Master creating sophisticated MCP tools with Ollama integration.
+
+**Topics:**
+
+- Design robust tool schemas with advanced validation
+- Implement tools that interact with external systems
+- Return multiple content types
+- Handle errors gracefully
+- Apply best practices for tool composition
+
+---
+
+### [Lab 8: K-Agent Integration](Lab08-Kagent/lab.md)
 
 Implement a specialized MCP server (K-Agent) that interacts with Kubernetes clusters to provide AI-driven log collection and analysis.
 

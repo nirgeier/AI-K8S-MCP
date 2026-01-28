@@ -1,1089 +1,715 @@
-# Implementing Live MCP Server (With Ollama Integration)
+# Complete MCP Server with Ollama Integration - Hands-On Lab
 
-## Overview
+## Lab Objective
 
-* In this lab, you'll master the art of creating sophisticated, production-ready `MCP` tools that can handle complex inputs, perform real-world operations, and return rich content types.
-
----
-
-
-## Learning Objectives
-
-By the end of this lab, you will:
-
-- Design robust tool schemas with advanced validation
-- Implement tools that interact with external systems (APIs, databases, file systems)
-- Return multiple content types (text, images, resources)
-- Handle errors gracefully with detailed feedback
-- Implement async operations and streaming responses
-- Apply best practices for tool composition
-- Test tools thoroughly with various edge cases
+- In this hands-on lab, you'll build a complete MCP (Model Context Protocol) server from scratch with Ollama integration.
+- You'll learn how each component works by implementing it yourself, understanding why each piece is necessary, and seeing the complete architecture come together.
+- You'll implement advanced tools: Weather information with Ollama, File Operations, and Database Query, along with best practices for error handling, async operations, and tool composition.
 
 ---
 
 ## Prerequisites
 
-  - Completion of previous MCP labs or equivalent experience
-  - Understanding of async/await in JavaScript/TypeScript
-  - Basic knowledge of REST APIs and JSON
-  - Node.js development environment set up
+- Python 3.10 or higher installed
+- Ollama installed and running locally
+- Basic understanding of Python programming
+- Terminal/command line access
+- Text editor or IDE
 
 ---
 
-### Weather Information with Ollama
+## Getting Started
 
-#### Goal
-  * Create a production-ready weather tool that uses Ollama (local AI) to generate weather information, handles errors gracefully, and returns formatted information.
 
-#### Complete Weather Tool Implementation with Ollama
+1. Create a new file called `mcp_ollama.py` as your project file.
+2. Open it in your favorite text editor.
+3. Don't worry, during this lab, we'll build this server step by step!
 
-* Here is the complete `src/index.ts` file with the Ollama-based weather tool added. 
+---
 
-<details>
-<summary>Click to expand code</summary>
+## Step 01: Adding Imports
 
-```typescript
-#!/usr/bin/env node
+- Before we write any code, we need to understand what libraries we'll be using, and why.
 
-import { Server } from "@modelcontextprotocol/sdk/server/index.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import {
-  CallToolRequestSchema,
-  ListToolsRequestSchema,
-} from "@modelcontextprotocol/sdk/types.js";
+### `asyncio` - Asynchronous I/O
 
-/**
-* Create an MCP server with core capabilities
-*/
-class MyFirstMCPServer {
-  private server: Server;
+!!! question "asyncio"
+    **Definition:** A library for writing concurrent code using the async/await syntax.  
+    **Why:** Enables non-blocking I/O operations, crucial for handling multiple client requests simultaneously without freezing the server.  
+    **Usage:** Used for async functions, event loops, and coordinating concurrent tasks in the MCP server.
 
-  constructor() {
-    this.server = new Server(
-      {
-        name: "my-first-mcp-server",
-        version: "1.0.0",
-      },
-      {
-        capabilities: {
-          tools: {},
-        },
-      }
-    );
+### `json` - JavaScript Object Notation
 
-    this.setupHandlers();
-    this.setupErrorHandling();
-  }
+!!! question "json"
+    **Definition:** A module for parsing and generating JSON data.  
+    **Why:** MCP uses JSON-RPC for communication between clients and servers.  
+    **Usage:** Serializing/deserializing data sent over stdio transport.
 
-  /**
-  * Set up request handlers
-  */
-  private setupHandlers(): void {
-    // Handler for listing available tools
-    this.server.setRequestHandler(
-      ListToolsRequestSchema,
-      async () => ({
-        tools: [
-          {
-            name: "get_weather",
-            description: "Get current weather information for a city using AI",
-            inputSchema: {
-              type: "object",
-              properties: {
-                city: {
-                  type: "string",
-                  description: "City name (e.g., 'London', 'New York')"
+### `typing` - Type Hints
+
+!!! question "typing"
+    **Definition:** Provides runtime support for type hints.  
+    **Why:** Improves code readability, enables better IDE support, and catches type-related errors early.  
+    **Usage:** Defining function signatures and data structures with proper types.
+
+### `mcp.server` - Core MCP Server
+
+!!! question "mcp.server"
+    **Definition:** The main server class for implementing MCP servers.  
+    **Why:** Provides the framework for registering tools, resources, and prompts, and handling client requests.  
+    **Usage:** Creating the server instance and setting up request handlers.
+
+### `mcp.server.stdio` - Standard I/O Transport
+
+!!! question "mcp.server.stdio"
+    **Definition:** Transport layer for communication via standard input/output streams.  
+    **Why:** Enables MCP servers to communicate with clients through stdin/stdout, making them easily integrable with various applications.  
+    **Usage:** Establishing the communication channel for the server.
+
+### `mcp.types` - Protocol Types
+
+!!! question "mcp.types"
+    **Definition:** Type definitions for MCP protocol messages and data structures.  
+    **Why:** Ensures type safety and consistency when working with MCP messages.  
+    **Usage:** Defining request/response schemas and content types.
+
+    **Key Types Used:**
+
+    - **`Resource`**: Defines a resource (readable data/content) with URI, name, description, and MIME type
+    - **`Tool`**: Defines a tool (executable function) with name, description, and input schema
+    - **`TextContent`**, **`ImageContent`**: Content types for tool/resource responses
+    - **`Prompt`**: Defines a prompt template with name, description, and required arguments
+    - **`GetPromptResult`**: Result structure when retrieving a prompt
+    - **`CallToolResult`**: Result structure when calling a tool
+    - **`ListResourcesResult`**, **`ListToolsResult`**, **`ListPromptsResult`**: Results when listing available resources/tools/prompts
+    - **`ReadResourceResult`**: Result structure when reading a resource
+
+### `sys` - System Functions
+
+!!! question "sys"
+    **Definition:** Provides access to system-specific parameters and functions.  
+    **Why:** Needed for handling command-line arguments and system-level operations.  
+    **Usage:** Accessing stdin/stdout streams and handling program exit.
+
+### `requests` - HTTP Library
+
+!!! question "requests"
+    **Definition:** A simple HTTP library for making web requests.  
+    **Why:** Used for interacting with external APIs and services.  
+    **Usage:** Making HTTP calls to fetch data from web services.
+
+### `sqlite3` - SQLite Database
+
+!!! question "sqlite3"
+    **Definition:** Python's built-in SQLite database module.  
+    **Why:** Provides a lightweight, file-based database for data storage and querying.  
+    **Usage:** Executing SQL queries and managing database operations.
+
+### `ollama` - Ollama Client
+
+!!! question "ollama"
+    **Definition:** Python client for interacting with Ollama, a tool for running large language models locally.  
+    **Why:** Enables integration with local AI models for generating content and responses.  
+    **Usage:** Generating AI-powered weather information and other content.
+
+### `os` - Operating System Interface
+
+!!! question "os"
+    **Definition:** Provides a way to interact with the operating system.  
+    **Why:** Needed for file system operations and path handling.  
+    **Usage:** Checking file existence, reading files, and managing file paths.
+
+### `pathlib` - Object-oriented Filesystem Paths
+
+!!! question "pathlib"
+    **Definition:** Provides classes for filesystem paths with semantic operations.  
+    **Why:** Offers a more intuitive and cross-platform way to handle file paths.  
+    **Usage:** Constructing and manipulating file paths safely.
+
+---
+
+### Code for Step 01: Imports
+
+Set the following imports inside the `mcp_ollama.py` file:
+
+```python
+import asyncio
+import json
+import os
+import sqlite3
+import sys  # Not used in this MCP server scenario - stdio handled by mcp.server.stdio
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+import ollama
+import requests
+from mcp.server import Server
+from mcp.server.stdio import stdio_server
+from mcp.types import (
+    Resource,
+    Tool,
+    TextContent,
+    ImageContent,
+    ResourceContent,
+    Prompt,
+    GetPromptResult,
+    CallToolResult,
+    ListResourcesResult,
+    ListToolsResult,
+    ReadResourceResult,
+    ListPromptsResult,
+)
+```
+
+Create a file named `requirements.txt` with the following content:
+
+```
+mcp>=0.1.0
+ollama>=0.1.0
+requests>=2.25.0
+```
+
+Install the dependenciesby running the following from the same directory as your `requirements.txt` file:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Step 02: Skeleton Code - Class
+
+### Class Definition
+
+- Add this class definition after the imports in your `mcp_ollama.py` file:
+
+```python
+class CompleteOllamaMCPServer:
+    def __init__(self):
+        self.server = Server("complete-ollama-mcp-server")
+        self.data_store = {}
+        self.db_path = "data.db"
+        self._setup_handlers()
+
+    def _setup_handlers(self):
+        # Will be implemented in subsequent steps
+        pass
+```
+
+---
+
+## Step 03: Constructor
+
+### Method `__init__` (Constructor)
+
+**Capabilities:**
+
+- Initializes the MCP server with a name
+- Sets up data structures for tools, resources, and prompts
+- Prepares database connection
+- Initializes Ollama client
+
+**Why This Runs First:**
+
+- Establishes the foundation for all server operations
+- Sets up the basic state of the server
+- Ensures all dependencies are ready before registering components
+
+---
+
+- Add this class definition after inside your `CompleteOllamaMCPServer` class:
+
+```python
+    def __init__(self):
+        self.server = Server("complete-ollama-mcp-server")
+        self.data_store = {}
+        self.db_path = "data.db"
+        self.ollama_client = ollama.Client()
+        self._setup_handlers()
+```
+
+---
+
+## Step 04: Register Tools
+
+### Method `register_tools`
+
+**Capabilities:**
+- Registers tool definitions for discovery
+- Defines tool schemas and capabilities
+- Makes tools available to clients
+
+**Why This Runs Second:**
+- Tools must be registered before they can be called
+- Defines the capabilities clients can invoke
+
+**What is a Tool?**
+- A tool is an executable function that clients can invoke.
+- Tools have names, descriptions, and input parameters.
+- Clients can discover and call these tools to perform operations.
+
+---
+
+- Add this method to your class:
+
+```python
+@self.server.list_tools()
+async def list_tools() -> List[Tool]:
+    return [
+        Tool(
+            name="weather_with_ollama",
+            description="Get weather information for a city using Ollama AI",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "city": {
+                        "type": "string",
+                        "description": "The city name to get weather for"
+                    },
+                    "temp_unit": {
+                        "type": "string",
+                        "enum": ["C", "F"],
+                        "default": "C",
+                        "description": "Temperature unit (Celsius or Fahrenheit)"
+                    }
                 },
-                units: {
-                  type: "string",
-                  description: "Temperature units",
-                  enum: ["celsius", "fahrenheit"],
-                  default: "celsius"
-                }
-              },
-              required: ["city"]
+                "required": ["city"]
             }
-          },
-          {
-            name: "hello_world",
-            description: "Returns a friendly greeting message",
-            inputSchema: {
-              type: "object",
-              properties: {
-                name: {
-                  type: "string",
-                  description: "The name to greet",
+        ),
+        Tool(
+            name="read_file",
+            description="Read and analyze file contents with metadata",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "filepath": {
+                        "type": "string",
+                        "description": "Absolute path to the file to read"
+                    },
+                    "max_size": {
+                        "type": "number",
+                        "default": 1048576,
+                        "description": "Maximum file size in bytes (default 1MB)"
+                    },
+                    "encoding": {
+                        "type": "string",
+                        "default": "utf-8",
+                        "description": "File encoding"
+                    }
                 },
-              },
-              required: ["name"],
-            },
-          },
-        ],
-      })
-    );
-
-    // Handler for calling tools
-    this.server.setRequestHandler(
-      CallToolRequestSchema,
-      async (request) => {
-        const { name, arguments: args } = request.params;
-
-        if (name === "get_weather") {
-          try {
-            // Extract and validate parameters
-            const city = args.city as string;
-            const units = (args.units as string) || "celsius";
-
-            if (!city || city.trim().length === 0) {
-              throw new Error("City name cannot be empty");
+                "required": ["filepath"]
             }
-
-            // Use Ollama to generate weather information
-            const prompt = `Generate realistic current weather information for ${city}.
-            Return ONLY a JSON object with this exact structure:
-            {
-              "name": "${city}",
-              "sys": {"country": "XX"},
-              "main": {"temp": 20.5, "feels_like": 22.1, "humidity": 65},
-              "weather": [{"description": "clear sky"}],
-              "wind": {"speed": 3.2}
+        ),
+        Tool(
+            name="query_database",
+            description="Execute SELECT queries on SQLite database",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "description": "SELECT SQL query to execute"
+                    },
+                    "database": {
+                        "type": "string",
+                        "default": "data.db",
+                        "description": "Database file path"
+                    }
+                },
+                "required": ["query"]
             }
-
-            Use realistic weather data appropriate for the location. Temperature should be in Celsius. Choose an appropriate 2-letter country code for the city. Make the weather description realistic for the location and season.`;
-
-            // Call Ollama API
-            const response = await fetch('http://localhost:11434/api/generate', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                model: 'gpt-oss:20b',
-                prompt: prompt,
-                stream: false,
-                format: 'json'
-              }),
-            });
-
-            if (!response.ok) {
-              throw new Error(`Ollama API error: ${response.status} ${response.statusText}. Make sure Ollama is running with 'ollama serve'.`);
-            }
-
-            const ollamaResult = await response.json();
-            let data;
-
-            try {
-              // Parse the JSON response from Ollama
-              data = JSON.parse(ollamaResult.response);
-            } catch (parseError) {
-              // Fallback to mock data if parsing fails
-              console.warn('Failed to parse Ollama response, using fallback data');
-              const fallbackData: Record<string, any> = {
-                "london": {
-                  name: "London",
-                  sys: { country: "GB" },
-                  main: { temp: 15.2, feels_like: 14.8, humidity: 82 },
-                  weather: [{ description: "light rain" }],
-                  wind: { speed: 3.6 }
-                },
-                "new york": {
-                  name: "New York",
-                  sys: { country: "US" },
-                  main: { temp: 22.5, feels_like: 24.1, humidity: 65 },
-                  weather: [{ description: "clear sky" }],
-                  wind: { speed: 2.1 }
-                },
-                "tokyo": {
-                  name: "Tokyo",
-                  sys: { country: "JP" },
-                  main: { temp: 18.7, feels_like: 18.2, humidity: 78 },
-                  weather: [{ description: "few clouds" }],
-                  wind: { speed: 1.8 }
-                },
-                "paris": {
-                  name: "Paris",
-                  sys: { country: "FR" },
-                  main: { temp: 12.8, feels_like: 11.9, humidity: 71 },
-                  weather: [{ description: "overcast clouds" }],
-                  wind: { speed: 4.2 }
-                },
-                "sydney": {
-                  name: "Sydney",
-                  sys: { country: "AU" },
-                  main: { temp: 24.3, feels_like: 25.1, humidity: 73 },
-                  weather: [{ description: "sunny" }],
-                  wind: { speed: 2.8 }
-                }
-              };
-              data = fallbackData[city.toLowerCase().trim()] || fallbackData["london"];
-            }
-
-            // Format response
-            const tempUnit = units === "fahrenheit" ? "°F" : "°C";
-            const weatherText = `
-Weather in ${data.name}, ${data.sys.country}:
-- Temperature: ${data.main.temp}${tempUnit}
-- Feels like: ${data.main.feels_like}${tempUnit}
-- Conditions: ${data.weather[0].description}
-- Humidity: ${data.main.humidity}%
-- Wind Speed: ${data.wind.speed} m/s
-
-*Generated by Ollama AI*
-`.trim();
-
-            // Return MCP response
-            return {
-              content: [
-                {
-                  type: "text",
-                  text: weatherText
-                }
-              ]
-            };
-
-          } catch (error) {
-            // Handle errors
-            throw new Error(
-              `Failed to get weather: ${error instanceof Error ? error.message : 'Unknown error'}`
-            );
-          }
-        }
-
-        if (name === "hello_world") {
-          const userName = args?.name as string;
-
-          if (!userName) {
-            throw new Error("Name parameter is required");
-          }
-
-          return {
-            content: [
-              {
-                type: "text",
-                text: `Hello, ${userName}! Welcome to your first MCP server! 🎉`,
-              },
-            ],
-          };
-        }
-
-        throw new Error(`Unknown tool: ${name}`);
-      }
-    );
-  }
-
-  /**
-  * Set up error handling
-  */
-  private setupErrorHandling(): void {
-    this.server.onerror = (error) => {
-      console.error("[MCP Error]", error);
-    };
-
-    process.on("SIGINT", async () => {
-      await this.server.close();
-      process.exit(0);
-    });
-  }
-
-  /**
-  * Start the server
-  */
-  async start(): Promise<void> {
-    const transport = new StdioServerTransport();
-    await this.server.connect(transport);
-
-    console.error("My First MCP Server running on stdio");
-  }
-}
-
-/**
-* Main entry point
-*/
-async function main() {
-  const server = new MyFirstMCPServer();
-  await server.start();
-}
-
-main().catch((error) => {
-  console.error("Fatal error:", error);
-  process.exit(1);
-});
-```
-
-</details>
-
----
-
-
-#### Test the Weather Tool
-
-- This MCP is wriitten in TypeScript. Make sure you have all dependencies installed with `npm install`.
-
-  ```sh
-  # Install dependencies
-  npm install @types/node tsx typescript
-
-  # Test the MCP server
-  # Start the MCP Inspector** (in a new terminal):
-  npx @modelcontextprotocol/inspector tsx mcp.ts
-  ```
-
-2. **In the MCP Inspector interface**:
-  
-      - You should see both `get_weather` and `hello_world` tools listed
-      - Click on `get_weather` tool
-      - Enter a city name like "London", "New York", "Tokyo", "Paris", or "Sydney"
-      - Optionally set units to "fahrenheit" for Fahrenheit temperatures
-      - Click "Call Tool"
-
-3. **Test different scenarios**:
-  
-      - Valid cities: "London", "New York", "Tokyo", "Paris", "Sydney"
-      - Invalid cities: "InvalidCity123" (will use fallback data)
-      - Different units: Try both "celsius" and "fahrenheit"
-      - Empty city: Try with empty string (should show validation error)
-
-4. **Test error cases**:
-   
-      - Stop Ollama server and try calling the tool (should show API error)
-      - Try with invalid model name in the code (should show error)
-
-
-- You should see AI-generated weather information formatted like this:
-
-    ```
-    Weather in London, GB:
-    - Temperature: 15.2°C
-    - Feels like: 14.8°C
-    - Conditions: light rain
-    - Humidity: 82%
-    - Wind Speed: 3.6 m/s
-
-    *Generated by Ollama AI*
-    ```
-
----
-
-### Tool 2: File Operations
-
-#### Goal
-
-  * Create a secure file reading tool that can handle various file types, validate paths, and return formatted content with metadata.
-
-#### Complete File Operations Tool Implementation
-
-!!! danger ""
-      * Do NOT copy the entire code block below. 
-      * Instead, add the `read_file` tool to your existing `src/index.ts` file by following these specific steps:
-
-1. **Add the import** at the top of your file (after existing imports):
-   ```typescript
-   import * as fs from 'fs/promises';
-   import * as path from 'path';
-   ```
-
-2. **Add the `read_file` tool to your tools array** in the `ListToolsRequestSchema` handler:
-   ```typescript
-   {
-     name: "read_file",
-     description: "Read contents of a text file with security validation",
-     inputSchema: {
-       type: "object",
-       properties: {
-         filepath: {
-           type: "string",
-           description: "Absolute path to the file"
-         },
-         encoding: {
-           type: "string",
-           description: "File encoding",
-           enum: ["utf8", "ascii", "base64"],
-           default: "utf8"
-         },
-         maxSize: {
-           type: "number",
-           description: "Maximum file size in bytes",
-           minimum: 1,
-           maximum: 10485760,
-           default: 1048576
-         }
-       },
-       required: ["filepath"]
-     }
-   }
-   ```
-
-3. **Add the `read_file` handler** in the `CallToolRequestSchema` handler (before the final `throw new Error`):
-   ```typescript
-   if (name === "read_file") {
-     try {
-       const filepath = args.filepath as string;
-       const encoding = (args.encoding as BufferEncoding) || "utf8";
-       const maxSize = (args.maxSize as number) || 1048576;
-
-       // Security: Validate input
-       if (!filepath || typeof filepath !== 'string' || filepath.trim().length === 0) {
-         throw new Error("filepath must be a non-empty string");
-       }
-
-       // Security: Resolve and validate path
-       const resolvedPath = path.resolve(filepath);
-       
-       // Prevent directory traversal attacks
-       if (!resolvedPath.startsWith(process.cwd())) {
-         throw new Error("Access denied: file path outside allowed directory");
-       }
-
-       // Check if file exists and is readable
-       try {
-         await fs.access(resolvedPath, fs.constants.R_OK);
-       } catch {
-         throw new Error(`File not found or not readable: ${filepath}`);
-       }
-
-       // Get file stats
-       const stats = await fs.stat(resolvedPath);
-       
-       // Check if it's actually a file (not a directory)
-       if (!stats.isFile()) {
-         throw new Error(`Path is not a file: ${filepath}`);
-       }
-
-       // Check file size
-       if (stats.size > maxSize) {
-         throw new Error(
-           `File too large: ${stats.size} bytes (max: ${maxSize})`
-         );
-       }
-
-       // Read file content
-       const content = await fs.readFile(resolvedPath, encoding);
-
-       // Format response with metadata
-       const fileInfo = {
-         path: resolvedPath,
-         size: stats.size,
-         modified: stats.mtime.toISOString(),
-         encoding: encoding
-       };
-
-       return {
-         content: [
-           {
-             type: "text",
-             text: `File Information:\n${JSON.stringify(fileInfo, null, 2)}\n\nContent:\n${content}`
-           }
-         ]
-       };
-
-     } catch (error) {
-       throw new Error(
-         `Failed to read file: ${error instanceof Error ? error.message : 'Unknown error'}`
-       );
-     }
-   }
-   ```
-
----
-
-
-#### Testing the File Operations Tool
-
-## Step 1: Create Test File
-
-```bash
-# Create a test directory and files
-mkdir -p test-files
-echo "Hello, this is a test file\!" > test-files/hello.txt
-echo '{"name": "test", "value": 123}' > test-files/data.json
-echo "Line 1\nLine 2\nLine 3" > test-files/lines.txt
-```
-
----
-
-## Step 2: Start the MCP Inspector
-
-```bash
-npx @modelcontextprotocol/inspector tsx mcp.ts
-```
-
----
-
-## Step 3: Test File Reading
-
-1. **Test with a simple text file**:
-
-      - Tool: `read_file`
-      - filepath: `/absolute/path/to/test-files/hello.txt` (use the full absolute path)
-      - Click "Call Tool"
-
-2. **Test with JSON file**:
-
-      - Tool: `read_file`
-      - filepath: `/absolute/path/to/test-files/data.json`
-      - Click "Call Tool"
-
-3. **Test with different encoding**:
-
-      - Tool: `read_file`
-      - filepath: `/absolute/path/to/test-files/hello.txt`
-      - encoding: `base64`
-      - Click "Call Tool"
-
-4. **Test file size limit**:
-
-      - Create a large file: `dd if=/dev/zero of=test-files/large.txt bs=1M count=2`
-      - Try reading it with default maxSize (1MB)
-      - Try with maxSize: `2097152` (2MB)
-
----
-
-## Step 4: Test Error Cases
-
-1. **Non-existent file**:
-
-      - filepath: `/absolute/path/to/test-files/nonexistent.txt`
-
-2. **Directory instead of file**:
-
-      - filepath: `/absolute/path/to/test-files` (the directory itself)
-
-3. **Empty filepath**:
-
-      - filepath: `""`
-
-4. **Path traversal attempt**:
-
-      - filepath: `/absolute/path/../../../etc/passwd`
-
----
-
-## Step 5: Verify Output
-
-- You should see output like:
-
-    ```
-    File Information:
-    {
-      "path": "/Users/username/project/test-files/hello.txt",
-      "size": 27,
-      "modified": "2024-01-06T10:30:00.000Z",
-      "encoding": "utf8"
-    }
-
-    Content:
-    Hello, this is a test file!
-    ```
-
-#### **Troubleshooting:**
-
-- **"File not found"**: Make sure you're using the absolute path
-- **"Access denied"**: The file path is outside your project directory
-- **"Path is not a file"**: You tried to read a directory
-- **"File too large"**: Increase the maxSize parameter
-
-#### Key Learning Points:
-
-- **Path security** and preventing directory traversal attacks
-- **File system operations** with Node.js fs/promises
-- **Input validation** beyond JSON Schema
-- **File metadata** extraction and formatting
-- **Error handling** for various file system scenarios
-- **Resource limits** to prevent abuse
-
----
-
-### Tool 3: Database Query
-
-#### Goal
-  
-  * Create a secure database query tool that can execute `SELECT` statements on a `SQLite` database with proper validation and safety measures.
-
-#### Complete Database Query Tool Implementation
-
-- First, install the SQLite dependency:
-
-    ```bash
-    npm install -g better-sqlite3
-    npm install -g @types/better-sqlite3
-    ```
-
-* Now add the `query_database` tool to your existing `src/index.ts` file by following these specific steps:
-
-1. **Add the imports** at the top of your file (after existing imports):
-   ```typescript
-   import Database from 'better-sqlite3';
-   ```
-
-2. **Add the `query_database` tool to your tools array** in the `ListToolsRequestSchema` handler:
-   ```typescript
-   {
-     name: "query_database",
-     description: "Execute SELECT queries on a SQLite database",
-     inputSchema: {
-       type: "object",
-       properties: {
-         query: {
-           type: "string",
-           description: "SQL SELECT query to execute"
-         },
-         parameters: {
-           type: "array",
-           description: "Query parameters for prepared statement",
-           items: {
-             type: ["string", "number", "boolean", "null"]
-           },
-           default: []
-         },
-         limit: {
-           type: "number",
-           description: "Maximum number of rows to return",
-           minimum: 1,
-           maximum: 1000,
-           default: 100
-         }
-       },
-       required: ["query"]
-     }
-   }
-   ```
-
-3. **Add the `query_database` handler** in the `CallToolRequestSchema` handler (before the final `throw new Error`):
-   ```typescript
-   if (name === "query_database") {
-     try {
-       const query = args.query as string;
-       const parameters = (args.parameters as any[]) || [];
-       const limit = (args.limit as number) || 100;
-
-       // Security: Validate input
-       if (!query || typeof query !== 'string' || query.trim().length === 0) {
-         throw new Error("query must be a non-empty string");
-       }
-
-       // Security: Only allow SELECT queries
-       const trimmedQuery = query.trim().toUpperCase();
-       if (!trimmedQuery.startsWith('SELECT')) {
-         throw new Error("Only SELECT queries are allowed for security");
-       }
-
-       // Check if database file exists
-       const dbPath = './data.db';
-       try {
-         await fs.access(dbPath, fs.constants.R_OK);
-       } catch {
-         throw new Error("Database file 'data.db' not found in project root");
-       }
-
-       // Open database in read-only mode
-       const db = new Database(dbPath, { readonly: true });
-
-       try {
-         // Prepare statement
-         const stmt = db.prepare(query + ' LIMIT ?');
-         
-         // Execute query
-         const rows = stmt.all(...parameters, limit);
-
-         // Format results
-         const resultText = rows.length > 0
-           ? JSON.stringify(rows, null, 2)
-           : "No results found";
-
-         // Get query info
-         const info = stmt.columns();
-         const columnNames = info.map(col => col.name);
-
-         return {
-           content: [
-             {
-               type: "text",
-               text: `Query executed successfully.\nDatabase: ${dbPath}\nColumns: ${columnNames.join(', ')}\nRows returned: ${rows.length}\n\nResults:\n${resultText}`
-             }
-           ]
-         };
-
-       } finally {
-         db.close();
-       }
-
-     } catch (error) {
-       throw new Error(
-         `Database query failed: ${error instanceof Error ? error.message : 'Unknown error'}`
-       );
-     }
-   }
-   ```
-
----
-
-#### Testing the Database Query Tool
-
-
-**Step 1: Install SQLite**
-
-```bash
-# Install sqlite3 command-line tool (if not already installed)
-
-# On macOS:
-brew install sqlite3
-
-# On Linux (Ubuntu/Debian):
-sudo apt-get update && sudo apt-get install sqlite3
-
-# On Linux (CentOS/RHEL/Fedora):
-sudo yum install sqlite3    # or sudo dnf install sqlite3
-
-# On Windows (using Chocolatey):
-choco install sqlite
-
-# On Windows (manual download):
-# Download from: https://www.sqlite.org/download.html
-# Extract sqlite3.exe to a folder in your PATH
-
-# Verify installation:
-sqlite3 --version
-```
-
----
-
-**Step 2: Create a Sample Database**
-
-**Navigate to your MCP server directory**
-
-```bash
-cd /Users/orni/Code-Wizard/MCP_Lab/MCP_Lab/lab_solution/my-first-mcp-server
-```
-
-**Run the database creation command**
-
-```bash
-sqlite3 data.db << 'EOF'
-CREATE TABLE users (
-  id INTEGER PRIMARY KEY,
-  name TEXT NOT NULL,
-  email TEXT UNIQUE,
-  age INTEGER,
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE products (
-  id INTEGER PRIMARY KEY,
-  name TEXT NOT NULL,
-  price REAL,
-  category TEXT,
-  in_stock BOOLEAN DEFAULT 1
-);
-
-INSERT INTO users (name, email, age) VALUES 
-  ('Alice Johnson', 'alice@example.com', 28),
-  ('Bob Smith', 'bob@example.com', 34),
-  ('Charlie Brown', 'charlie@example.com', 22);
-
-INSERT INTO products (name, price, category, in_stock) VALUES 
-  ('Laptop', 999.99, 'Electronics', 1),
-  ('Book', 19.99, 'Education', 1),
-  ('Coffee Mug', 12.50, 'Kitchen', 0);
-
-.quit
-EOF
-```
-
-**Verify the database was created**
-
-```bash
-sqlite3 data.db "SELECT name FROM sqlite_master WHERE type='table';"
-```
-
-- You should see output like:
-
-    ```
-    users
-    products
-    ```
-
-**What this does:**
-
-- Creates a SQLite database file called `data.db` in your project directory
-- Creates two tables: `users` and `products`
-- Inserts sample data into both tables
-- This gives you test data to query with your `query_database` tool
-
----
-
-**Step 2: Start the MCP Inspector**
-
-```bash
-npx @modelcontextprotocol/inspector tsx mcp.ts
-```
-
----
-
-**Step 3: Test Database Queries**
-
-1. **Simple SELECT query**:
-
-      - Tool: `query_database`
-      - query: `SELECT * FROM users`
-      - Click "Call Tool"
-
-2. **Query with WHERE clause**:
-
-      - Tool: `query_database`
-      - query: `SELECT name, email FROM users WHERE age > 25`
-      - Click "Call Tool"
-
-3. **Query with parameters**:
-
-      - Tool: `query_database`
-      - query: `SELECT * FROM products WHERE category = ?`
-      - parameters: `["Electronics"]`
-      - Click "Call Tool"
-
-4. **Query with LIMIT**:
-
-      - Tool: `query_database`
-      - query: `SELECT * FROM users`
-      - limit: `2`
-      - Click "Call Tool"
-
-5. **JOIN query**:
-
-      - Tool: `query_database`
-      - query: `SELECT u.name, p.name as product FROM users u CROSS JOIN products p LIMIT 5`
-      - Click "Call Tool"
-
----
-
-**Step 4: Test Error Cases**
-
-1. **Non-SELECT query**:
-
-      - query: `DELETE FROM users WHERE id = 1`
-
-2. **Invalid SQL syntax**:
-
-      - query: `SELECT * FROM nonexistent_table`
-
-3. **Missing database file**:
-
-      - Rename `data.db` to `data.db.backup` and try a query
-
-4. **Empty query**:
-
-      - query: `""`
-
----
-
-**Step 5: Verify Output**
-
-- You should see output like:
-
-    ```
-    Query executed successfully.
-    Database: ./data.db
-    Columns: id, name, email, age, created_at
-    Rows returned: 3
-
-    Results:
-    [
-      {
-        "id": 1,
-        "name": "Alice Johnson",
-        "email": "alice@example.com",
-        "age": 28,
-        "created_at": "2024-01-06 10:30:00"
-      },
-      ...
+        )
     ]
-    ```
-
-
-**Troubleshooting:**
-
-- **"Database file not found"**: Make sure `data.db` exists in your project root
-- **"Only SELECT queries are allowed"**: The tool only allows SELECT statements for security
-- **"no such table"**: Check your table names in the database
-- **"sqlite3: command not found"**: Install sqlite3 CLI tool
-
-#### Key Learning Points:
-
-- **SQL injection prevention** using prepared statements
-- **Database security** with read-only access and query restrictions
-- **SQLite operations** with better-sqlite3
-- **Query parameterization** for safe dynamic queries
-- **Result formatting** and metadata extraction
-- **Resource management** with proper database connection handling
+```
 
 ---
 
-## Returning Rich Content
+## Step 05: Tool Handlers
 
-* MCP supports multiple content types in tool responses, allowing you to return not just text but also images, resources, and combinations of different content types. 
-* This enables richer, more interactive responses that can include visual data, file references, and structured information.
+### Method `register_tool_handlers`
 
-### 1. Text Content
+**Capabilities:**
+- Implements the logic for each tool
+- Handles tool execution and error management
+- Returns formatted results
 
-**Text content** is the most common and basic type of response.   
-Use it for any string-based information like analysis results, status messages, or formatted data.
+**Why This Runs Third:**
+- Connects tool schemas to actual functionality
+- Makes tools operational
 
-```typescript
-return {
-  content: [
-    {
-      type: "text",
-      text: "Simple text response"
-    }
-  ]
-};
+---
+
+- Add this method to your class:
+
+```python
+@self.server.call_tool()
+async def call_tool(name: str, arguments: Dict[str, Any]) -> List[TextContent]:
+    if name == "weather_with_ollama":
+        city = arguments.get("city", "")
+        temp_unit = arguments.get("temp_unit", "C")
+        
+        if not city:
+            raise ValueError("City name is required")
+        
+        try:
+            # Use Ollama to generate weather information
+            prompt = f"Generate realistic weather information for {city}. Include temperature, conditions, humidity, and wind speed. Format as a weather report."
+            
+            response = self.ollama_client.generate(
+                model='llama2',  # or your preferred model
+                prompt=prompt,
+                options={'temperature': 0.7, 'max_tokens': 200}
+            )
+            
+            weather_info = response['response'].strip()
+            
+            result = f"Weather in {city}:\n{weather_info}\n\n*Generated by Ollama AI*"
+            
+            return [TextContent(type="text", text=result)]
+            
+        except Exception as e:
+            return [TextContent(type="text", text=f"Error getting weather: {str(e)}")]
+    
+    elif name == "read_file":
+        filepath = arguments.get("filepath", "")
+        max_size = arguments.get("max_size", 1048576)
+        encoding = arguments.get("encoding", "utf-8")
+        
+        if not filepath:
+            raise ValueError("File path is required")
+        
+        path = Path(filepath)
+        if not path.exists():
+            raise ValueError(f"File not found: {filepath}")
+        
+        if not path.is_file():
+            raise ValueError(f"Path is not a file: {filepath}")
+        
+        file_size = path.stat().st_size
+        if file_size > max_size:
+            raise ValueError(f"File too large: {file_size} bytes (max: {max_size})")
+        
+        try:
+            with open(path, 'r', encoding=encoding) as f:
+                content = f.read()
+            
+            metadata = f"File: {path.name}\nSize: {file_size} bytes\nEncoding: {encoding}\n\n"
+            result = metadata + "Content:\n" + content
+            
+            return [TextContent(type="text", text=result)]
+            
+        except Exception as e:
+            return [TextContent(type="text", text=f"Error reading file: {str(e)}")]
+    
+    elif name == "query_database":
+        query = arguments.get("query", "").strip()
+        database = arguments.get("database", self.db_path)
+        
+        if not query:
+            raise ValueError("Query is required")
+        
+        if not query.upper().startswith("SELECT"):
+            raise ValueError("Only SELECT queries are allowed")
+        
+        try:
+            conn = sqlite3.connect(database)
+            cursor = conn.cursor()
+            
+            cursor.execute(query)
+            rows = cursor.fetchall()
+            columns = [desc[0] for desc in cursor.description]
+            
+            conn.close()
+            
+            if not rows:
+                result = "No results found."
+            else:
+                # Format as table
+                result = "| " + " | ".join(columns) + " |\n"
+                result += "|" + "|".join(["---"] * len(columns)) + "|\n"
+                for row in rows:
+                    result += "| " + " | ".join(str(cell) for cell in row) + " |\n"
+            
+            return [TextContent(type="text", text=result)]
+            
+        except Exception as e:
+            return [TextContent(type="text", text=f"Database error: {str(e)}")]
+    
+    else:
+        raise ValueError(f"Unknown tool: {name}")
 ```
 
-**When to use -** Most tool responses will use text content. 
-It's perfect for:
+---
 
-  - Status messages and confirmations
-  - Formatted data output (JSON, tables, lists)
-  - Error messages and explanations
-  - Analysis results and summaries
+## Step 06: Register Resources
 
-### 2. Image Content
+### Method `register_resources`
 
-**Image content** allows you to return visual data directly in the response. The image data must be base64-encoded and include the appropriate MIME type.
+**Capabilities:**
+- Registers resource definitions for discovery
+- Provides additional data for clients
 
-```typescript
-return {
-  content: [
-    {
-      type: "image",
-      data: base64ImageData,
-      mimeType: "image/png"
-    }
-  ]
-};
+**Why This Runs Fourth:**
+- Resources enhance the server's functionality
+
+**What is a Resource?**
+- A resource is readable data or content.
+- Resources have URIs and metadata.
+
+---
+
+- Add this method to your class:
+
+```python
+@self.server.list_resources()
+async def list_resources() -> List[Resource]:
+    return [
+        Resource(
+            uri="resource://server-info",
+            name="Server Information",
+            description="Basic information about this MCP server",
+            mimeType="application/json"
+        ),
+        Resource(
+            uri="resource://ollama-models",
+            name="Available Ollama Models",
+            description="List of available Ollama models",
+            mimeType="application/json"
+        )
+    ]
 ```
 
-**When to use -** Ideal for tools that generate or process visual content:
+---
 
-  - Charts and graphs from data analysis
-  - Screenshots or visual captures
-  - Generated diagrams or illustrations
-  - Image processing results
+## Step 07: Resource Handlers
 
-**Important:** Always specify the correct MIME type (image/png, image/jpeg, image/svg+xml, etc.) and ensure the base64 data is properly encoded.
+### Method `register_resource_handlers`
 
-### 3. Resource Content
+**Capabilities:**
+- Implements resource reading logic
 
-**Resource content** references external resources rather than including their data directly. This is useful for large files or when you want to provide access to resources without embedding them.
+**Why This Runs Fifth:**
+- Connects resource URIs to actual content
 
-```typescript
-return {
-  content: [
-    {
-      type: "resource",
-      resource: {
-        uri: "file:///path/to/file.txt",
-        mimeType: "text/plain",
-        text: "File contents..."
-      }
-    }
-  ]
-};
+---
+
+- Add this method to your class:
+
+```python
+@self.server.read_resource()
+async def read_resource(uri: str) -> str:
+    if uri == "resource://server-info":
+        info = {
+            "name": "Complete Ollama MCP Server",
+            "version": "1.0.0",
+            "capabilities": ["tools", "resources", "ollama-integration"],
+            "tools": ["weather_with_ollama", "read_file", "query_database"]
+        }
+        return json.dumps(info, indent=2)
+    
+    elif uri == "resource://ollama-models":
+        try:
+            models = self.ollama_client.list()
+            return json.dumps(models, indent=2)
+        except Exception as e:
+            return json.dumps({"error": str(e)}, indent=2)
+    
+    else:
+        raise ValueError(f"Unknown resource: {uri}")
 ```
 
-**When to use -** Best for:
+---
 
-  - Large files that would make responses too bulky
-  - References to external files or URLs
-  - When the client should handle the resource directly
-  - Providing access to generated files
+## Step 08: Register Prompts
 
-**Note:** The `text` field is optional - you can omit it if the resource content is too large or if you just want to provide a reference.
+### Method `register_prompts`
 
-### 4. Multiple Content Items
+**Capabilities:**
+- Registers prompt templates
 
-**Multiple content items** allow you to combine different types of content in a single response. This creates rich, multi-part responses that can include text explanations alongside visual data.
+**Why This Runs Sixth:**
+- Provides structured prompts for AI interactions
 
-```typescript
-return {
-  content: [
-    {
-      type: "text",
-      text: "Analysis complete:"
-    },
-    {
-      type: "text",
-      text: "Details:\n- Item 1\n- Item 2"
-    },
-    {
-      type: "image",
-      data: chartImage,
-      mimeType: "image/png"
-    }
-  ]
-};
+**What is a Prompt?**
+- A prompt is a template that guides AI assistants.
+
+---
+
+- Add this method to your class:
+
+```python
+@self.server.list_prompts()
+async def list_prompts() -> List[Prompt]:
+    return [
+        Prompt(
+            name="analyze-weather-data",
+            description="Analyze weather data and provide insights",
+            arguments=[
+                {
+                    "name": "city",
+                    "description": "City to analyze weather for",
+                    "required": True
+                }
+            ]
+        )
+    ]
 ```
 
-**When to use -** Perfect for comprehensive responses that need multiple components:
+---
 
-  - Analysis reports with both text summaries and visual charts
-  - File processing results with metadata and content preview
-  - Multi-step operations with status updates and final results
-  - Complex data with both tabular and graphical representations
+## Step 09: Prompt Handlers
 
-**Tip:** Order your content logically - start with text explanations, then show supporting images or resources.
+### Method `register_prompt_handlers`
+
+**Capabilities:**
+- Generates prompt content
+
+**Why This Runs Seventh:**
+- Connects prompt templates to actual content
+
+---
+
+- Add this method to your class:
+
+```python
+@self.server.get_prompt()
+async def get_prompt(name: str, arguments: Dict[str, Any]) -> GetPromptResult:
+    if name == "analyze-weather-data":
+        city = arguments.get("city", "Unknown City")
+        prompt_text = f"""Analyze the weather data for {city} and provide insights:
+
+1. Use the weather_with_ollama tool to get current weather information
+2. Analyze the temperature, conditions, and other factors
+3. Provide recommendations based on the weather
+4. Consider seasonal patterns and typical conditions
+
+Please provide a comprehensive weather analysis."""
+        
+        return GetPromptResult(
+            description=f"Weather analysis prompt for {city}",
+            messages=[
+                {
+                    "role": "user",
+                    "content": {
+                        "type": "text",
+                        "text": prompt_text
+                    }
+                }
+            ]
+        )
+    
+    else:
+        raise ValueError(f"Unknown prompt: {name}")
+```
+
+---
+
+## Step 10: Lifecycle Handlers
+
+### Method `setup_lifecycle_handlers`
+
+**Capabilities:**
+- Handles server initialization and shutdown
+
+**Why This Runs Eighth:**
+- Ensures proper server lifecycle management
+
+---
+
+- Add this method to your class:
+
+```python
+def _setup_handlers(self):
+    # Register all handlers
+    self.register_tools()
+    self.register_tool_handlers()
+    self.register_resources()
+    self.register_resource_handlers()
+    self.register_prompts()
+    self.register_prompt_handlers()
+    self.setup_lifecycle_handlers()
+```
+
+---
+
+## Step 11: Run the Server
+
+### Method `run`
+
+**Capabilities:**
+- Starts the MCP server
+
+**Why This Runs Last:**
+- Initiates the server operation
+
+---
+
+- Add this method to your class:
+
+```python
+async def run(self):
+    async with stdio_server() as (read_stream, write_stream):
+        await self.server.run(read_stream, write_stream, self.server.create_initialization_options())
+```
+
+---
+
+## Step 12: Main / Entry Point
+
+**What is the Main Entry Point?**
+- The starting point of the script
+
+---
+
+```python
+async def main():
+    server = CompleteOllamaMCPServer()
+    await server.run()
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
 
 ---
 
 ## Error Handling Patterns
 
-Error handling is crucial for robust MCP tools. Different situations require different approaches to handle failures gracefully while providing useful feedback to users. Here are three essential patterns for handling errors effectively.
-
 ### Pattern 1: Input Validation
 
-**Input validation** ensures that tool arguments meet your requirements before processing begins. This prevents runtime errors and provides clear feedback when users provide invalid data.
+!!! question "Input Validation"
+    **Definition:** Ensures tool arguments meet requirements before processing.  
+    **Why:** Prevents runtime errors and provides clear feedback.  
+    **Usage:** Validate inputs early in tool handlers.
 
-```typescript
-function validateInput(args: any): void {
-  if (!args.filepath || typeof args.filepath !== 'string') {
-    throw new Error("filepath must be a non-empty string");
-  }
-
-  if (args.maxSize && (args.maxSize < 1 || args.maxSize > 10485760)) {
-    throw new Error("maxSize must be between 1 and 10485760 bytes");
-  }
-}
+```python
+if not city:
+    raise ValueError("City name is required")
 ```
 
-**When to use -** Always validate inputs before processing, even when using JSON Schema validation. This pattern is essential for:
+**When to use -** For all tool inputs and external data:
 
-  - Type checking beyond JSON Schema capabilities
-  - Business logic validation (file size limits, path security)
-  - Preventing runtime errors from malformed data
-  - Providing specific, actionable error messages
+  - User-provided parameters and arguments
+  - File paths and resource identifiers
+  - Network requests and API parameters
+  - Database queries and data inputs
+  - Any data that could be malformed or malicious
 
-**Why it matters:** Early validation fails fast and gives users clear guidance on how to fix their input.
+**Why it matters:** Prevents crashes, security vulnerabilities, and unexpected behavior by catching invalid inputs early with clear error messages.
 
 ### Pattern 2: Graceful Degradation
 
-**Graceful degradation** provides partial functionality when full operation isn't possible. Instead of failing completely, the tool returns useful information or falls back to alternative approaches.
+!!! question "Graceful Degradation"
+    **Definition:** Provides partial functionality when full operation isn't possible.  
+    **Why:** Users get some value even when systems fail partially.  
+    **Usage:** Return useful information or fallbacks.
 
-```typescript
-try {
-  const data = await fetchFromAPI(url);
-  return formatSuccess(data);
-} catch (error) {
-  // Log error but return partial results if possible
-  console.error("API call failed:", error);
-
-  return {
-    content: [
-      {
-        type: "text",
-        text: "⚠️ Could not fetch live data. Using cached results..."
-      }
-    ]
-  };
-}
+```python
+try:
+    # Attempt full operation
+    pass
+except Exception as e:
+    # Return partial results or error message
+    return [TextContent(type="text", text=f"Partial result: {str(e)}")]
 ```
 
 **When to use -** For external dependencies that might be unreliable:
@@ -1097,24 +723,15 @@ try {
 
 ### Pattern 3: Detailed Error Context
 
-**Detailed error context** provides comprehensive information for debugging while keeping user-facing messages clean. Log full details internally but expose only safe, helpful information to users.
+!!! question "Detailed Error Context"
+    **Definition:** Provides comprehensive debugging information.  
+    **Why:** Enables effective troubleshooting while keeping user messages clean.  
+    **Usage:** Log details internally, expose safe messages to users.
 
-```typescript
-catch (error) {
-  const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-  const errorContext = {
-    tool: name,
-    arguments: args,
-    timestamp: new Date().toISOString(),
-    error: errorMessage
-  };
-
-  console.error("[Tool Error]", JSON.stringify(errorContext));
-
-  throw new Error(
-    `Tool '${name}' failed: ${errorMessage}. Check server logs for details.`
-  );
-}
+```python
+except Exception as e:
+    print(f"Internal error: {str(e)}", file=sys.stderr)
+    return [TextContent(type="text", text="An error occurred. Please try again.")]
 ```
 
 **When to use -** For complex operations where debugging might be needed:
@@ -1128,805 +745,382 @@ catch (error) {
 
 ---
 
-#### **Best Practices for Error Handling:**
-
-- **Fail Fast:** Validate inputs early and stop processing on critical errors
-- **Log Internally:** Use `console.error()` for detailed logging (goes to stderr, not stdout)
-- **User-Friendly Messages:** Keep error messages clear and actionable
-- **Don't Leak Sensitive Data:** Never expose file paths, credentials, or internal details
-- **Consistent Format:** Use similar error message patterns across tools
-- **Recovery Options:** When possible, suggest how users can resolve the issue
-
----
-
 ## Async Operations and Performance
-
-MCP tools often need to handle asynchronous operations and optimize performance. Long-running tasks require special handling to prevent timeouts and provide feedback, while expensive operations benefit from caching to improve response times and reduce resource usage.
 
 ### Long-Running Operations
 
-**Long-running operations** need monitoring and progress feedback to prevent timeouts and keep users informed. Use logging and timing to track operation progress and provide completion status.
+!!! question "Long-Running Operations"
+    **Definition:** Operations that take significant time to complete.  
+    **Why:** Prevents timeouts and provides feedback.  
+    **Usage:** Use async/await and provide progress updates.
 
-```typescript
-if (name === "analyze_large_file") {
-  const filepath = args.filepath as string;
-
-  // For very long operations, consider streaming or progress updates
-  console.error(`[INFO] Starting analysis of ${filepath}...`);
-
-  try {
-    const startTime = Date.now();
-
-    // Perform analysis
-    const result = await performLongAnalysis(filepath);
-
-    const duration = Date.now() - startTime;
-    console.error(`[INFO] Analysis completed in ${duration}ms`);
-
-    return {
-      content: [
-        {
-          type: "text",
-          text: `Analysis Results (completed in ${duration}ms):\n\n${result}`
-        }
-      ]
-    };
-
-  } catch (error) {
-    console.error(`[ERROR] Analysis failed after ${Date.now() - startTime}ms`);
-    throw error;
-  }
-}
+```python
+async def long_operation():
+    print("Starting long operation...", file=sys.stderr)
+    await asyncio.sleep(5)  # Simulate work
+    print("Operation completed.", file=sys.stderr)
+    return result
 ```
 
 **When to use -** For operations that take more than a few seconds:
 
-- Large file processing or analysis
-- Complex computations
-- External API calls with potential delays
-- Batch operations on multiple items
+  - Large file processing or analysis
+  - Complex computations
+  - External API calls with potential delays
+  - Batch operations on multiple items
 
 **Why it matters:** Prevents timeouts, provides user feedback, enables monitoring and debugging of slow operations.
 
 ### Caching Results
 
-**Caching results** stores expensive operation results to avoid redundant computation. Use time-based expiration and proper cache keys for efficient reuse of results.
+!!! question "Caching Results"
+    **Definition:** Stores results of expensive operations.  
+    **Why:** Improves response times for repeated requests.  
+    **Usage:** Implement a simple cache with expiration.
 
-```typescript
-class CachedMCPServer {
-  private cache: Map<string, { data: any; timestamp: number }>;
-  private cacheTTL: number = 60000; // 1 minute
-
-  constructor() {
-    this.cache = new Map();
-  }
-
-  private getCacheKey(toolName: string, args: any): string {
-    return `${toolName}:${JSON.stringify(args)}`;
-  }
-
-  private getCached(key: string): any | null {
-    const cached = this.cache.get(key);
-    if (!cached) return null;
-
-    if (Date.now() - cached.timestamp > this.cacheTTL) {
-      this.cache.delete(key);
-      return null;
-    }
-
-    return cached.data;
-  }
-
-  private setCache(key: string, data: any): void {
-    this.cache.set(key, {
-      data,
-      timestamp: Date.now()
-    });
-  }
-}
+```python
+cache = {}
+async def cached_operation(key):
+    if key in cache and time.time() - cache[key]['timestamp'] < 300:  # 5 min
+        return cache[key]['data']
+    # Compute result
+    result = await expensive_operation()
+    cache[key] = {'data': result, 'timestamp': time.time()}
+    return result
 ```
 
 **When to use -** For expensive operations that return consistent results:
 
-- API calls to external services
-- Complex calculations or data processing
-- Database queries with static data
-- File analysis that doesn't change frequently
+  - API calls to external services
+  - Complex calculations or data processing
+  - Database queries with static data
+  - File analysis that doesn't change frequently
 
 **Why it matters:** Dramatically improves response times, reduces resource usage, and provides better user experience for repeated requests.
-
-#### **Best Practices for Async Operations and Performance:**
-
-- **Monitor Execution Time:** Log start/end times for operations over 1 second
-- **Set Reasonable Timeouts:** Use appropriate timeouts for external calls (5-30 seconds)
-- **Cache Strategically:** Cache expensive operations but consider data freshness
-- **Use Streaming:** For very large responses, consider streaming or pagination
-- **Resource Cleanup:** Always clean up connections, file handles, and memory
-- **Progress Feedback:** For long operations, provide progress updates via logging
-- **Memory Management:** Be mindful of memory usage in long-running processes
 
 ---
 
 ## Tool Composition
 
-**Tool composition** is the art of designing MCP tools that work seamlessly together, allowing LLMs to chain multiple tools to accomplish complex tasks. Well-composed tools create a powerful ecosystem where each tool handles a specific responsibility while enabling sophisticated workflows through intelligent combination.
-
 ### Example: Multi-Step Analysis
 
-**Multi-step analysis** demonstrates how simple, focused tools can be combined to perform complex data processing workflows. Each tool has a clear responsibility and can be used independently or as part of larger operations.
+!!! question "Multi-Step Analysis"
+    **Definition:** Combining simple tools for complex workflows.  
+    **Why:** Enables sophisticated operations through tool chaining.  
+    **Usage:** Design tools that work well together.
 
-```typescript
-// Tool 1: List files
-{
-  name: "list_files",
-  description: "List files in a directory",
-  inputSchema: { ... }
-}
-
-// Tool 2: Read file
-{
-  name: "read_file",
-  description: "Read a specific file",
-  inputSchema: { ... }
-}
-
-// Tool 3: Analyze content
-{
-  name: "analyze_text",
-  description: "Analyze text content",
-  inputSchema: { ... }
-}
+```python
+# Tool 1: Get weather
+# Tool 2: Analyze data
+# Tool 3: Generate report
+# LLM can chain: weather -> analyze -> report
 ```
 
 **When to use -** For workflows that require multiple processing steps:
 
-- Data analysis pipelines
-- File processing workflows
-- Multi-stage computations
-- Complex research tasks
+  - Data analysis pipelines
+  - File processing workflows
+  - Multi-stage computations
+  - Complex research tasks
 
 **Why it matters:** Breaks down complex problems into manageable, reusable components that can be combined in flexible ways.
 
 ### LLM Tool Chaining
 
-**LLM tool chaining** allows AI models to automatically sequence tool calls based on intermediate results. The LLM analyzes outputs from one tool and determines which tool to call next, creating intelligent workflows without explicit programming.
+!!! question "LLM Tool Chaining"
+    **Definition:** AI automatically sequences tool calls.  
+    **Why:** Enables complex reasoning without explicit programming.  
+    **Usage:** Design tool outputs as inputs for other tools.
 
-The LLM can chain these tools:
+```python
+# Example of how an LLM might chain tools:
+# 1. Use weather_with_ollama to get weather data
+# 2. Use read_file to get historical weather patterns
+# 3. Use query_database to store analysis results
 
-1. **List files in directory** - Discover available files
-2. **Read interesting files** - Access content based on filenames
-3. **Analyze their content** - Process and extract insights
+async def analyze_weather_trends(city: str):
+    """LLM can automatically chain these calls"""
+    
+    # Step 1: Get current weather
+    weather_result = await call_tool("weather_with_ollama", {"city": city})
+    
+    # Step 2: Read historical data file
+    historical_data = await call_tool("read_file", {
+        "filepath": f"data/{city}_weather_history.txt"
+    })
+    
+    # Step 3: Store analysis in database
+    analysis_query = f"""
+    INSERT INTO weather_analysis (city, current_weather, historical_data, timestamp)
+    VALUES ('{city}', '{weather_result[0].text}', '{historical_data[0].text}', datetime('now'))
+    """
+    
+    db_result = await call_tool("query_database", {"query": analysis_query})
+    
+    return {
+        "current": weather_result[0].text,
+        "historical": historical_data[0].text,
+        "stored": db_result[0].text
+    }
+```
 
 **When to use -** When tasks naturally break down into sequential steps:
 
-- Research and analysis workflows
-- Data processing pipelines
-- Content generation chains
-- Problem-solving sequences
+  - Research and analysis workflows
+  - Data processing pipelines
+  - Content generation chains
+  - Problem-solving sequences
 
 **Why it matters:** Enables complex, multi-step reasoning and problem-solving that would be difficult to implement in single tools.
 
-### Testing Composed Tools
-
-**Testing composed tools** ensures that individual tools work correctly both in isolation and when chained together. Use comprehensive test suites that cover single-tool usage and multi-tool workflows.
-
-```typescript
-import { describe, it, expect } from 'vitest';
-
-describe('Weather Tool', () => {
-  it('should validate city name', async () => {
-    await expect(
-      callTool('get_weather', { city: '' })
-    ).rejects.toThrow('City name cannot be empty');
-  });
-
-  it('should handle invalid city', async () => {
-    await expect(
-      callTool('get_weather', { city: 'InvalidCity12345' })
-    ).rejects.toThrow('not found');
-  });
-
-  it('should return weather data', async () => {
-    const result = await callTool('get_weather', {
-      city: 'London',
-      units: 'celsius'
-    });
-
-    expect(result.content).toHaveLength(1);
-    expect(result.content[0].text).toContain('Temperature');
-  });
-});
-```
-
-**When to use -** For validating tool behavior in different scenarios:
-
-- Unit testing individual tools
-- Integration testing tool chains
-- Regression testing after changes
-- Edge case validation
-
-**Why it matters:** Ensures reliability and predictability when tools are used individually or in combination.
-
-
-#### **Best Practices for Tool Composition:**
-
-- **Single Responsibility:** Each tool should do one thing well
-- **Consistent Interfaces:** Use similar parameter patterns across tools
-- **Clear Dependencies:** Document which tools work well together
-- **Error Propagation:** Handle failures gracefully in tool chains
-- **State Management:** Avoid tools that require complex state between calls
-- **Flexible Outputs:** Design tool outputs to be usable as inputs for other tools
-- **Documentation:** Clearly explain how tools can be combined
-- **Version Compatibility:** Ensure tool interfaces remain stable
-
 ---
-
-## Best Practices Checklist
-
-**Schema Design**
-
-  - Use descriptive names and descriptions
-  - Add examples in descriptions
-  - Set reasonable defaults
-  - Use enums for constrained values
-  - Add min/max for numbers
-
-**Implementation**
-
-  - Validate all inputs, even with schemas
-  - Handle errors gracefully
-  - Log to stderr, not stdout
-  - Use async/await properly
-  - Clean up resources (file handles, connections)
-
-**Security**
-
-  - Validate and sanitize file paths
-  - Use prepared statements for SQL
-  - Limit resource usage (file sizes, API calls)
-  - Don't expose sensitive data in errors
-  - Implement rate limiting
-
-**Performance**
-
-  - Cache expensive operations
-  - Set reasonable timeouts
-  - Limit result sizes
-  - Use streaming for large data
-  - Monitor execution time
-
-**User Experience**
-
-  - Provide clear error messages
-  - Return structured data when possible
-  - Include relevant context in responses
-  - Handle edge cases gracefully
-  - Document expected behavior
-
----
-
 
 ## Hands-On Exercises
 
-### Exercise 1: Text Processing Tool
 
-Create a tool that:
 
-  - Counts words, characters, lines
-  - Finds specific patterns
-  - Calculates reading time
-  - Detects language
+!!! question "Exercise 1: Text Processing Tool"
+    **Definition:** A tool for analyzing and processing text content.  
+    **Why:** Enables text manipulation and analysis operations.  
+    **Usage:** Process text for counting, patterns, and metrics.
+
+    **Task:** Create a new MCP tool called `process_text` that analyzes and processes text content. The tool should support multiple operations: counting words/characters/lines, finding regex patterns, and calculating reading time. Add this tool to your `CompleteOllamaMCPServer` class by updating the `list_tools()` method and `call_tool()` handler.
+
+
 
 <details>
-<summary>💡 Solution: Text Processing Tool</summary>
+<summary>💡 Complete Exercise 1 Solution</summary>
 
-Tool Schema - Add this to your tools array:
+<h4>Step 1: Add Tool Definition</h4>
 
-```typescript
-{
-  name: "process_text",
-  description: "Analyze and process text content with various metrics and operations",
-  inputSchema: {
-    type: "object",
-    properties: {
-      text: {
-        type: "string",
-        description: "The text content to process"
-      },
-      operations: {
-        type: "array",
-        description: "Operations to perform",
-        items: {
-          type: "string",
-          enum: ["count", "find_pattern", "reading_time", "detect_language"]
+Add to `list_tools()`:
+
+```python
+Tool(
+    name="process_text",
+    description="Analyze and process text content",
+    inputSchema={
+        "type": "object",
+        "properties": {
+            "text": {"type": "string", "description": "Text to process"},
+            "operations": {
+                "type": "array",
+                "items": {"type": "string", "enum": ["count", "find_pattern", "reading_time"]},
+                "description": "Operations to perform"
+            },
+            "pattern": {"type": "string", "description": "Regex pattern for find_pattern"}
         },
-        default: ["count"]
-      },
-      pattern: {
-        type: "string",
-        description: "Regex pattern for find_pattern operation"
-      }
-    },
-    required: ["text"]
-  }
-}
-```
-
-Implementation - Add this handler in your "CallToolRequestSchema" handler:
-
-```typescript
-if (name === "process_text") {
-  try {
-    const text = args.text as string;
-    const operations = (args.operations as string[]) || ["count"];
-    const pattern = args.pattern as string;
-
-    let results: string[] = [];
-
-    for (const op of operations) {
-      switch (op) {
-        case "count":
-          const lines = text.split('\n').length;
-          const words = text.split(/\s+/).filter(w => w.length > 0).length;
-          const chars = text.length;
-          results.push(`📊 Text Statistics:\n- Lines: ${lines}\n- Words: ${words}\n- Characters: ${chars}`);
-          break;
-
-        case "find_pattern":
-          if (!pattern) {
-            results.push("❌ Pattern required for find_pattern operation");
-            break;
-          }
-          try {
-            const regex = new RegExp(pattern, 'g');
-            const matches = text.match(regex);
-            results.push(`🔍 Pattern Matches (${pattern}):\nFound ${matches ? matches.length : 0} matches:\n${matches ? matches.slice(0, 10).join('\n') : 'None'}`);
-          } catch (e) {
-            results.push(`❌ Invalid regex pattern: ${pattern}`);
-          }
-          break;
-
-        case "reading_time":
-          // Average reading speed: 200 words per minute
-          const wordCount = text.split(/\s+/).filter(w => w.length > 0).length;
-          const readingTime = Math.ceil(wordCount / 200);
-          results.push(`⏱️ Reading Time: Approximately ${readingTime} minute${readingTime !== 1 ? 's' : ''} (${wordCount} words at 200 WPM)`);
-          break;
-
-        case "detect_language":
-          // Simple language detection based on common words
-          const englishWords = /\b(the|and|or|but|in|on|at|to|for|of|with|by)\b/gi;
-          const spanishWords = /\b(el|la|los|las|y|o|pero|en|sobre|a|para|de|con|por)\b/gi;
-          const frenchWords = /\b(le|la|les|et|ou|mais|dans|sur|à|pour|de|avec|par)\b/gi;
-
-          const englishMatches = (text.match(englishWords) || []).length;
-          const spanishMatches = (text.match(spanishWords) || []).length;
-          const frenchMatches = (text.match(frenchWords) || []).length;
-
-          const maxMatches = Math.max(englishMatches, spanishMatches, frenchMatches);
-          let detectedLang = "Unknown";
-
-          if (maxMatches > 0) {
-            if (englishMatches === maxMatches) detectedLang = "English";
-            else if (spanishMatches === maxMatches) detectedLang = "Spanish";
-            else if (frenchMatches === maxMatches) detectedLang = "French";
-          }
-
-          results.push(`🌍 Detected Language: ${detectedLang} (confidence: ${maxMatches} common words)`);
-          break;
-      }
+        "required": ["text", "operations"]
     }
-
-    return {
-      content: [
-        {
-          type: "text",
-          text: results.join('\n\n')
-        }
-      ]
-    };
-
-  } catch (error) {
-    throw new Error(`Text processing failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-  }
-}
+)
 ```
 
-Testing - Test with different inputs:
+<h4>Step 2: Add Handler Logic</h4>
 
-```javascript
-// Basic counting
-{ text: "Hello world\nThis is a test", operations: ["count"] }
+Add to `call_tool()`:
 
-// Pattern matching
-{ text: "The quick brown fox jumps over the lazy dog", operations: ["find_pattern"], pattern: "\\b\\w{4}\\b" }
-
-// Multiple operations
-{ text: "This is a longer piece of text to analyze for various metrics and patterns.", operations: ["count", "reading_time", "detect_language"] }
+```python
+elif name == "process_text":
+    text = arguments.get("text", "")
+    operations = arguments.get("operations", [])
+    pattern = arguments.get("pattern", "")
+    
+    result = ""
+    if "count" in operations:
+        words = len(text.split())
+        chars = len(text)
+        lines = len(text.split('\n'))
+        result += f"Words: {words}, Characters: {chars}, Lines: {lines}\n"
+    
+    if "find_pattern" in operations and pattern:
+        import re
+        matches = re.findall(pattern, text)
+        result += f"Pattern matches: {matches}\n"
+    
+    if "reading_time" in operations:
+        words_per_minute = 200
+        minutes = len(text.split()) / words_per_minute
+        result += f"Estimated reading time: {minutes:.1f} minutes\n"
+    
+    return [TextContent(type="text", text=result)]
 ```
+
+<h4>Step 3: Test the Tool</h4>
+
+Test with various inputs to verify functionality.
 
 </details>
 
+---
 
-### Exercise 2: JSON Validator Tool
 
-Create a tool that:
 
-- Validates JSON syntax
-- Validates against JSON Schema
-- Formats/pretty-prints JSON
-- Compares two JSON objects
+!!! question "Exercise 2: JSON Validator Tool"
+    **Definition:** A tool for validating and processing JSON data.  
+    **Why:** Ensures data integrity and provides JSON utilities.  
+    **Usage:** Validate, format, and compare JSON structures.
+
+    **Task:** Create a new MCP tool called `validate_json` that validates and processes JSON data. The tool should support four operations: validating JSON syntax, formatting/pretty-printing JSON, validating against a JSON schema, and comparing two JSON objects. You'll need to install the `jsonschema` package and add the necessary imports. Update your server class to include this tool in the `list_tools()` method and `call_tool()` handler.
+
+
 
 <details>
-<summary>💡 Solution: JSON Validator Tool</summary>
+<summary>💡 Complete Exercise 2 Solution</summary>
 
-Tool Schema - Add this to your tools array:
-
-```typescript
-{
-  name: "validate_json",
-  description: "Validate, format, and compare JSON data",
-  inputSchema: {
-    type: "object",
-    properties: {
-      json: {
-        type: "string",
-        description: "JSON string to validate or format"
-      },
-      operation: {
-        type: "string",
-        description: "Operation to perform",
-        enum: ["validate", "format", "schema_validate", "compare"],
-        default: "validate"
-      },
-      schema: {
-        type: "string",
-        description: "JSON Schema for schema validation (as JSON string)"
-      },
-      json2: {
-        type: "string",
-        description: "Second JSON string for comparison"
-      }
-    },
-    required: ["json", "operation"]
-  }
-}
-```
-
-Implementation - First, install the required dependency:
+<h4>Step 1: Install Dependencies</h4>
 
 ```bash
-npm install ajv
+pip install jsonschema
 ```
 
-Add the import:
+<h4>Step 2: Add Imports</h4>
 
-```typescript
-import Ajv from 'ajv';
+```python
+import jsonschema
 ```
 
-Add this handler in your "CallToolRequestSchema" handler:
+<h4>Step 3: Add Tool Definition</h4>
 
-```typescript
-if (name === "validate_json") {
-  try {
-    const json = args.json as string;
-    const operation = args.operation as string;
-    const schema = args.schema as string;
-    const json2 = args.json2 as string;
+Add to `list_tools()`:
 
-    let result = "";
-
-    switch (operation) {
-      case "validate":
-        try {
-          JSON.parse(json);
-          result = "✅ Valid JSON syntax";
-        } catch (e) {
-          result = `❌ Invalid JSON: ${e instanceof Error ? e.message : 'Unknown error'}`;
-        }
-        break;
-
-      case "format":
-        try {
-          const parsed = JSON.parse(json);
-          result = `📄 Formatted JSON:\n\`\`\`json\n${JSON.stringify(parsed, null, 2)}\n\`\`\``;
-        } catch (e) {
-          result = `❌ Cannot format invalid JSON: ${e instanceof Error ? e.message : 'Unknown error'}`;
-        }
-        break;
-
-      case "schema_validate":
-        if (!schema) {
-          result = "❌ Schema required for schema validation";
-          break;
-        }
-        try {
-          const ajv = new Ajv();
-          const parsedJson = JSON.parse(json);
-          const parsedSchema = JSON.parse(schema);
-          
-          const validate = ajv.compile(parsedSchema);
-          const valid = validate(parsedJson);
-          
-          if (valid) {
-            result = "✅ JSON validates against schema";
-          } else {
-            result = `❌ Schema validation failed:\n${JSON.stringify(validate.errors, null, 2)}`;
-          }
-        } catch (e) {
-          result = `❌ Schema validation error: ${e instanceof Error ? e.message : 'Unknown error'}`;
-        }
-        break;
-
-      case "compare":
-        if (!json2) {
-          result = "❌ Second JSON required for comparison";
-          break;
-        }
-        try {
-          const obj1 = JSON.parse(json);
-          const obj2 = JSON.parse(json2);
-          
-          const differences: string[] = [];
-          
-          // Simple comparison - check if objects are equal
-          if (JSON.stringify(obj1) === JSON.stringify(obj2)) {
-            result = "✅ JSON objects are identical";
-          } else {
-            // Find differences
-            const keys1 = Object.keys(obj1);
-            const keys2 = Object.keys(obj2);
-            
-            const added = keys2.filter(k => !keys1.includes(k));
-            const removed = keys1.filter(k => !keys2.includes(k));
-            const modified = keys1.filter(k => keys2.includes(k) && JSON.stringify(obj1[k]) !== JSON.stringify(obj2[k]));
-            
-            if (added.length > 0) differences.push(`Added keys: ${added.join(', ')}`);
-            if (removed.length > 0) differences.push(`Removed keys: ${removed.join(', ')}`);
-            if (modified.length > 0) differences.push(`Modified keys: ${modified.join(', ')}`);
-            
-            result = `⚠️ JSON objects differ:\n${differences.join('\n')}`;
-          }
-        } catch (e) {
-          result = `❌ Comparison error: ${e instanceof Error ? e.message : 'Unknown error'}`;
-        }
-        break;
+```python
+Tool(
+    name="validate_json",
+    description="Validate and process JSON data",
+    inputSchema={
+        "type": "object",
+        "properties": {
+            "json": {"type": "string", "description": "JSON string to validate"},
+            "operation": {"type": "string", "enum": ["validate", "format", "schema_validate", "compare"]},
+            "schema": {"type": "string", "description": "JSON schema for validation"},
+            "json2": {"type": "string", "description": "Second JSON for comparison"}
+        },
+        "required": ["json", "operation"]
     }
-
-    return {
-      content: [
-        {
-          type: "text",
-          text: result
-        }
-      ]
-    };
-
-  } catch (error) {
-    throw new Error(`JSON validation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-  }
-}
+)
 ```
 
-Testing - Test different operations:
+<h4>Step 4: Add Handler Logic</h4>
 
-```javascript
-// Validate syntax
-{ json: '{"name": "test", "value": 123}', operation: "validate" }
+Add to `call_tool()`:
 
-// Format JSON
-{ json: '{"name":"test","value":123}', operation: "format" }
-
-// Schema validation
-{ 
-  json: '{"name": "John", "age": 30}', 
-  operation: "schema_validate",
-  schema: '{"type": "object", "properties": {"name": {"type": "string"}, "age": {"type": "number"}}}'
-}
-
-// Compare JSON
-{
-  json: '{"a": 1, "b": 2}',
-  json2: '{"a": 1, "c": 3}',
-  operation: "compare"
-}
+```python
+elif name == "validate_json":
+    json_str = arguments.get("json", "")
+    operation = arguments.get("operation", "validate")
+    schema_str = arguments.get("schema", "")
+    json2_str = arguments.get("json2", "")
+    
+    try:
+        data = json.loads(json_str)
+        
+        if operation == "validate":
+            result = "JSON is valid"
+        elif operation == "format":
+            result = json.dumps(data, indent=2)
+        elif operation == "schema_validate" and schema_str:
+            schema = json.loads(schema_str)
+            jsonschema.validate(data, schema)
+            result = "JSON validates against schema"
+        elif operation == "compare" and json2_str:
+            data2 = json.loads(json2_str)
+            if data == data2:
+                result = "JSON objects are identical"
+            else:
+                result = "JSON objects differ"
+        
+        return [TextContent(type="text", text=result)]
+    except Exception as e:
+        return [TextContent(type="text", text=f"Error: {str(e)}")]
 ```
+
+<h4>Step 5: Test the Tool</h4>
+
+Test validation, formatting, and comparison operations.
 
 </details>
 
 
-### Exercise 3: Web Scraper Tool
+---
 
-Create a tool that:
 
-- Fetches web page content
-- Extracts specific elements
-- Returns clean text
-- Handles errors gracefully
+
+!!! question "Exercise 3: Web Scraper Tool"
+    **Definition:** A tool for extracting content from web pages.  
+    **Why:** Enables data collection from web sources.  
+    **Usage:** Fetch and parse web content safely.
+
+    **Task:** Create a new MCP tool called `scrape_web` that extracts content from web pages. The tool should fetch web pages, extract specific elements using CSS selectors, return clean text content, and handle errors gracefully. You'll need to install the `beautifulsoup4` and `lxml` packages and add the necessary imports. Update your server class to include this tool in the `list_tools()` method and `call_tool()` handler.
+
+
 
 <details>
-<summary>💡 Solution: Web Scraper Tool</summary>
+<summary>💡 Complete Exercise 3 Solution</summary>
 
-Tool Schema - Add this to your tools array:
-
-```typescript
-{
-  name: "scrape_web",
-  description: "Fetch and extract content from web pages",
-  inputSchema: {
-    type: "object",
-    properties: {
-      url: {
-        type: "string",
-        description: "URL to scrape",
-        format: "uri"
-      },
-      selector: {
-        type: "string",
-        description: "CSS selector to extract specific elements (optional)",
-        default: "body"
-      },
-      includeText: {
-        type: "boolean",
-        description: "Extract only text content (remove HTML)",
-        default: true
-      },
-      maxLength: {
-        type: "number",
-        description: "Maximum length of extracted content",
-        minimum: 100,
-        maximum: 10000,
-        default: 2000
-      },
-      timeout: {
-        type: "number",
-        description: "Request timeout in milliseconds",
-        minimum: 1000,
-        maximum: 30000,
-        default: 10000
-      }
-    },
-    required: ["url"]
-  }
-}
-```
-
-Implementation - First, install the required dependencies:
+<h4>Step 1: Install Dependencies</h4>
 
 ```bash
-npm install axios cheerio
+pip install beautifulsoup4 lxml
 ```
 
-Add the imports:
+<h4>Step 2: Add Imports</h4>
 
-```typescript
-import axios from 'axios';
-import * as cheerio from 'cheerio';
+```python
+from bs4 import BeautifulSoup
 ```
 
-Add this handler in your `CallToolRequestSchema` handler:
+<h4>Step 3: Add Tool Definition</h4>
 
-```typescript
-if (name === "scrape_web") {
-  try {
-    const url = args.url as string;
-    const selector = (args.selector as string) || "body";
-    const includeText = (args.includeText !== false); // default true
-    const maxLength = (args.maxLength as number) || 2000;
-    const timeout = (args.timeout as number) || 10000;
+Add to `list_tools()`:
 
-    // Validate URL
-    try {
-      new URL(url);
-    } catch {
-      throw new Error("Invalid URL format");
+```python
+Tool(
+    name="scrape_web",
+    description="Extract content from web pages",
+    inputSchema={
+        "type": "object",
+        "properties": {
+            "url": {"type": "string", "description": "URL to scrape"},
+            "selector": {"type": "string", "description": "CSS selector for content"},
+            "include_html": {"type": "boolean", "default": False, "description": "Include HTML tags"}
+        },
+        "required": ["url"]
     }
+)
+```
 
-    // Fetch the webpage
-    const response = await axios.get(url, {
-      timeout: timeout,
-      headers: {
-        'User-Agent': 'MCP-Web-Scraper/1.0 (Educational Tool)'
-      },
-      maxContentLength: 5 * 1024 * 1024, // 5MB limit
-    });
+<h4>Step 4: Add Handler Logic</h4>
 
-    // Load HTML into cheerio
-    const $ = cheerio.load(response.data);
+Add to `call_tool()`:
+
+```python
+elif name == "scrape_web":
+    url = arguments.get("url", "")
+    selector = arguments.get("selector", "")
+    include_html = arguments.get("include_html", False)
     
-    // Extract content based on selector
-    let extractedContent = "";
-    
-    if (selector === "body") {
-      extractedContent = includeText ? $('body').text() : $('body').html() || "";
-    } else {
-      const elements = $(selector);
-      if (elements.length === 0) {
-        throw new Error(`No elements found matching selector: ${selector}`);
-      }
-      
-      if (includeText) {
-        extractedContent = elements.map((_, el) => $(el).text()).get().join('\n\n');
-      } else {
-        extractedContent = elements.map((_, el) => $.html(el)).get().join('\n\n');
-      }
-    }
-
-    // Clean up the content
-    extractedContent = extractedContent
-      .replace(/\s+/g, ' ')  // Replace multiple whitespace with single space
-      .replace(/\n\s*\n/g, '\n')  // Remove empty lines
-      .trim();
-
-    // Truncate if too long
-    if (extractedContent.length > maxLength) {
-      extractedContent = extractedContent.substring(0, maxLength - 3) + "...";
-    }
-
-    // Prepare metadata
-    const metadata = {
-      url: url,
-      statusCode: response.status,
-      contentType: response.headers['content-type'],
-      contentLength: response.data.length,
-      extractedLength: extractedContent.length,
-      selector: selector,
-      elementsFound: selector === "body" ? 1 : $(selector).length
-    };
-
-    return {
-      content: [
-        {
-          type: "text",
-          text: `🌐 Web Scraping Results\n\n📊 Metadata:\n${Object.entries(metadata).map(([k, v]) => `- ${k}: ${v}`).join('\n')}\n\n📄 Extracted Content:\n${extractedContent}`
-        }
-      ]
-    };
-
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      if (error.code === 'ENOTFOUND') {
-        throw new Error(`Could not resolve hostname: ${args.url}`);
-      } else if (error.code === 'ECONNREFUSED') {
-        throw new Error(`Connection refused: ${args.url}`);
-      } else if (error.response) {
-        throw new Error(`HTTP ${error.response.status}: ${error.response.statusText}`);
-      } else if (error.code === 'ETIMEDOUT') {
-        throw new Error(`Request timeout after ${args.timeout || 10000}ms`);
-      } else {
-        throw new Error(`Network error: ${error.message}`);
-      }
-    } else {
-      throw new Error(`Web scraping failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
-}
+    try:
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+        
+        soup = BeautifulSoup(response.content, 'lxml')
+        
+        if selector:
+            elements = soup.select(selector)
+            if include_html:
+                content = '\n'.join(str(el) for el in elements)
+            else:
+                content = '\n'.join(el.get_text() for el in elements)
+        else:
+            content = soup.get_text() if not include_html else str(soup)
+        
+        return [TextContent(type="text", text=content)]
+    except Exception as e:
+        return [TextContent(type="text", text=f"Error scraping web: {str(e)}")]
 ```
 
-Testing - Test with different websites and selectors:
+<h4>Step 5: Test the Tool</h4>
 
-```javascript
-// Basic page scraping
-{ url: "https://httpbin.org/html" }
-
-// Extract specific elements
-{ url: "https://httpbin.org/html", selector: "h1" }
-
-// Get HTML instead of text
-{ url: "https://httpbin.org/html", selector: "p", includeText: false }
-
-// Test error handling
-{ url: "https://nonexistent-domain-12345.com" }
-{ url: "https://httpbin.org/status/404" }
-```
-
-#### Security Notes
-
-- This tool includes basic security measures but should not be used for production scraping
-- Always respect robots.txt and terms of service
-- Consider rate limiting to avoid being blocked
-- Some websites may block requests without proper headers
+Test with different URLs and selectors, handling errors gracefully.
 
 </details>
-

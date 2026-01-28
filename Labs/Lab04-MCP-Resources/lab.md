@@ -1,4 +1,4 @@
-# Lab 4: Implementing MCP Resources
+# Lab 4: Working with MCP Resources
 
 ## Overview
 

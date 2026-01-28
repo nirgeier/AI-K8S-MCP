@@ -1,4 +1,4 @@
-# Lab 5: MCP Prompts and Integration
+# Lab 5: MCP Prompts and Complete Integration
 
 ## Overview
 

@@ -6,7 +6,7 @@ nav:
   - Welcome: welcome.md
   - Labs:
       - labs.md
-      - "Lab 0: Setup": Lab00-Setup/lab.md
+      - "Lab 0: Environment Setup": Lab00-Setup/lab.md
       - "Lab 1: MCP Fundamentals": Lab01-MCP-Fundamentals/lab.md
       - "Lab 2: First MCP Server": Lab02-First-MCP-Server/lab.md
       - "Lab 3: MCP Tools": Lab03-MCP-Tools/lab.md
