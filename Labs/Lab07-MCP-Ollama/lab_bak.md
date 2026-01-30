@@ -4,63 +4,32 @@
 
 - In this hands-on lab, you'll build a complete MCP (Model Context Protocol) server from scratch with Ollama integration.
 - You'll learn how each component works by implementing it yourself, understanding why each piece is necessary, and seeing the complete architecture come together.
-- You'll implement advanced tools: Country Information with RAG (Retrieval-Augmented Generation) using separate CSV-based databases for different information types covering all 193 UN member states, File Operations, and Database Query, along with best practices for error handling, async operations, and tool composition.
-
-**Important Note:** This lab is designed to be followed step-by-step. Each code block builds upon the previous ones. Do not copy all code blocks at once, as this may lead to duplicate methods or incorrect structure. Follow the instructions sequentially, updating existing code as indicated.
+- You'll implement advanced tools: Weather information with Ollama, File Operations, and Database Query, along with best practices for error handling, async operations, and tool composition.
 
 ---
 
 ## Prerequisites
 
 - Python 3.10 or higher installed
-- Ollama installed and running locally with models available (e.g., llama3.2)
-- Basic knowledge of MCP concepts
-- Basic understanding of REST APIs and JSON
-- Familiarity with CSV files and data handling
+- Ollama installed and running locally
 - Basic understanding of Python programming
-- Terminal / command line (CLI) access
-- Text editor or IDE (VS Code is recommended)
+- Terminal/command line access
+- Text editor or IDE
 
 ---
 
 ## Getting Started
 
 
-1. Create a new file called `mcp_ollama.py` as your project file, inside the lab's directory.
-2. Open it in your chosen text editor.
-3. See the following CSV files, containing data of all 193 UN member states, have been created for you in the lab's directory (you can open these files in Excel etc.):
-   
-      - `capital.csv`: Columns - `country`, `capital`
-      - `population.csv`: Columns - `country`, `population`
-      - `height.csv`: Columns - `country`, `height` (average topographic height in meters)
-      - `foundation_year.csv`: Columns - `country`, `foundation_year`
-
-4. **Important:** Ensure all CSV files are in the same directory as your `mcp_ollama.py` file, as the code loads them from the current working directory.
-5. Create a file named `requirements.txt` with the following content, inside the lab’s directory:
-
-    ```
-    mcp>=0.1.0
-    ollama>=0.1.0
-    pandas>=1.3.0
-    requests>=2.25.0
-    ```
-
-
-6. Install the dependencies by running the following from the same directory as your `requirements.txt` file, inside the lab’s directory:
-
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-
-7. Don't worry, during this lab, we'll build this server step by step!
-
+1. Create a new file called `mcp_ollama.py` as your project file.
+2. Open it in your favorite text editor.
+3. Don't worry, during this lab, we'll build this server step by step!
 
 ---
 
 ## Step 01: Adding Imports
 
-- Before we write any code, we need to understand which Python libraries we'll be using, and why.
+- Before we write any code, we need to understand what libraries we'll be using, and why.
 
 ### `asyncio` - Asynchronous I/O
 
@@ -136,35 +105,43 @@
     **Why:** Provides a lightweight, file-based database for data storage and querying.  
     **Usage:** Executing SQL queries and managing database operations.
 
-### `pandas` - Data Analysis Library
+### `ollama` - Ollama Client
 
-!!! question "pandas"
-    **Definition:** A powerful data manipulation and analysis library.  
-    **Why:** Used for reading CSV files and managing structured data.  
-    **Usage:** Loading country data from CSV files for RAG retrieval.
+!!! question "ollama"
+    **Definition:** Python client for interacting with Ollama, a tool for running large language models locally.  
+    **Why:** Enables integration with local AI models for generating content and responses.  
+    **Usage:** Generating AI-powered weather information and other content.
 
-### `openpyxl` - Excel File Reader
+### `os` - Operating System Interface
 
-!!! question "openpyxl"
-    **Definition:** A library for reading and writing Excel files.  
-    **Why:** Required by pandas for Excel file operations.  
-    **Usage:** Handling .xlsx files containing country information.
+!!! question "os"
+    **Definition:** Provides a way to interact with the operating system.  
+    **Why:** Needed for file system operations and path handling.  
+    **Usage:** Checking file existence, reading files, and managing file paths.
+
+### `pathlib` - Object-oriented Filesystem Paths
+
+!!! question "pathlib"
+    **Definition:** Provides classes for filesystem paths with semantic operations.  
+    **Why:** Offers a more intuitive and cross-platform way to handle file paths.  
+    **Usage:** Constructing and manipulating file paths safely.
 
 ---
 
-Paste the following imports code inside the `mcp_ollama.py` file:
+### Code for Step 01: Imports
+
+Set the following imports inside the `mcp_ollama.py` file:
 
 ```python
 import asyncio
 import json
 import os
 import sqlite3
-import sys
+import sys  # Not used in this MCP server scenario - stdio handled by mcp.server.stdio
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import ollama
-import pandas as pd
 import requests
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
@@ -173,7 +150,7 @@ from mcp.types import (
     Tool,
     TextContent,
     ImageContent,
-    TextResourceContents,
+    ResourceContent,
     Prompt,
     GetPromptResult,
     CallToolResult,
@@ -184,18 +161,34 @@ from mcp.types import (
 )
 ```
 
+Create a file named `requirements.txt` with the following content:
+
+```
+mcp>=0.1.0
+ollama>=0.1.0
+requests>=2.25.0
+```
+
+Install the dependenciesby running the following from the same directory as your `requirements.txt` file:
+
+```bash
+pip install -r requirements.txt
+```
+
 ---
 
 ## Step 02: Skeleton Code - Class
 
 ### Class Definition
 
-Append this class definition code after the imports in your `mcp_ollama.py` file:
+- Add this class definition after the imports in your `mcp_ollama.py` file:
 
 ```python
 class CompleteOllamaMCPServer:
     def __init__(self):
         self.server = Server("complete-ollama-mcp-server")
+        self.data_store = {}
+        self.db_path = "data.db"
         self._setup_handlers()
 
     def _setup_handlers(self):
@@ -215,7 +208,6 @@ class CompleteOllamaMCPServer:
 - Sets up data structures for tools, resources, and prompts
 - Prepares database connection
 - Initializes Ollama client
-- Loads country data from Excel files for RAG retrieval
 
 **Why This Runs First:**
 
@@ -225,31 +217,15 @@ class CompleteOllamaMCPServer:
 
 ---
 
-**Update the `__init__` method** inside your `CompleteOllamaMCPServer` class to include the full initialization:
+- Add this class definition after inside your `CompleteOllamaMCPServer` class:
 
 ```python
     def __init__(self):
         self.server = Server("complete-ollama-mcp-server")
+        self.data_store = {}
         self.db_path = "data.db"
         self.ollama_client = ollama.Client()
-        self.country_data = self._load_country_data()
         self._setup_handlers()
-
-    def _load_country_data(self):
-        """Load country information from CSV files for RAG retrieval."""
-        data = {}
-        script_dir = Path(__file__).parent
-        info_types = ['capital', 'population', 'height', 'foundation_year']
-        for info_type in info_types:
-            try:
-                file_path = script_dir / f'{info_type}.csv'
-                df = pd.read_csv(file_path)
-                # Convert country names to lowercase for case-insensitive matching
-                data[info_type] = dict(zip(df['country'].str.lower(), df[info_type]))
-            except Exception as e:
-                print(f"Error loading {info_type}.csv: {e}", file=sys.stderr)
-                data[info_type] = {}
-        return data
 ```
 
 ---
@@ -259,47 +235,45 @@ class CompleteOllamaMCPServer:
 ### Method `register_tools`
 
 **Capabilities:**
-
 - Registers tool definitions for discovery
 - Defines tool schemas and capabilities
 - Makes tools available to clients
 
 **Why This Runs Second:**
-
 - Tools must be registered before they can be called
 - Defines the capabilities clients can invoke
 
 **What is a Tool?**
-
 - A tool is an executable function that clients can invoke.
 - Tools have names, descriptions, and input parameters.
 - Clients can discover and call these tools to perform operations.
 
 ---
 
-Add this method to your class:
+- Add this method to your class:
 
 ```python
 @self.server.list_tools()
 async def list_tools() -> List[Tool]:
     return [
         Tool(
-            name="country_info",
-            description="Get country information using RAG from CSV databases",
+            name="weather_with_ollama",
+            description="Get weather information for a city using Ollama AI",
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "country": {
+                    "city": {
                         "type": "string",
-                        "description": "The country name to get information for"
+                        "description": "The city name to get weather for"
                     },
-                    "info_types": {
-                        "type": "array",
-                        "items": {"type": "string", "enum": ["capital", "population", "height", "foundation_year"]},
-                        "description": "Types of information to retrieve"
+                    "temp_unit": {
+                        "type": "string",
+                        "enum": ["C", "F"],
+                        "default": "C",
+                        "description": "Temperature unit (Celsius or Fahrenheit)"
                     }
                 },
-                "required": ["country"]
+                "required": ["city"]
             }
         ),
         Tool(
@@ -355,60 +329,46 @@ async def list_tools() -> List[Tool]:
 ### Method `register_tool_handlers`
 
 **Capabilities:**
-
 - Implements the logic for each tool
 - Handles tool execution and error management
 - Returns formatted results
 
 **Why This Runs Third:**
-
 - Connects tool schemas to actual functionality
 - Makes tools operational
 
 ---
 
-Add this method to your class:
+- Add this method to your class:
 
 ```python
 @self.server.call_tool()
 async def call_tool(name: str, arguments: Dict[str, Any]) -> List[TextContent]:
-    if name == "country_info":
-        country = arguments.get("country", "").lower()
-        info_types = arguments.get("info_types", [])
-
-        if not country:
-            raise ValueError("Country name is required")
-
-        if not info_types:
-            info_types = ["capital", "population", "height", "foundation_year"]
-
-        retrieved_info = {}
-        for info_type in info_types:
-            # Safe access to nested dictionary
-            type_data = self.country_data.get(info_type, {})
-            if country in type_data:
-                retrieved_info[info_type] = type_data[country]
-            else:
-                retrieved_info[info_type] = f"Information not available (Data loaded: {len(type_data)} records)"
-
-        # Use Ollama to generate a formatted response
-        prompt = f"Format the following information about {country.title()} into a nice, readable response: {json.dumps(retrieved_info, indent=2)}"
-
+    if name == "weather_with_ollama":
+        city = arguments.get("city", "")
+        temp_unit = arguments.get("temp_unit", "C")
+        
+        if not city:
+            raise ValueError("City name is required")
+        
         try:
-            # Use llama3.2 as detected on your system
+            # Use Ollama to generate weather information
+            prompt = f"Generate realistic weather information for {city}. Include temperature, conditions, humidity, and wind speed. Format as a weather report."
+            
             response = self.ollama_client.generate(
-                model='llama3.2', 
+                model='llama2',  # or your preferred model
                 prompt=prompt,
-                options={'temperature': 0.7, 'max_tokens': 300}
+                options={'temperature': 0.7, 'max_tokens': 200}
             )
-
-            result = response['response'].strip()
-
+            
+            weather_info = response['response'].strip()
+            
+            result = f"Weather in {city}:\n{weather_info}\n\n*Generated by Ollama AI*"
+            
             return [TextContent(type="text", text=result)]
-
+            
         except Exception as e:
-            # Fallback if Ollama fails
-            return [TextContent(type="text", text=f"Error getting AI response: {str(e)}\n\nRaw Data: {retrieved_info}")]
+            return [TextContent(type="text", text=f"Error getting weather: {str(e)}")]
     
     elif name == "read_file":
         filepath = arguments.get("filepath", "")
@@ -486,23 +446,19 @@ async def call_tool(name: str, arguments: Dict[str, Any]) -> List[TextContent]:
 ### Method `register_resources`
 
 **Capabilities:**
-
 - Registers resource definitions for discovery
 - Provides additional data for clients
 
 **Why This Runs Fourth:**
-
 - Resources enhance the server's functionality
-- Allows clients to access static or dynamic data
 
 **What is a Resource?**
-
 - A resource is readable data or content.
 - Resources have URIs and metadata.
 
 ---
 
-Add this method to your class:
+- Add this method to your class:
 
 ```python
 @self.server.list_resources()
@@ -530,47 +486,36 @@ async def list_resources() -> List[Resource]:
 ### Method `register_resource_handlers`
 
 **Capabilities:**
-
 - Implements resource reading logic
-- Handles resource requests and returns content
 
 **Why This Runs Fifth:**
-
 - Connects resource URIs to actual content
-- Makes resources accessible to clients
 
 ---
 
-Add this method to your class:
+- Add this method to your class:
 
 ```python
 @self.server.read_resource()
-async def read_resource(self, uri: str) -> str:
-    uri_str = str(uri).strip()
-    
-    # Debug log to help diagnose the mismatch
-    print(f"DEBUG: Requesting URI: '{uri_str}'", file=sys.stderr)
-
-    # Allow exact match or match without scheme to be robust
-    if uri_str == "resource://server-info" or uri_str.endswith("server-info"):
+async def read_resource(uri: str) -> str:
+    if uri == "resource://server-info":
         info = {
             "name": "Complete Ollama MCP Server",
             "version": "1.0.0",
             "capabilities": ["tools", "resources", "ollama-integration"],
-            "tools": ["country_info", "read_file", "query_database"],
-            "country_database": "193 UN member states with capitals, populations, topographic heights, and foundation years"
+            "tools": ["weather_with_ollama", "read_file", "query_database"]
         }
         return json.dumps(info, indent=2)
-
-    elif uri_str == "resource://ollama-models" or uri_str.endswith("ollama-models"):
+    
+    elif uri == "resource://ollama-models":
         try:
             models = self.ollama_client.list()
             return json.dumps(models, indent=2)
         except Exception as e:
             return json.dumps({"error": str(e)}, indent=2)
-
+    
     else:
-        raise ValueError(f"Unknown resource: {uri_str}")
+        raise ValueError(f"Unknown resource: {uri}")
 ```
 
 ---
@@ -580,35 +525,29 @@ async def read_resource(self, uri: str) -> str:
 ### Method `register_prompts`
 
 **Capabilities:**
-
 - Registers prompt templates
-- Defines structured prompts for AI interactions
 
 **Why This Runs Sixth:**
-
 - Provides structured prompts for AI interactions
-- Enables clients to request specific prompt templates
 
 **What is a Prompt?**
-
 - A prompt is a template that guides AI assistants.
-- Prompts have names, descriptions, and required arguments.
 
 ---
 
-Add this method to your class:
+- Add this method to your class:
 
 ```python
 @self.server.list_prompts()
 async def list_prompts() -> List[Prompt]:
     return [
         Prompt(
-            name="analyze-country-data",
-            description="Analyze country data and provide insights",
+            name="analyze-weather-data",
+            description="Analyze weather data and provide insights",
             arguments=[
                 {
-                    "name": "country",
-                    "description": "Country to analyze",
+                    "name": "city",
+                    "description": "City to analyze weather for",
                     "required": True
                 }
             ]
@@ -623,35 +562,31 @@ async def list_prompts() -> List[Prompt]:
 ### Method `register_prompt_handlers`
 
 **Capabilities:**
-
-- Generates prompt content.
-- Handles prompt requests and returns structured messages.
+- Generates prompt content
 
 **Why This Runs Seventh:**
-
-- Connects prompt templates to actual content.
-- Makes prompts usable by clients.
+- Connects prompt templates to actual content
 
 ---
 
-Add this method to your class:
+- Add this method to your class:
 
 ```python
 @self.server.get_prompt()
 async def get_prompt(name: str, arguments: Dict[str, Any]) -> GetPromptResult:
-    if name == "analyze-country-data":
-        country = arguments.get("country", "Unknown Country")
-        prompt_text = f"""Analyze the data for {country} and provide insights:
+    if name == "analyze-weather-data":
+        city = arguments.get("city", "Unknown City")
+        prompt_text = f"""Analyze the weather data for {city} and provide insights:
 
-1. Use the country_info tool to get information about the country's capital, population, topographic height, and foundation year
-2. Analyze the retrieved information and provide interesting facts
-3. Consider historical context and geographical significance
-4. Provide recommendations or interesting trivia based on the data
+1. Use the weather_with_ollama tool to get current weather information
+2. Analyze the temperature, conditions, and other factors
+3. Provide recommendations based on the weather
+4. Consider seasonal patterns and typical conditions
 
-Please provide a comprehensive country analysis."""
+Please provide a comprehensive weather analysis."""
         
         return GetPromptResult(
-            description=f"Country analysis prompt for {country}",
+            description=f"Weather analysis prompt for {city}",
             messages=[
                 {
                     "role": "user",
@@ -669,28 +604,30 @@ Please provide a comprehensive country analysis."""
 
 ---
 
-## Step 10: Setup Handlers
+## Step 10: Lifecycle Handlers
 
-### Method `_setup_handlers`
+### Method `setup_lifecycle_handlers`
 
 **Capabilities:**
+- Handles server initialization and shutdown
 
-- Placeholder for handler setup (decorators handle registration automatically).
-- Adds structure for future setup logic.
-
-**Why This Runs:**
-
-- Ensures the initialization completes properly.
-- Maintains structure for potential future setup logic.
+**Why This Runs Eighth:**
+- Ensures proper server lifecycle management
 
 ---
 
-Update the `_setup_handlers` method in your class (it should already exist from Step 02):
+- Add this method to your class:
 
 ```python
 def _setup_handlers(self):
-    # Handlers are registered automatically via decorators
-    pass
+    # Register all handlers
+    self.register_tools()
+    self.register_tool_handlers()
+    self.register_resources()
+    self.register_resource_handlers()
+    self.register_prompts()
+    self.register_prompt_handlers()
+    self.setup_lifecycle_handlers()
 ```
 
 ---
@@ -700,19 +637,14 @@ def _setup_handlers(self):
 ### Method `run`
 
 **Capabilities:**
-
-- Starts the MCP server.
-- Handles stdio communication.
-- Manages server lifecycle.
+- Starts the MCP server
 
 **Why This Runs Last:**
-
-- Initiates the server operation.
-- Begins listening for client requests.
+- Initiates the server operation
 
 ---
 
-Add this method to your class:
+- Add this method to your class:
 
 ```python
 async def run(self):
@@ -725,21 +657,9 @@ async def run(self):
 ## Step 12: Main / Entry Point
 
 **What is the Main Entry Point?**
-
-- The starting point of the script.
-- Initializes and runs the MCP server.
-- Ensures the server starts when the script is executed.
-- Uses `asyncio.run()` to manage the event loop for async operations.
-
-**Why this runs at the end:**
-
-- Ensures all class definitions and methods are in place before starting the server.
-- Provides a clear entry point for execution.
-- Manages the asynchronous nature of the server.
+- The starting point of the script
 
 ---
-
-Add this code at the end of your `mcp_ollama.py` file:
 
 ```python
 async def main():
@@ -762,8 +682,8 @@ if __name__ == "__main__":
     **Usage:** Validate inputs early in tool handlers.
 
 ```python
-if not country:
-    raise ValueError("Country name is required")
+if not city:
+    raise ValueError("City name is required")
 ```
 
 **When to use -** For all tool inputs and external data:
@@ -785,13 +705,11 @@ if not country:
 
 ```python
 try:
-    # Attempt to generate AI response with Ollama
-    response = self.ollama_client.generate(model='llama3.2', prompt=prompt)
-    result = response['response'].strip()
-    return [TextContent(type="text", text=result)]
+    # Attempt full operation
+    pass
 except Exception as e:
-    # Return partial results with raw data
-    return [TextContent(type="text", text=f"Error getting AI response: {str(e)}\n\nRaw Data: {retrieved_info}")]
+    # Return partial results or error message
+    return [TextContent(type="text", text=f"Partial result: {str(e)}")]
 ```
 
 **When to use -** For external dependencies that might be unreliable:
@@ -812,8 +730,8 @@ except Exception as e:
 
 ```python
 except Exception as e:
-    print(f"Internal error loading country data: {str(e)}", file=sys.stderr)
-    return [TextContent(type="text", text="An error occurred while processing country information. Please try again.")]
+    print(f"Internal error: {str(e)}", file=sys.stderr)
+    return [TextContent(type="text", text="An error occurred. Please try again.")]
 ```
 
 **When to use -** For complex operations where debugging might be needed:
@@ -837,12 +755,11 @@ except Exception as e:
     **Usage:** Use async/await and provide progress updates.
 
 ```python
-async def analyze_country_data(country: str):
-    print(f"Starting analysis for {country}...", file=sys.stderr)
-    # Simulate data processing
-    await asyncio.sleep(2)
-    print("Analysis completed.", file=sys.stderr)
-    return f"Analysis result for {country}"
+async def long_operation():
+    print("Starting long operation...", file=sys.stderr)
+    await asyncio.sleep(5)  # Simulate work
+    print("Operation completed.", file=sys.stderr)
+    return result
 ```
 
 **When to use -** For operations that take more than a few seconds:
@@ -863,12 +780,12 @@ async def analyze_country_data(country: str):
 
 ```python
 cache = {}
-async def get_cached_country_info(country: str):
-    if country in cache and time.time() - cache[country]['timestamp'] < 3600:  # 1 hour
-        return cache[country]['data']
-    # Fetch fresh data
-    result = await fetch_country_data(country)
-    cache[country] = {'data': result, 'timestamp': time.time()}
+async def cached_operation(key):
+    if key in cache and time.time() - cache[key]['timestamp'] < 300:  # 5 min
+        return cache[key]['data']
+    # Compute result
+    result = await expensive_operation()
+    cache[key] = {'data': result, 'timestamp': time.time()}
     return result
 ```
 
@@ -893,10 +810,10 @@ async def get_cached_country_info(country: str):
     **Usage:** Design tools that work well together.
 
 ```python
-# Tool 1: Get country info
+# Tool 1: Get weather
 # Tool 2: Analyze data
 # Tool 3: Generate report
-# LLM can chain: country_info -> analyze -> report
+# LLM can chain: weather -> analyze -> report
 ```
 
 **When to use -** For workflows that require multiple processing steps:
@@ -917,34 +834,31 @@ async def get_cached_country_info(country: str):
 
 ```python
 # Example of how an LLM might chain tools:
-# 1. Use country_info to get country data
-# 2. Use read_file to get historical data file
+# 1. Use weather_with_ollama to get weather data
+# 2. Use read_file to get historical weather patterns
 # 3. Use query_database to store analysis results
 
-async def analyze_country_trends(country: str):
+async def analyze_weather_trends(city: str):
     """LLM can automatically chain these calls"""
     
-    # Step 1: Get country information
-    country_result = await call_tool("country_info", {
-        "country": country, 
-        "info_types": ["capital", "population", "height", "foundation_year"]
-    })
+    # Step 1: Get current weather
+    weather_result = await call_tool("weather_with_ollama", {"city": city})
     
     # Step 2: Read historical data file
     historical_data = await call_tool("read_file", {
-        "filepath": f"data/{country}_history.txt"
+        "filepath": f"data/{city}_weather_history.txt"
     })
     
     # Step 3: Store analysis in database
     analysis_query = f"""
-    INSERT INTO country_analysis (country, info, historical_data, timestamp)
-    VALUES ('{country}', '{country_result[0].text}', '{historical_data[0].text}', datetime('now'))
+    INSERT INTO weather_analysis (city, current_weather, historical_data, timestamp)
+    VALUES ('{city}', '{weather_result[0].text}', '{historical_data[0].text}', datetime('now'))
     """
     
     db_result = await call_tool("query_database", {"query": analysis_query})
     
     return {
-        "country_info": country_result[0].text,
+        "current": weather_result[0].text,
         "historical": historical_data[0].text,
         "stored": db_result[0].text
     }
