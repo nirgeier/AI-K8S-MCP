@@ -415,7 +415,7 @@ try:
     if 'plugins' in config:
         # List of slow plugins to remove in development
         slow_plugins = ['print-site', 'minify', 'git-committers', 'git-revision-date-localized', 'pdf-export']
-        
+
         new_plugins = []
         for plugin in config.get('plugins', []):
             name = plugin if isinstance(plugin, str) else list(plugin.keys())[0]
@@ -423,7 +423,7 @@ try:
                 new_plugins.append(plugin)
             else:
                 print(f' - Removing plugin: {name}')
-        
+
         config['plugins'] = new_plugins
 
     with open('mkdocs.yml', 'w') as f:

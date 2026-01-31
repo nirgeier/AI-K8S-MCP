@@ -19,7 +19,7 @@ theme:
     - content.tooltips
     - content.footer.last-updated
     - content.footer.contributors
-    - navigation.expand: false
+    - navigation.expand
     - navigation.footer
     - navigation.indexes
     - navigation.instant # Disabled for live reload during development
@@ -60,39 +60,75 @@ theme:
 ###
 
 nav:
-  - Welcome: welcome.md
-  - Labs:
-      - labs.md
-      - "Lab 0: Setup": Lab00-Setup/lab.md
-      - "Lab 1: MCP Fundamentals": Lab01-MCP-Fundamentals/lab.md
-      - "Lab 2: First MCP Server": Lab02-First-MCP-Server/lab.md
-      - "Lab 3: MCP Tools": Lab03-MCP-Tools/lab.md
-      - "Lab 4: MCP Resources": Lab04-MCP-Resources/lab.md
-      - "Lab 5: MCP Prompts": Lab05-MCP-Prompts/lab.md
-      - "Lab 6: MCP Workflow": Lab06-MCP-Workflow/lab.md
-      - "Lab 7: MCP Ollama": Lab07-MCP-Ollama/lab.md
-      - "Lab 8: Kagent": Lab08-Kagent/lab.md
-  - Tasks:
-      - Overview: Tasks/index.md
-      - "Setup RooCode": Tasks/000-Setup-RooCode/000-Setup-RooCode.md
-  - Resources:
-      - "Lab 01 - Basics (Python)": Resources/Lab01-MCP-Fundamentals/MCP-Basics-py.md
-      - "Lab 01 - Basics (TypeScript)": Resources/Lab01-MCP-Fundamentals/MCP-Basics-ts.md
-      - "Lab 01 - Advanced (Python)": Resources/Lab01-MCP-Fundamentals/MCP-Advanced-py.md
-      - "Lab 06 - Step 01: Imports": Resources/Lab06-MCP-Workflow/step01-imports.md
-      - "Lab 06 - Step 02: Constructor": Resources/Lab06-MCP-Workflow/step02-ctor.md
-      - "Lab 06 - Step 03: Initialization": Resources/Lab06-MCP-Workflow/step03-init.md
-      - "Lab 06 - Step 04: Tools": Resources/Lab06-MCP-Workflow/step04-tools.md
-      - "Lab 06 - Step 05: Tool Handlers": Resources/Lab06-MCP-Workflow/step05-tool-handlers.md
-      - "Lab 06 - Step 06: Resources": Resources/Lab06-MCP-Workflow/step06-resources.md
-      - "Lab 06 - Step 07: Resource Handlers": Resources/Lab06-MCP-Workflow/step07-resource-handlers.md
-      - "Lab 06 - Step 08: Prompts": Resources/Lab06-MCP-Workflow/step08-prompts.md
-      - "Lab 06 - Step 09: Prompt Handlers": Resources/Lab06-MCP-Workflow/step09-prompt-handlers.md
-      - "Lab 06 - Step 10: Lifecycle": Resources/Lab06-MCP-Workflow/step10-lifecycle.md
-      - "Lab 06 - Step 11: Main": Resources/Lab06-MCP-Workflow/step11-main.md
-      - "Lab 06 - Step 12: RAG": Resources/Lab06-MCP-Workflow/step12-rag.md
-      - "Lab 06 - Step 13: Main Entry Point": Resources/Lab06-MCP-Workflow/step13-main.md
-      - "Lab 06 - Test Client": Resources/Lab06-MCP-Workflow/test_client.md
+- Welcome: welcome.md
+- Labs:
+  - labs.md
+  - "Lab 0: Setup": Lab00-Setup/lab.md
+  - "Lab 1: MCP Fundamentals": Lab01-MCP-Fundamentals/lab.md
+  - "Lab 2: First MCP Server": Lab02-First-MCP-Server/lab.md
+  - "Lab 3: MCP Tools": Lab03-MCP-Tools/lab.md
+  - "Lab 4: MCP Resources": Lab04-MCP-Resources/lab.md
+  - "Lab 5: MCP Prompts": Lab05-MCP-Prompts/lab.md
+  - "Lab 6: MCP Workflow": Lab06-MCP-Workflow/lab.md
+  - "Lab 7: MCP Ollama": Lab07-MCP-Ollama/lab.md
+  - "Lab 8: Kagent": Lab08-Kagent/lab.md
+  - "Lab 9: K8S Event Monitor": Lab09-K8S-Event-Monitor/lab.md
+
+- Resources:
+  # - "Lab 01 - Basics (Python)": Resources/Lab01-MCP-Fundamentals/MCP-Basics-py.md
+  # - "Lab 01 - Basics (TypeScript)": Resources/Lab01-MCP-Fundamentals/MCP-Basics-ts.md
+  # - "Lab 01 - Advanced (Python)": Resources/Lab01-MCP-Fundamentals/MCP-Advanced-py.md
+
+  # - "Lab 06 - 01: Imports": Resources/Lab06-MCP-Workflow/step01-imports.md
+  # - "Lab 06 - 02: Constructor": Resources/Lab06-MCP-Workflow/step02-ctor.md
+  # - "Lab 06 - 03: Initialization": Resources/Lab06-MCP-Workflow/step03-init.md
+  # - "Lab 06 - 04: Tools": Resources/Lab06-MCP-Workflow/step04-tools.md
+  # - "Lab 06 - 05: Tool Handlers": Resources/Lab06-MCP-Workflow/step05-call-tools.md
+  # - "Lab 06 - 06: Resources": Resources/Lab06-MCP-Workflow/step06-resources.md
+  # - "Lab 06 - 07: Resource Handlers": Resources/Lab06-MCP-Workflow/step07-resource-handlers.md
+  # - "Lab 06 - 08: Prompts": Resources/Lab06-MCP-Workflow/step08-prompts.md
+  # - "Lab 06 - 09: Prompt Handlers": Resources/Lab06-MCP-Workflow/step09-prompt-handlers.md
+  # - "Lab 06 - 10: Lifecycle": Resources/Lab06-MCP-Workflow/step10-lifecycle.md
+  # - "Lab 06 - 11: Main": Resources/Lab06-MCP-Workflow/step11-main.md
+  # - "Lab 06 - 12: RAG": Resources/Lab06-MCP-Workflow/step12-rag.md
+  # - "Lab 06 - 13: Main Entry Point": Resources/Lab06-MCP-Workflow/step13-main.md
+  # - "Lab 06 - Test Client": Resources/Lab06-MCP-Workflow/test_client.md
+  - index.md
+
+  - "Lab 09 - 01: Install Kagent": Resources/Lab09-K8S-Event-Monitor/step01-install-kagent.md
+  - "Lab 09 - 02: Create MCP Server": Resources/Lab09-K8S-Event-Monitor/step02-create-mcp-server.md
+  - "Lab 09 - 03: Build with KMCP": Resources/Lab09-K8S-Event-Monitor/step03-kmcp-build.md
+  - "Lab 09 - 04: Verify Registration": Resources/Lab09-K8S-Event-Monitor/step04-verify-registration.md
+  - "Lab 09 - 05: Create Agent": Resources/Lab09-K8S-Event-Monitor/step05-create-agent.md
+  - "Lab 09 - 06: Install Ingress": Resources/Lab09-K8S-Event-Monitor/step06-install-ingress.md
+  - "Lab 09 - 07: Prometheus & Grafana": Resources/Lab09-K8S-Event-Monitor/step07-deploy-prometheus-grafana.md
+  - "Lab 09 - 08: Expose Services": Resources/Lab09-K8S-Event-Monitor/step08-expose-ingress.md
+
+  - "Lab 07 - 00: ----------------": ""
+  - "Lab 07 - 00: Getting Started": Resources/Lab07-MCP-Ollama/step00-getting-started.md
+  - "Lab 07 - 01: Imports": Resources/Lab07-MCP-Ollama/step01-imports.md
+  - "Lab 07 - 02: Skeleton Code": Resources/Lab07-MCP-Ollama/step02-skeleton-code.md
+  - "Lab 07 - 03: Constructor": Resources/Lab07-MCP-Ollama/step03-constructor.md
+  - "Lab 07 - 04: Register Tools": Resources/Lab07-MCP-Ollama/step04-list-tools.md
+  - "Lab 07 - 05: Tool Handlers": Resources/Lab07-MCP-Ollama/step05-call-tools.md
+  - "Lab 07 - 06: Register Resources": Resources/Lab07-MCP-Ollama/step06-list-resources.md
+  - "Lab 07 - 07: Resource Handlers": Resources/Lab07-MCP-Ollama/step07-read-resources.md
+  - "Lab 07 - 08: Register Prompts": Resources/Lab07-MCP-Ollama/step08-list_prompts.md
+  - "Lab 07 - 09: Prompt Handlers": Resources/Lab07-MCP-Ollama/step09-get_prompt.md
+  - "Lab 07 - 10: Setup Handlers": Resources/Lab07-MCP-Ollama/step10-setup-handlers.md
+  - "Lab 07 - 11: Run Server": Resources/Lab07-MCP-Ollama/step11-run-server.md
+  - "Lab 07 - 12: Main Entry Point": Resources/Lab07-MCP-Ollama/step12-main-entry-point.md
+  # - "Lab 08 - 01: Prerequisites": Resources/Lab08-Kagent/step01-prerequisites.md
+  # - "Lab 08 - 02: Project Setup": Resources/Lab08-Kagent/step02-project-setup.md
+  # - "Lab 08 - 03: TypeScript Config": Resources/Lab08-Kagent/step03-typescript-config.md
+  # - "Lab 08 - 04: Imports": Resources/Lab08-Kagent/step04-imports.md
+  # - "Lab 08 - 05: Class Structure": Resources/Lab08-Kagent/step05-class-structure.md
+  # - "Lab 08 - 06: Tool Registration": Resources/Lab08-Kagent/step06-tool-registration.md
+  # - "Lab 08 - 07: Tool Handlers": Resources/Lab08-Kagent/step07-call-tools.md
+  # - "Lab 08 - 08: List Pods": Resources/Lab08-Kagent/step08-list-pods.md
+  # - "Lab 08 - 09: Log Collection": Resources/Lab08-Kagent/step09-log-collection.md
+  # - "Lab 08 - 10: Complete Code": Resources/Lab08-Kagent/step10-complete-code.md
+  # - "Lab 08 - 11: Testing": Resources/Lab08-Kagent/step11-testing.md
 ###
 ### mkdocs-site.yml
 ###

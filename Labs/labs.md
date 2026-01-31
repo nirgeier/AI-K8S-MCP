@@ -4,25 +4,25 @@
 
 ---
 
-* Welcome to the Model Context Protocol (MCP) hands-on learning series! 
-* This comprehensive set of labs will take you from MCP fundamentals to building production-ready MCP servers.
-* **Here you'll learn and build the Model Context Protocol (MCP) from scratch**
-* Whether you're new to MCP or looking to deepen your understanding, this learning series will take you from fundamentals to building production-ready MCP servers.
+- Welcome to the Model Context Protocol (MCP) hands-on learning series!
+- This comprehensive set of labs will take you from MCP fundamentals to building production-ready MCP servers.
+- **Here you'll learn and build the Model Context Protocol (MCP) from scratch**
+- Whether you're new to MCP or looking to deepen your understanding, this learning series will take you from fundamentals to building production-ready MCP servers.
 
 ---
 
-## What You'll Learn 
+## What You'll Learn
 
 Through these 8 progressive labs, you'll master:
 
-| Topic | Description |
-|-------|-------------|
-| MCP Architecture | Understanding and mastering the client-server model and core concepts |
-| Server Development | Building MCP servers from scratch with TypeScript using the official SDK |
-| Tools Implementation | Creating sophisticated tools that interact with external systems and developing functions that LLMs can call to perform actions |
-| Resource Management | Exposing contextual data through MCP resources that LLMs can read and reference |
-| Prompt Engineering | Building reusable prompt templates for common tasks |
-| Production Deployment | Applying best practices for real-world applications |
+| Topic                 | Description                                                                                                                     |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| MCP Architecture      | Understanding and mastering the client-server model and core concepts                                                           |
+| Server Development    | Building MCP servers from scratch with TypeScript using the official SDK                                                        |
+| Tools Implementation  | Creating sophisticated tools that interact with external systems and developing functions that LLMs can call to perform actions |
+| Resource Management   | Exposing contextual data through MCP resources that LLMs can read and reference                                                 |
+| Prompt Engineering    | Building reusable prompt templates for common tasks                                                                             |
+| Production Deployment | Applying best practices for real-world applications                                                                             |
 
 ---
 
@@ -150,6 +150,19 @@ Implement a specialized MCP server (K-Agent) that interacts with Kubernetes clus
 - Collecting and structuring logs for LLM consumption
 - Containerizing and deploying the K-Agent server
 
+---
+
+### [Lab 9: K8s Event & Log Monitor](Lab09-K8s-Event-Monitor/lab.md)
+
+Build a complete observability stack with a custom Python MCP server, Kagent, Prometheus, and Grafana.
+
+**Topics:**
+
+- Minimal Kagent installation
+- Building Python-based MCP servers
+- Registering custom tools with Kagent
+- Deploying Prometheus and Grafana via Helm
+- Connecting Log/Event collection to visualization dashboards
 
 ---
 

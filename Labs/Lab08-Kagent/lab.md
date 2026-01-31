@@ -1,16 +1,16 @@
-# Lab 6: K-Agent Integration
+# Lab 08: K-Agent Integration
 
 ## Overview
 
-Welcome to the advanced MCP lab!
+- Welcome to the advanced MCP lab!
 
-Now that you've mastered the fundamentals of MCP servers, tools, resources, and prompts, it's time to apply your knowledge to a real-world scenario: **building and implementing a K-Agent**.
+- Now that you've mastered the fundamentals of MCP servers, tools, resources, and prompts, it's time to apply your knowledge to a real-world scenario: **building and implementing a K-Agent**.
 
-A K-Agent is an MCP server specifically designed to interact with Kubernetes clusters. 
+- A K-Agent is an MCP server specifically designed to interact with Kubernetes clusters.
 
-In this lab, you'll build a focused K-Agent that communicates with a Kubernetes cluster and collects logs from all pods - a critical capability for monitoring, debugging, and operational intelligence.
+- In this lab, you'll build a focused K-Agent that communicates with a Kubernetes cluster and collects logs from all pods - a critical capability for monitoring, debugging, and operational intelligence.
 
-This lab bridges the gap between MCP theory and practical Kubernetes operations, showing how MCP servers can enhance DevOps workflows and provide AI-powered insights into cluster health and application behavior.
+- This lab bridges the gap between MCP theory and practical Kubernetes operations, showing how MCP servers can enhance DevOps workflows and provide AI-powered insights into cluster health and application behavior.
 
 ---
 
@@ -34,24 +34,26 @@ By the end of this lab, you will:
 - Familiarity with container orchestration principles
 - Understanding of log aggregation and monitoring concepts
 
-!!! info "Verify Kubernetes Setup"
-    Before starting this lab, ensure your Kubernetes environment is ready:
-    ```bash
-    # Check cluster access
-    kubectl cluster-info
-    
-    # Verify you can list pods
-    kubectl get pods --all-namespaces
-    
-    # Check your kubeconfig
-    kubectl config view
-    ```
+!!! debug "Verify Kubernetes Setup"
+
+    * Before starting this lab, ensure your Kubernetes environment is ready:
+
+          ```bash
+          # Check cluster access
+          kubectl cluster-info
+
+          # Verify you can list pods
+          kubectl get pods --all-namespaces
+
+          # Check your kubeconfig
+          kubectl config view
+          ```
 
 ---
 
 ## What is a K-Agent?
 
-A **K-Agent** is an MCP server that specializes in Kubernetes operations. 
+A `**K-Agent**` is an `MCP server` that specializes in Kubernetes operations.
 
 Unlike generic MCP servers, K-Agents are designed specifically for:
 
@@ -65,7 +67,7 @@ Unlike generic MCP servers, K-Agents are designed specifically for:
 
 ### Why K-Agents Matter
 
-In modern DevOps environments, Kubernetes clusters generate enormous amounts of operational data. 
+- In modern DevOps environments, Kubernetes clusters generate enormous amounts of operational data.
 
 K-Agents provide:
 
@@ -73,6 +75,10 @@ K-Agents provide:
 - **Automated Troubleshooting**: AI-assisted diagnosis of issues
 - **Operational Insights**: Pattern recognition in cluster behavior
 - **Enhanced Observability**: Structured access to distributed system data
+- **Seamless Integration**: MCP tools that interact directly with Kubernetes resources
+- **Improved DevOps Workflows**: Streamlined operations through AI-driven tools
+- **Dashboarding and Alerts**: Proactive monitoring with AI-generated alerts
+- **Custom Tooling**: Tailored MCP tools for specific Kubernetes tasks
 
 ---
 
@@ -85,59 +91,55 @@ graph TB
     subgraph "MCP Client (AI/Inspector)"
         Client[MCP Client]
     end
-    
+
     subgraph "K-Agent MCP Server"
         Server[K-Agent Server]
         Tools[MCP Tools]
         K8sClient[Kubernetes Client]
-        
+
         Server --> Tools
         Tools --> K8sClient
     end
-    
+
     subgraph "Kubernetes Cluster"
         API[Kubernetes API]
         Pods[Pods]
         Logs[Container Logs]
-        
+
         API --> Pods
         Pods --> Logs
     end
-    
+
     Client -->|"stdio/JSON-RPC"| Server
     K8sClient -->|"REST API"| API
-    
+
     Tools -.->|"list_pods"| API
     Tools -.->|"collect_pod_logs"| Logs
-    
+
     style Server fill:#4CAF50
     style Tools fill:#2196F3
     style K8sClient fill:#FF9800
     style API fill:#9C27B0
 ```
 
-
+---
 
 ### Core Components
 
-1. **Kubernetes Client Integration**
+1.  **Kubernetes Client Integration**
+    - Secure cluster authentication
+    - API communication handling
+    - Error management for cluster operations
 
-      - Secure cluster authentication
-      - API communication handling
-      - Error management for cluster operations
+2.  **Log Collection Tools**
+    - Pod discovery across namespaces
+    - Log retrieval from all containers
+    - Structured log formatting
 
-2. **Log Collection Tools**
-
-      - Pod discovery across namespaces
-      - Log retrieval from all containers
-      - Structured log formatting
-
-3. **Resource Management**
-
-      - Namespace enumeration
-      - Pod status monitoring
-      - Health check capabilities
-
+3.  **Resource Management**
+    - Namespace enumeration
+    - Pod status monitoring
+    - Health check capabilities
 
 ---
 
@@ -149,14 +151,13 @@ Create a new MCP server project with Kubernetes dependencies:
 
 ```bash
 # Create project directory and navigate to it
-mkdir k-agent-logs  # <-- Create this directory next to the previous labs directories
+mkdir k-agent-logs
 cd k-agent-logs
 ```
 
 <br>
 
-Create a new `package.json` file inside the `k-agent-logs` directory with the following content:
-
+- Create a new `package.json` file inside the `k-agent-logs` directory with the following content:
 
 ```json
 {
@@ -185,9 +186,9 @@ Create a new `package.json` file inside the `k-agent-logs` directory with the fo
 }
 ```
 
-<br>
+---
 
-Run the following command to install the dependencies:
+- Run the following command to install the dependencies:
 
 ```bash
 npm install
@@ -209,7 +210,6 @@ mkdir -p src && touch src/index.ts
 
 Create your complete K-Agent server by pasting the following code inside `src/index.ts`:
 
-
 ```typescript
 // Import MCP SDK components and Kubernetes client
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
@@ -222,7 +222,7 @@ import {
   McpError,
   ReadResourceRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
-import * as k8s from '@kubernetes/client-node';
+import * as k8s from "@kubernetes/client-node";
 
 class KAgentServer {
   // Store Kubernetes API clients (for talking to your cluster)
@@ -250,7 +250,7 @@ class KAgentServer {
           tools: {},
           resources: {},
         },
-      }
+      },
     );
 
     // Handle incoming MCP requests (you'll add tools here next)
@@ -276,9 +276,7 @@ server.run().catch(console.error);
 
 <br>
 
-
-Create a file named `tsconfig.json` inside the `k-agent-logs` directory (not inside `src`): 
-
+Create a file named `tsconfig.json` inside the `k-agent-logs` directory (not inside `src`):
 
 ```bash
 cd ..  # Go back to k-agent-logs directory
@@ -289,10 +287,9 @@ touch tsconfig.json
 
 Paste the following content into `tsconfig.json`:
 
-
 ```json
 {
-    "compilerOptions": {
+  "compilerOptions": {
     "target": "ES2022",
     "module": "commonjs",
     "lib": ["ES2022"],
@@ -306,9 +303,9 @@ Paste the following content into `tsconfig.json`:
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true
-    },
-    "include": ["src/**/*"],
-    "exclude": ["node_modules", "dist"]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }
 ```
 
@@ -324,16 +321,9 @@ You should see: `K-Agent MCP server running on stdio`
 
 <br>
 
-!!! warning "If you get errors:"
-    - `Missing script: "dev"` → You didn't update package.json (go back to step 2)
-    - `Cannot find module` → Make sure you're in the k-agent-logs directory
-    - Other errors → Check that src/index.ts has the correct code
-
-
-
+!!! warning "If you get errors:" - `Missing script: "dev"` → You didn't update package.json (go back to step 2) - `Cannot find module` → Make sure you're in the k-agent-logs directory - Other errors → Check that src/index.ts has the correct code
 
 ---
-
 
 ### Step 3: Pod Discovery Tool
 
@@ -450,7 +440,7 @@ private handleK8sError(error: any): Error {
 <br>
 
 !!! success "Complete `src/index.ts` After Step 3"
-    Here's what your complete `src/index.ts` file should look like after completing Step 3:
+Here's what your complete `src/index.ts` file should look like after completing Step 3:
 
     ```typescript
     // Import MCP SDK components and Kubernetes client
@@ -629,7 +619,6 @@ You should see a JSON list of all pods with their status and container names.
 
 ---
 
-
 ### Step 4: Log Collection Tool
 
 Build the core log collection functionality with the `collect_pod_logs` tool.
@@ -638,7 +627,7 @@ Build the core log collection functionality with the `collect_pod_logs` tool.
 
 #### Add collect_pod_logs to Tools Array
 
-In your `src/index.ts` file, locate the tools array inside `setupHandlers()` method. 
+In your `src/index.ts` file, locate the tools array inside `setupHandlers()` method.
 
 Add the following second tool code to the array:
 
@@ -704,10 +693,7 @@ switch (name) {
   case "collect_pod_logs":
     return await this.handleCollectPodLogs(args);
   default:
-    throw new McpError(
-      ErrorCode.MethodNotFound,
-      `Unknown tool: ${name}`
-    );
+    throw new McpError(ErrorCode.MethodNotFound, `Unknown tool: ${name}`);
 }
 ```
 
@@ -738,8 +724,8 @@ private async handleCollectPodLogs(args: any) {
 }
 
 private async collectPodLogs(namespace: string, podName?: string, tailLines: number = 100): Promise<string> {
-  const pods = podName 
-    ? await this.getPods(namespace).then(pods => pods.filter(p => p.metadata?.name === podName)) 
+  const pods = podName
+    ? await this.getPods(namespace).then(pods => pods.filter(p => p.metadata?.name === podName))
     : await this.getPods(namespace);
 
   const allLogs: string[] = [];
@@ -778,7 +764,7 @@ private async getPodLogs(namespace: string, podName: string, containerName: stri
 ```
 
 !!! success "Complete `src/index.ts` After Step 4"
-    Here's what your complete `src/index.ts` file should look like after completing Step 4:
+Here's what your complete `src/index.ts` file should look like after completing Step 4:
 
     ```typescript
     // Import MCP SDK components and Kubernetes client
@@ -938,8 +924,8 @@ private async getPodLogs(namespace: string, podName: string, containerName: stri
       }
 
       private async collectPodLogs(namespace: string, podName?: string, tailLines: number = 100): Promise<string> {
-        const pods = podName 
-          ? await this.getPods(namespace).then(pods => pods.filter(p => p.metadata?.name === podName)) 
+        const pods = podName
+          ? await this.getPods(namespace).then(pods => pods.filter(p => p.metadata?.name === podName))
           : await this.getPods(namespace);
 
         const allLogs: string[] = [];
@@ -1038,13 +1024,12 @@ This will start the MCP Inspector connected to your K-Agent server and open a br
 
 You should see logs from all pods in the default namespace, formatted with pod and container names.
 
-
 ---
 
 ## Optional Extensions
 
 !!! info "Prerequisites"
-    These exercises assume you have completed **Steps 1-4** and have a fully functional K-Agent server with `list_pods` and `collect_pod_logs` tools. These exercises extend the functionality beyond the core implementation.
+These exercises assume you have completed **Steps 1-4** and have a fully functional K-Agent server with `list_pods` and `collect_pod_logs` tools. These exercises extend the functionality beyond the core implementation.
 
 ---
 
@@ -1054,138 +1039,138 @@ Enhance the `list_pods` tool to support filtering by status, labels, and sorting
 
 **Update the list_pods tool schema** in your `setupHandlers()` method to include new parameters:
 
-   ```typescript
-   {
-     name: "list_pods",
-     description: "List all pods across namespaces with their status, with filtering and sorting options",
-     inputSchema: {
-       type: "object",
-       properties: {
-         namespace: {
-           type: "string",
-           description: "Optional: Filter by specific namespace"
-         },
-         status: {
-           type: "string",
-           description: "Optional: Filter by pod status (Running, Pending, Failed, etc.)",
-           enum: ["Running", "Pending", "Failed", "Succeeded", "Unknown"]
-         },
-         labelSelector: {
-           type: "string",
-           description: "Optional: Filter by label selector (e.g., 'app=nginx,env=prod')"
-         },
-         sortBy: {
-           type: "string",
-           description: "Sort results by field",
-           enum: ["name", "namespace", "status", "age"],
-           default: "name"
-         }
-       }
-     }
-   }
-   ```
+```typescript
+{
+  name: "list_pods",
+  description: "List all pods across namespaces with their status, with filtering and sorting options",
+  inputSchema: {
+    type: "object",
+    properties: {
+      namespace: {
+        type: "string",
+        description: "Optional: Filter by specific namespace"
+      },
+      status: {
+        type: "string",
+        description: "Optional: Filter by pod status (Running, Pending, Failed, etc.)",
+        enum: ["Running", "Pending", "Failed", "Succeeded", "Unknown"]
+      },
+      labelSelector: {
+        type: "string",
+        description: "Optional: Filter by label selector (e.g., 'app=nginx,env=prod')"
+      },
+      sortBy: {
+        type: "string",
+        description: "Sort results by field",
+        enum: ["name", "namespace", "status", "age"],
+        default: "name"
+      }
+    }
+  }
+}
+```
 
 <br>
 
 **Update the handleListPods method** to support the new parameters:
 
-   ```typescript
-   private async handleListPods(args: any) {
-     const { namespace, status, labelSelector, sortBy = 'name' } = args;
-     let pods = await this.getPods(namespace, labelSelector);
+```typescript
+private async handleListPods(args: any) {
+  const { namespace, status, labelSelector, sortBy = 'name' } = args;
+  let pods = await this.getPods(namespace, labelSelector);
 
-     // Filter by status if specified
-     if (status) {
-       pods = pods.filter(pod => pod.status?.phase === status);
-     }
+  // Filter by status if specified
+  if (status) {
+    pods = pods.filter(pod => pod.status?.phase === status);
+  }
 
-     // Map to simplified format
-     const podList = pods.map(pod => ({
-       name: pod.metadata?.name || 'unknown',
-       namespace: pod.metadata?.namespace || 'unknown',
-       status: pod.status?.phase || 'unknown',
-       containers: pod.spec?.containers?.map(c => c.name) || [],
-       age: pod.metadata?.creationTimestamp 
-         ? Math.floor((Date.now() - new Date(pod.metadata.creationTimestamp).getTime()) / 1000 / 60)
-         : 0,
-       labels: pod.metadata?.labels || {}
-     }));
+  // Map to simplified format
+  const podList = pods.map(pod => ({
+    name: pod.metadata?.name || 'unknown',
+    namespace: pod.metadata?.namespace || 'unknown',
+    status: pod.status?.phase || 'unknown',
+    containers: pod.spec?.containers?.map(c => c.name) || [],
+    age: pod.metadata?.creationTimestamp
+      ? Math.floor((Date.now() - new Date(pod.metadata.creationTimestamp).getTime()) / 1000 / 60)
+      : 0,
+    labels: pod.metadata?.labels || {}
+  }));
 
-     // Sort results
-     const sortedPods = this.sortPods(podList, sortBy);
+  // Sort results
+  const sortedPods = this.sortPods(podList, sortBy);
 
-     return {
-       content: [
-         {
-           type: "text",
-           text: JSON.stringify(sortedPods, null, 2)
-         }
-       ]
-     };
-   }
-   ```
+  return {
+    content: [
+      {
+        type: "text",
+        text: JSON.stringify(sortedPods, null, 2)
+      }
+    ]
+  };
+}
+```
 
 <br>
 
 **Update the getPods method** to support label selectors:
 
-   ```typescript
-   private async getPods(namespace?: string, labelSelector?: string): Promise<k8s.V1Pod[]> {
-     try {
-       if (namespace) {
-         const response = await this.k8sCoreApi.listNamespacedPod({
-           namespace,
-           labelSelector
-         });
-         return response.items || [];
-       } else {
-         const response = await this.k8sCoreApi.listPodForAllNamespaces({
-           labelSelector
-         });
-         return response.items || [];
-       }
-     } catch (error) {
-       throw this.handleK8sError(error);
-     }
-   }
-   ```
+```typescript
+private async getPods(namespace?: string, labelSelector?: string): Promise<k8s.V1Pod[]> {
+  try {
+    if (namespace) {
+      const response = await this.k8sCoreApi.listNamespacedPod({
+        namespace,
+        labelSelector
+      });
+      return response.items || [];
+    } else {
+      const response = await this.k8sCoreApi.listPodForAllNamespaces({
+        labelSelector
+      });
+      return response.items || [];
+    }
+  } catch (error) {
+    throw this.handleK8sError(error);
+  }
+}
+```
 
 <br>
 
 **Add a sorting helper method** after the `getPods` method:
 
-   ```typescript
-   private sortPods(pods: any[], sortBy: string): any[] {
-     return pods.sort((a, b) => {
-       switch (sortBy) {
-         case 'namespace':
-           return a.namespace.localeCompare(b.namespace);
-         case 'status':
-           return a.status.localeCompare(b.status);
-         case 'age':
-           return b.age - a.age; // Newest first
-         case 'name':
-         default:
-           return a.name.localeCompare(b.name);
-       }
-     });
-   }
-   ```
+```typescript
+private sortPods(pods: any[], sortBy: string): any[] {
+  return pods.sort((a, b) => {
+    switch (sortBy) {
+      case 'namespace':
+        return a.namespace.localeCompare(b.namespace);
+      case 'status':
+        return a.status.localeCompare(b.status);
+      case 'age':
+        return b.age - a.age; // Newest first
+      case 'name':
+      default:
+        return a.name.localeCompare(b.name);
+    }
+  });
+}
+```
 
 <br>
 
 **Test the enhanced filtering:**
 
-   ```bash
-   npx @modelcontextprotocol/inspector node_modules/.bin/tsx src/index.ts
-   ```
+```bash
+npx @modelcontextprotocol/inspector node_modules/.bin/tsx src/index.ts
+```
 
 **Try these test cases:**
 
-   - List only Running pods: Set `status` to "Running"
-   - Filter by labels: Set `labelSelector` to "app=nginx"
-   - Sort by age: Set `sortBy` to "age"
-   - Combine filters: Use namespace + status + sortBy together
+- List only Running pods: Set `status` to "Running"
+- Filter by labels: Set `labelSelector` to "app=nginx"
+- Sort by age: Set `sortBy` to "age"
+- Combine filters: Use namespace + status + sortBy together
 
 ---
 
@@ -1195,190 +1180,190 @@ Extend the `collect_pod_logs` tool to support log searching, filtering by severi
 
 **Add a new tool `analyze_logs`** to your tools array in `setupHandlers()`:
 
-   ```typescript
-   {
-     name: "analyze_logs",
-     description: "Analyze and search through pod logs with filtering and export capabilities",
-     inputSchema: {
-       type: "object",
-       properties: {
-         namespace: {
-           type: "string",
-           description: "Namespace to analyze logs from"
-         },
-         podName: {
-           type: "string",
-           description: "Specific pod name (optional)"
-         },
-         searchPattern: {
-           type: "string",
-           description: "Regex pattern to search for in logs"
-         },
-         severityLevel: {
-           type: "string",
-           description: "Filter by log severity",
-           enum: ["ERROR", "WARN", "INFO", "DEBUG"]
-         },
-         tailLines: {
-           type: "number",
-           description: "Number of recent log lines to analyze",
-           default: 100
-         },
-         exportToFile: {
-           type: "boolean",
-           description: "Export matching logs to a file",
-           default: false
-         }
-       },
-       required: ["namespace"]
-     }
-   }
-   ```
+```typescript
+{
+  name: "analyze_logs",
+  description: "Analyze and search through pod logs with filtering and export capabilities",
+  inputSchema: {
+    type: "object",
+    properties: {
+      namespace: {
+        type: "string",
+        description: "Namespace to analyze logs from"
+      },
+      podName: {
+        type: "string",
+        description: "Specific pod name (optional)"
+      },
+      searchPattern: {
+        type: "string",
+        description: "Regex pattern to search for in logs"
+      },
+      severityLevel: {
+        type: "string",
+        description: "Filter by log severity",
+        enum: ["ERROR", "WARN", "INFO", "DEBUG"]
+      },
+      tailLines: {
+        type: "number",
+        description: "Number of recent log lines to analyze",
+        default: 100
+      },
+      exportToFile: {
+        type: "boolean",
+        description: "Export matching logs to a file",
+        default: false
+      }
+    },
+    required: ["namespace"]
+  }
+}
+```
 
 <br>
 
 **Add the case to your switch statement:**
 
-   ```typescript
-   case "analyze_logs":
-     return await this.handleAnalyzeLogs(args);
-   ```
+```typescript
+case "analyze_logs":
+  return await this.handleAnalyzeLogs(args);
+```
 
 <br>
 
 **Implement the log analysis handler** after your `handleCollectPodLogs` method:
 
-   ```typescript
-   private async handleAnalyzeLogs(args: any) {
-     const { namespace, podName, searchPattern, severityLevel, tailLines = 100, exportToFile = false } = args;
+```typescript
+private async handleAnalyzeLogs(args: any) {
+  const { namespace, podName, searchPattern, severityLevel, tailLines = 100, exportToFile = false } = args;
 
-     if (!namespace) {
-       throw new Error("Namespace is required");
-     }
+  if (!namespace) {
+    throw new Error("Namespace is required");
+  }
 
-     const logs = await this.collectPodLogs(namespace, podName, tailLines);
-     const analyzedLogs = this.analyzeLogs(logs, searchPattern, severityLevel);
+  const logs = await this.collectPodLogs(namespace, podName, tailLines);
+  const analyzedLogs = this.analyzeLogs(logs, searchPattern, severityLevel);
 
-     if (exportToFile) {
-       const filename = await this.exportLogs(analyzedLogs, namespace, podName);
-       return {
-         content: [
-           {
-             type: "text",
-             text: `Analysis complete. ${analyzedLogs.totalLines} lines analyzed, ${analyzedLogs.matchingLines} matches found.\nExported to: ${filename}\n\n${analyzedLogs.summary}`
-           }
-         ]
-       };
-     }
+  if (exportToFile) {
+    const filename = await this.exportLogs(analyzedLogs, namespace, podName);
+    return {
+      content: [
+        {
+          type: "text",
+          text: `Analysis complete. ${analyzedLogs.totalLines} lines analyzed, ${analyzedLogs.matchingLines} matches found.\nExported to: ${filename}\n\n${analyzedLogs.summary}`
+        }
+      ]
+    };
+  }
 
-     return {
-       content: [
-         {
-           type: "text",
-           text: `Analysis Results:\n${analyzedLogs.summary}\n\nMatching Logs:\n${analyzedLogs.matches.join('\n')}`
-         }
-       ]
-     };
-   }
-   ```
+  return {
+    content: [
+      {
+        type: "text",
+        text: `Analysis Results:\n${analyzedLogs.summary}\n\nMatching Logs:\n${analyzedLogs.matches.join('\n')}`
+      }
+    ]
+  };
+}
+```
 
 <br>
 
 **Add the log analysis helper method:**
 
-   ```typescript
-   private analyzeLogs(logs: string, searchPattern?: string, severityLevel?: string) {
-     const lines = logs.split('\n');
-     const matches: string[] = [];
-     const errors: string[] = [];
-     const warnings: string[] = [];
+```typescript
+private analyzeLogs(logs: string, searchPattern?: string, severityLevel?: string) {
+  const lines = logs.split('\n');
+  const matches: string[] = [];
+  const errors: string[] = [];
+  const warnings: string[] = [];
 
-     for (const line of lines) {
-       // Filter by severity if specified
-       if (severityLevel) {
-         if (!line.includes(severityLevel)) continue;
-       }
+  for (const line of lines) {
+    // Filter by severity if specified
+    if (severityLevel) {
+      if (!line.includes(severityLevel)) continue;
+    }
 
-       // Search for pattern if specified
-       if (searchPattern) {
-         const regex = new RegExp(searchPattern, 'i');
-         if (regex.test(line)) {
-           matches.push(line);
-         }
-       } else {
-         matches.push(line);
-       }
+    // Search for pattern if specified
+    if (searchPattern) {
+      const regex = new RegExp(searchPattern, 'i');
+      if (regex.test(line)) {
+        matches.push(line);
+      }
+    } else {
+      matches.push(line);
+    }
 
-       // Categorize by severity
-       if (line.includes('ERROR') || line.includes('error')) {
-         errors.push(line);
-       } else if (line.includes('WARN') || line.includes('warning')) {
-         warnings.push(line);
-       }
-     }
+    // Categorize by severity
+    if (line.includes('ERROR') || line.includes('error')) {
+      errors.push(line);
+    } else if (line.includes('WARN') || line.includes('warning')) {
+      warnings.push(line);
+    }
+  }
 
-     const summary = [
-       `Total Lines: ${lines.length}`,
-       `Matching Lines: ${matches.length}`,
-       `Errors Found: ${errors.length}`,
-       `Warnings Found: ${warnings.length}`,
-       searchPattern ? `Search Pattern: ${searchPattern}` : '',
-       severityLevel ? `Severity Filter: ${severityLevel}` : ''
-     ].filter(Boolean).join('\n');
+  const summary = [
+    `Total Lines: ${lines.length}`,
+    `Matching Lines: ${matches.length}`,
+    `Errors Found: ${errors.length}`,
+    `Warnings Found: ${warnings.length}`,
+    searchPattern ? `Search Pattern: ${searchPattern}` : '',
+    severityLevel ? `Severity Filter: ${severityLevel}` : ''
+  ].filter(Boolean).join('\n');
 
-     return {
-       totalLines: lines.length,
-       matchingLines: matches.length,
-       matches: matches.slice(0, 100), // Limit to first 100 matches
-       errors,
-       warnings,
-       summary
-     };
-   }
-   ```
+  return {
+    totalLines: lines.length,
+    matchingLines: matches.length,
+    matches: matches.slice(0, 100), // Limit to first 100 matches
+    errors,
+    warnings,
+    summary
+  };
+}
+```
 
 <br>
 
 **Add the export helper method** (requires fs module - add `import * as fs from 'fs';` at the top):
 
-   ```typescript
-   private async exportLogs(analyzedLogs: any, namespace: string, podName?: string): Promise<string> {
-     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-     const filename = `logs_${namespace}_${podName || 'all'}_${timestamp}.txt`;
-     const filepath = `/tmp/${filename}`;
+```typescript
+private async exportLogs(analyzedLogs: any, namespace: string, podName?: string): Promise<string> {
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const filename = `logs_${namespace}_${podName || 'all'}_${timestamp}.txt`;
+  const filepath = `/tmp/${filename}`;
 
-     const content = [
-       `Kubernetes Log Analysis Report`,
-       `Generated: ${new Date().toISOString()}`,
-       `Namespace: ${namespace}`,
-       podName ? `Pod: ${podName}` : 'All Pods',
-       ``,
-       analyzedLogs.summary,
-       ``,
-       `=== Matching Log Entries ===`,
-       analyzedLogs.matches.join('\n')
-     ].join('\n');
+  const content = [
+    `Kubernetes Log Analysis Report`,
+    `Generated: ${new Date().toISOString()}`,
+    `Namespace: ${namespace}`,
+    podName ? `Pod: ${podName}` : 'All Pods',
+    ``,
+    analyzedLogs.summary,
+    ``,
+    `=== Matching Log Entries ===`,
+    analyzedLogs.matches.join('\n')
+  ].join('\n');
 
-     // Note: In a real implementation, you'd want to handle file system operations more carefully
-     // For this exercise, we'll just return the intended filename
-     return filepath;
-   }
-   ```
+  // Note: In a real implementation, you'd want to handle file system operations more carefully
+  // For this exercise, we'll just return the intended filename
+  return filepath;
+}
+```
 
 <br>
 
 **Test the log analysis:**
 
-   ```bash
-   npx @modelcontextprotocol/inspector node_modules/.bin/tsx src/index.ts
-   ```
+```bash
+npx @modelcontextprotocol/inspector node_modules/.bin/tsx src/index.ts
+```
 
 **Try these test cases:**
 
-   - Search for errors: Set `searchPattern` to "error" and `severityLevel` to "ERROR"
-   - Find warnings: Set `severityLevel` to "WARN"
-   - Export logs: Set `exportToFile` to true
-   - Pattern matching: Set `searchPattern` to a specific error code or message
+- Search for errors: Set `searchPattern` to "error" and `severityLevel` to "ERROR"
+- Find warnings: Set `severityLevel` to "WARN"
+- Export logs: Set `exportToFile` to true
+- Pattern matching: Set `searchPattern` to a specific error code or message
 
 ---
 
@@ -1388,202 +1373,202 @@ Create a new tool to monitor pod health and events in real-time, providing insig
 
 **Add the `monitor_pod_health` tool** to your tools array:
 
-   ```typescript
-   {
-     name: "monitor_pod_health",
-     description: "Monitor pod health, restart counts, and recent events",
-     inputSchema: {
-       type: "object",
-       properties: {
-         namespace: {
-           type: "string",
-           description: "Namespace to monitor"
-         },
-         podName: {
-           type: "string",
-           description: "Specific pod to monitor (optional)"
-         },
-         includeEvents: {
-           type: "boolean",
-           description: "Include recent Kubernetes events",
-           default: true
-         }
-       },
-       required: ["namespace"]
-     }
-   }
-   ```
+```typescript
+{
+  name: "monitor_pod_health",
+  description: "Monitor pod health, restart counts, and recent events",
+  inputSchema: {
+    type: "object",
+    properties: {
+      namespace: {
+        type: "string",
+        description: "Namespace to monitor"
+      },
+      podName: {
+        type: "string",
+        description: "Specific pod to monitor (optional)"
+      },
+      includeEvents: {
+        type: "boolean",
+        description: "Include recent Kubernetes events",
+        default: true
+      }
+    },
+    required: ["namespace"]
+  }
+}
+```
 
 <br>
 
 **Add the case to your switch statement:**
 
-   ```typescript
-   case "monitor_pod_health":
-     return await this.handleMonitorPodHealth(args);
-   ```
+```typescript
+case "monitor_pod_health":
+  return await this.handleMonitorPodHealth(args);
+```
 
 <br>
 
 **Implement the monitoring handler:**
 
-   ```typescript
-   private async handleMonitorPodHealth(args: any) {
-     const { namespace, podName, includeEvents = true } = args;
+```typescript
+private async handleMonitorPodHealth(args: any) {
+  const { namespace, podName, includeEvents = true } = args;
 
-     if (!namespace) {
-       throw new Error("Namespace is required");
-     }
+  if (!namespace) {
+    throw new Error("Namespace is required");
+  }
 
-     const pods = podName 
-       ? await this.getPods(namespace).then(pods => pods.filter(p => p.metadata?.name === podName))
-       : await this.getPods(namespace);
+  const pods = podName
+    ? await this.getPods(namespace).then(pods => pods.filter(p => p.metadata?.name === podName))
+    : await this.getPods(namespace);
 
-     const healthReports = [];
+  const healthReports = [];
 
-     for (const pod of pods) {
-       if (!pod.metadata?.name) continue;
+  for (const pod of pods) {
+    if (!pod.metadata?.name) continue;
 
-       const health = this.analyzePodHealth(pod);
-       const events = includeEvents 
-         ? await this.getPodEvents(namespace, pod.metadata.name)
-         : [];
+    const health = this.analyzePodHealth(pod);
+    const events = includeEvents
+      ? await this.getPodEvents(namespace, pod.metadata.name)
+      : [];
 
-       healthReports.push({
-         pod: pod.metadata.name,
-         namespace: pod.metadata.namespace,
-         health,
-         events
-       });
-     }
+    healthReports.push({
+      pod: pod.metadata.name,
+      namespace: pod.metadata.namespace,
+      health,
+      events
+    });
+  }
 
-     return {
-       content: [
-         {
-           type: "text",
-           text: JSON.stringify(healthReports, null, 2)
-         }
-       ]
-     };
-   }
-   ```
+  return {
+    content: [
+      {
+        type: "text",
+        text: JSON.stringify(healthReports, null, 2)
+      }
+    ]
+  };
+}
+```
 
 <br>
 
 **Add the health analysis method:**
 
-   ```typescript
-   private analyzePodHealth(pod: k8s.V1Pod) {
-     const status = pod.status;
-     const conditions = status?.conditions || [];
-     const containerStatuses = status?.containerStatuses || [];
+```typescript
+private analyzePodHealth(pod: k8s.V1Pod) {
+  const status = pod.status;
+  const conditions = status?.conditions || [];
+  const containerStatuses = status?.containerStatuses || [];
 
-     // Calculate restart counts
-     const totalRestarts = containerStatuses.reduce(
-       (sum, cs) => sum + (cs.restartCount || 0), 
-       0
-     );
+  // Calculate restart counts
+  const totalRestarts = containerStatuses.reduce(
+    (sum, cs) => sum + (cs.restartCount || 0),
+    0
+  );
 
-     // Check readiness
-     const readyCondition = conditions.find(c => c.type === 'Ready');
-     const isReady = readyCondition?.status === 'True';
+  // Check readiness
+  const readyCondition = conditions.find(c => c.type === 'Ready');
+  const isReady = readyCondition?.status === 'True';
 
-     // Check container states
-     const containerHealth = containerStatuses.map(cs => ({
-       name: cs.name,
-       ready: cs.ready,
-       restartCount: cs.restartCount || 0,
-       state: cs.state?.running ? 'Running' 
-         : cs.state?.waiting ? `Waiting: ${cs.state.waiting.reason}` 
-         : cs.state?.terminated ? `Terminated: ${cs.state.terminated.reason}`
-         : 'Unknown',
-       lastState: cs.lastState?.terminated 
-         ? `Previously terminated: ${cs.lastState.terminated.reason}`
-         : undefined
-     }));
+  // Check container states
+  const containerHealth = containerStatuses.map(cs => ({
+    name: cs.name,
+    ready: cs.ready,
+    restartCount: cs.restartCount || 0,
+    state: cs.state?.running ? 'Running'
+      : cs.state?.waiting ? `Waiting: ${cs.state.waiting.reason}`
+      : cs.state?.terminated ? `Terminated: ${cs.state.terminated.reason}`
+      : 'Unknown',
+    lastState: cs.lastState?.terminated
+      ? `Previously terminated: ${cs.lastState.terminated.reason}`
+      : undefined
+  }));
 
-     // Overall health assessment
-     const healthStatus = 
-       status?.phase === 'Running' && isReady && totalRestarts === 0 ? 'Healthy' :
-       status?.phase === 'Running' && totalRestarts > 0 ? 'Unstable' :
-       status?.phase === 'Pending' ? 'Starting' :
-       status?.phase === 'Failed' ? 'Failed' :
-       'Unknown';
+  // Overall health assessment
+  const healthStatus =
+    status?.phase === 'Running' && isReady && totalRestarts === 0 ? 'Healthy' :
+    status?.phase === 'Running' && totalRestarts > 0 ? 'Unstable' :
+    status?.phase === 'Pending' ? 'Starting' :
+    status?.phase === 'Failed' ? 'Failed' :
+    'Unknown';
 
-     return {
-       phase: status?.phase,
-       healthStatus,
-       isReady,
-       totalRestarts,
-       age: pod.metadata?.creationTimestamp 
-         ? Math.floor((Date.now() - new Date(pod.metadata.creationTimestamp).getTime()) / 1000 / 60)
-         : 0,
-       conditions: conditions.map(c => ({
-         type: c.type,
-         status: c.status,
-         reason: c.reason,
-         message: c.message
-       })),
-       containers: containerHealth
-     };
-   }
-   ```
+  return {
+    phase: status?.phase,
+    healthStatus,
+    isReady,
+    totalRestarts,
+    age: pod.metadata?.creationTimestamp
+      ? Math.floor((Date.now() - new Date(pod.metadata.creationTimestamp).getTime()) / 1000 / 60)
+      : 0,
+    conditions: conditions.map(c => ({
+      type: c.type,
+      status: c.status,
+      reason: c.reason,
+      message: c.message
+    })),
+    containers: containerHealth
+  };
+}
+```
 
 <br>
 
 **Add the events retrieval method:**
 
-   ```typescript
-   private async getPodEvents(namespace: string, podName: string): Promise<any[]> {
-     try {
-       const response = await this.k8sCoreApi.listNamespacedEvent({
-         namespace,
-         fieldSelector: `involvedObject.name=${podName}`
-       });
+```typescript
+private async getPodEvents(namespace: string, podName: string): Promise<any[]> {
+  try {
+    const response = await this.k8sCoreApi.listNamespacedEvent({
+      namespace,
+      fieldSelector: `involvedObject.name=${podName}`
+    });
 
-       const events = (response.items || [])
-         .sort((a, b) => {
-           const timeA = a.lastTimestamp || a.firstTimestamp || '';
-           const timeB = b.lastTimestamp || b.firstTimestamp || '';
-           return timeB.localeCompare(timeA);
-         })
-         .slice(0, 10) // Last 10 events
-         .map(event => ({
-           type: event.type,
-           reason: event.reason,
-           message: event.message,
-           count: event.count,
-           time: event.lastTimestamp || event.firstTimestamp
-         }));
+    const events = (response.items || [])
+      .sort((a, b) => {
+        const timeA = a.lastTimestamp || a.firstTimestamp || '';
+        const timeB = b.lastTimestamp || b.firstTimestamp || '';
+        return timeB.localeCompare(timeA);
+      })
+      .slice(0, 10) // Last 10 events
+      .map(event => ({
+        type: event.type,
+        reason: event.reason,
+        message: event.message,
+        count: event.count,
+        time: event.lastTimestamp || event.firstTimestamp
+      }));
 
-       return events;
-     } catch (error) {
-       console.error('Failed to retrieve events:', error);
-       return [];
-     }
-   }
-   ```
+    return events;
+  } catch (error) {
+    console.error('Failed to retrieve events:', error);
+    return [];
+  }
+}
+```
 
 <br>
 
 **Test the monitoring functionality:**
 
-   ```bash
-   npx @modelcontextprotocol/inspector node_modules/.bin/tsx src/index.ts
-   ```
+```bash
+npx @modelcontextprotocol/inspector node_modules/.bin/tsx src/index.ts
+```
 
 **Try these test cases:**
 
-   - Monitor a specific pod: Set `namespace` and `podName`
-   - Check all pods in namespace: Set only `namespace`
-   - Include events: Set `includeEvents` to true
-   - Look for unhealthy pods with high restart counts
+- Monitor a specific pod: Set `namespace` and `podName`
+- Check all pods in namespace: Set only `namespace`
+- Include events: Set `includeEvents` to true
+- Look for unhealthy pods with high restart counts
 
 ---
 
 !!! tip "Extension Ideas"
-    Now that you have a robust K-Agent, consider these additional enhancements:
-    
+Now that you have a robust K-Agent, consider these additional enhancements:
+
     - **Resource Metrics**: Add CPU/memory usage monitoring using the Metrics API
     - **Multi-Cluster Support**: Extend to work with multiple Kubernetes clusters
     - **Alerting**: Implement threshold-based alerts for restart counts or error rates
@@ -1598,11 +1583,12 @@ Create a new tool to monitor pod health and events in real-time, providing insig
 ### Common Issues
 
 **"Kubernetes configuration not found"**
+
 - Ensure `kubectl` is installed and configured
 - Check `~/.kube/config` exists and is readable
 
-
 **"Pod not found" errors**
+
 - Confirm pod names and namespaces are correct
 - Check pod status with `kubectl get pods`
 
@@ -1623,33 +1609,26 @@ kubectl logs -n your-namespace your-pod-name
 
 ## Key Takeaways
 
-!!! success "What You Learned"
-    -  **K-Agent Architecture**: Building specialized MCP servers for Kubernetes operations
-    -  **MCP Server Setup**: Configuring TypeScript-based MCP servers with proper dependencies
-    -  **Kubernetes Client Integration**: Using the @kubernetes/client-node library to interact with clusters
-    -  **Tool Implementation**: Creating MCP tools for pod discovery and log collection
-    -  **Error Handling**: Managing Kubernetes API errors and edge cases
-    -  **Testing with MCP Inspector**: Using the Inspector to test and debug MCP tools
-
+!!! success "What You Learned" - **K-Agent Architecture**: Building specialized MCP servers for Kubernetes operations - **MCP Server Setup**: Configuring TypeScript-based MCP servers with proper dependencies - **Kubernetes Client Integration**: Using the @kubernetes/client-node library to interact with clusters - **Tool Implementation**: Creating MCP tools for pod discovery and log collection - **Error Handling**: Managing Kubernetes API errors and edge cases - **Testing with MCP Inspector**: Using the Inspector to test and debug MCP tools
 
 Congratulations! You've built a functional K-Agent with two core capabilities:
 
--  **Pod Discovery** - List all pods across namespaces with status information
--  **Log Collection** - Retrieve logs from pod containers with timestamp support
+- **Pod Discovery** - List all pods across namespaces with status information
+- **Log Collection** - Retrieve logs from pod containers with timestamp support
 
 ---
 
 ## What's Next?
 
-Your K-Agent provides a foundation for more advanced Kubernetes automation. 
+Your K-Agent provides a foundation for more advanced Kubernetes automation.
 
 Consider exploring:
 
--  Adding filtering, log analysis, and health monitoring
--  Integrating your K-Agent with other MCP clients
--  Adding more tools for resource management (deployments, services, configmaps)
--  Implementing resource watching for real-time cluster monitoring
--  Building custom tools specific to your set Kubernetes workflows
+- Adding filtering, log analysis, and health monitoring
+- Integrating your K-Agent with other MCP clients
+- Adding more tools for resource management (deployments, services, configmaps)
+- Implementing resource watching for real-time cluster monitoring
+- Building custom tools specific to your set Kubernetes workflows
 
 ---
 

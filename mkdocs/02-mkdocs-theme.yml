@@ -19,7 +19,7 @@ theme:
     - content.tooltips
     - content.footer.last-updated
     - content.footer.contributors
-    - navigation.expand: false
+    - navigation.expand
     - navigation.footer
     - navigation.indexes
     - navigation.instant # Disabled for live reload during development
