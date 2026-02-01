@@ -2,166 +2,306 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/explanations/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/labs/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/resources/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/welcome/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab00-Setup/lab/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab01-MCP-Fundamentals/lab/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab01-MCP-Fundamentals/lab1-tasks/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab02-First-MCP-Server/lab/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab02-First-MCP-Server/lab2-tasks/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab03-MCP-Tools/lab/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab03-MCP-Tools/lab3-tasks/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab04-MCP-Resources/lab/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab04-MCP-Resources/lab4-tasks/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab05-MCP-Prompts/lab/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab05-MCP-Prompts/lab5-tasks/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab06-MCP-Workflow/lab/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab07-MCP-Ollama/lab/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab07-MCP-Ollama/tasks/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab08-Kagent/lab/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab08-Kagent/lab6-tasks/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab08-Kagent/lab8-tasks/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Lab09-K8s-Event-Monitor/lab/</loc>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/resources/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab01-MCP-Fundamentals/MCP-Advanced-py/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab01-MCP-Fundamentals/MCP-Basics-py/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab01-MCP-Fundamentals/MCP-Basics-ts/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab06-MCP-Workflow/step01-imports/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab06-MCP-Workflow/step02-ctor/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab06-MCP-Workflow/step03-init/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab06-MCP-Workflow/step04-tools/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab06-MCP-Workflow/step05-tool-handlers/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab06-MCP-Workflow/step06-resources/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab06-MCP-Workflow/step07-resource-handlers/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab06-MCP-Workflow/step08-prompts/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab06-MCP-Workflow/step09-prompt-handlers/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab06-MCP-Workflow/step10-lifecycle/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab06-MCP-Workflow/step11-main/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab06-MCP-Workflow/step12-rag/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab06-MCP-Workflow/step13-main/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab06-MCP-Workflow/test_client/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab07-MCP-Ollama/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab07-MCP-Ollama/step00-getting-started/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab07-MCP-Ollama/step01-imports/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab07-MCP-Ollama/step02-skeleton-code/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab07-MCP-Ollama/step03-constructor/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab07-MCP-Ollama/step04-register-tools/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab07-MCP-Ollama/step05-tool-handlers/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab07-MCP-Ollama/step06-register-resources/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab07-MCP-Ollama/step07-resource-handlers/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab07-MCP-Ollama/step08-register-prompts/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab07-MCP-Ollama/step09-prompt-handlers/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab07-MCP-Ollama/step10-setup-handlers/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab07-MCP-Ollama/step11-run-server/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab07-MCP-Ollama/step12-main-entry-point/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab08-Kagent/step01-prerequisites/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab08-Kagent/step02-project-setup/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab08-Kagent/step03-typescript-config/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab08-Kagent/step04-imports/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab08-Kagent/step05-class-structure/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab08-Kagent/step06-tool-registration/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab08-Kagent/step07-tool-handlers/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab08-Kagent/step08-list-pods/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab08-Kagent/step09-log-collection/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab08-Kagent/step10-complete-code/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab08-Kagent/step11-testing/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab09-K8S-Event-Monitor/step01-install-kagent/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab09-K8S-Event-Monitor/step02-create-mcp-server/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab09-K8S-Event-Monitor/step03-kmcp-build/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab09-K8S-Event-Monitor/step04-verify-registration/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab09-K8S-Event-Monitor/step05-create-agent/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab09-K8S-Event-Monitor/step06-install-ingress/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab09-K8S-Event-Monitor/step07-deploy-prometheus-grafana/</loc>
+         <lastmod>2026-02-01</lastmod>
+    </url>
+    <url>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab09-K8S-Event-Monitor/step08-expose-ingress/</loc>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Tasks/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
     <url>
          <loc>https://nirgeier.github.io/AI-K8S-MCP/Tasks/000-Setup-RooCode/000-Setup-RooCode/</loc>
-         <lastmod>2026-01-30</lastmod>
+         <lastmod>2026-02-01</lastmod>
     </url>
 </urlset>

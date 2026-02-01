@@ -1,0 +1,12 @@
+apiVersion: kagent.dev/v1alpha2
+kind: RemoteMCPServer
+metadata:
+  name: k8s-monitor-mcp
+  namespace: default
+  labels:
+    app.kubernetes.io/name: k8s-monitor-mcp
+    app.kubernetes.io/part-of: kagent
+spec:
+  description: K8s Event and Log Monitor MCP Server
+  protocol: STREAMABLE_HTTP
+  url: http://k8s-monitor.default:3000/mcp
