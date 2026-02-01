@@ -185,27 +185,27 @@
          <lastmod>2026-02-01</lastmod>
     </url>
     <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab07-MCP-Ollama/step04-register-tools/</loc>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab07-MCP-Ollama/step04-list-tools/</loc>
          <lastmod>2026-02-01</lastmod>
     </url>
     <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab07-MCP-Ollama/step05-tool-handlers/</loc>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab07-MCP-Ollama/step05-call-tools/</loc>
          <lastmod>2026-02-01</lastmod>
     </url>
     <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab07-MCP-Ollama/step06-register-resources/</loc>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab07-MCP-Ollama/step06-list-resources/</loc>
          <lastmod>2026-02-01</lastmod>
     </url>
     <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab07-MCP-Ollama/step07-resource-handlers/</loc>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab07-MCP-Ollama/step07-read-resources/</loc>
          <lastmod>2026-02-01</lastmod>
     </url>
     <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab07-MCP-Ollama/step08-register-prompts/</loc>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab07-MCP-Ollama/step08-list-prompts/</loc>
          <lastmod>2026-02-01</lastmod>
     </url>
     <url>
-         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab07-MCP-Ollama/step09-prompt-handlers/</loc>
+         <loc>https://nirgeier.github.io/AI-K8S-MCP/Resources/Lab07-MCP-Ollama/step09-get_prompt/</loc>
          <lastmod>2026-02-01</lastmod>
     </url>
     <url>
