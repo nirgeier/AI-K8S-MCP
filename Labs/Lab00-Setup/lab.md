@@ -19,7 +19,7 @@
 
 ### 🐳 Docker Installation
 
-=== " macOS"
+=== "🍎 macOS"
 
     ```bash
     # Install Docker Desktop
@@ -72,7 +72,7 @@
 
 ### ☸️ kubectl Installation
 
-=== " macOS"
+=== "🍎 macOS"
 
     ```bash
     brew install kubectl
@@ -101,7 +101,7 @@
 
 ### ⚓ Helm Installation
 
-=== " macOS"
+=== "🍎 macOS"
 
     ```bash
     brew install helm
@@ -128,7 +128,7 @@
 
 ### 🐙 Git Installation
 
-=== " macOS"
+=== "🍎 macOS"
 
     ```bash
     brew install git
@@ -155,7 +155,7 @@
 
 ### 🐍 Python3 Installation
 
-=== " macOS"
+=== "🍎 macOS"
 
     ```bash
     brew install python
@@ -182,7 +182,7 @@
 
 ### 📦 Node.js Installation
 
-=== " macOS"
+=== "🍎 macOS"
 
     ```bash
     brew install node

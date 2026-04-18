@@ -14,9 +14,11 @@ site_url: https://nirgeier.github.io/AI-K8S-MCP
 ###
 ### mkdocs-theme.yml
 ###
-copyright:
-  '©2021-2025 Nir Geier<br/><a href="https://visitor-badge.laobi.icu/badge?page_id=nirgeier" target="_blank" rel="noopener"><img
-  src="https://visitor-badge.laobi.icu/badge?page_id=nirgeier" alt="Visitor Badge"></a>'
+copyright: "©2021-2025 Nir Geier<br/><a
+  href=\"https://visitor-badge.laobi.icu/badge?page_id=nirgeier\"
+  target=\"_blank\" rel=\"noopener\"><img
+  src=\"https://visitor-badge.laobi.icu/badge?page_id=nirgeier\" alt=\"Visitor
+  Badge\"></a>"
 theme:
   name: material
   custom_dir: .mkdocs-build/overrides
@@ -67,49 +69,49 @@ theme:
 nav:
   - Welcome: welcome.md
   - Labs Overview: labs.md
-  
+
   - Labs:
-    - Index: index.md
-    - "Lab 00: Setup": Lab00-Setup/lab.md
-    - "Lab 01: MCP Fundamentals": Lab01-MCP-Fundamentals/lab.md
-    - "Lab 02: First MCP Server": Lab02-First-MCP-Server/lab.md
-    - "Lab 03: MCP Tools": Lab03-MCP-Tools/lab.md
-    - "Lab 04: MCP Resources": Lab04-MCP-Resources/lab.md
-    - "Lab 05: MCP Prompts": Lab05-MCP-Prompts/lab.md
-    - "Lab 06: MCP Workflow": Lab06-MCP-Workflow/lab.md
-    - "Lab 07: MCP Ollama": Lab07-MCP-Ollama/lab.md
-    - "Lab 08: Kagent": Lab08-Kagent/lab.md
-    - "Lab 09: K8S Event Monitor": Lab09-Event-Monitor/lab.md
+      - Index: index.md
+      - "Lab 00: Setup": Lab00-Setup/lab.md
+      - "Lab 01: MCP Fundamentals": Lab01-MCP-Fundamentals/lab.md
+      - "Lab 02: First MCP Server": Lab02-First-MCP-Server/lab.md
+      - "Lab 03: MCP Tools": Lab03-MCP-Tools/lab.md
+      - "Lab 04: MCP Resources": Lab04-MCP-Resources/lab.md
+      - "Lab 05: MCP Prompts": Lab05-MCP-Prompts/lab.md
+      - "Lab 06: MCP Workflow": Lab06-MCP-Workflow/lab.md
+      - "Lab 07: MCP Ollama": Lab07-MCP-Ollama/lab.md
+      - "Lab 08: Kagent": Lab08-Kagent/lab.md
+      - "Lab 09: K8S Event Monitor": Lab09-Event-Monitor/lab.md
 
   - Tasks:
-    - Index: Tasks/index.md
-    - "Setup with RooCode": Tasks/000-Setup-RooCode/README.md
-    - "MCP Basics": Tasks/001-MCP-Basics/README.md
-    - "MCP FastMCP": Tasks/002-MCP-FastMCP/README.md
+      - Index: Tasks/index.md
+      - "Setup with RooCode": Tasks/000-Setup-RooCode/README.md
+      - "MCP Basics": Tasks/001-MCP-Basics/README.md
+      - "MCP FastMCP": Tasks/002-MCP-FastMCP/README.md
 
   - Resources:
-    - "Lab 09 - 01: Install Kagent": Resources/Lab09-Event-Monitor/step01-install-kagent.md
-    - "Lab 09 - 02: Create MCP Server": Resources/Lab09-Event-Monitor/step02-create-mcp-server.md
-    - "Lab 09 - 03: Build with KMCP": Resources/Lab09-Event-Monitor/step03-kmcp-build.md
-    - "Lab 09 - 04: Verify Registration": Resources/Lab09-Event-Monitor/step04-verify-registration.md
-    - "Lab 09 - 05: Create Agent": Resources/Lab09-Event-Monitor/step05-create-agent.md
-    - "Lab 09 - 06: Install Ingress": Resources/Lab09-Event-Monitor/step06-install-ingress.md
-    - "Lab 09 - 07: Prometheus & Grafana": Resources/Lab09-Event-Monitor/step07-deploy-prometheus-grafana.md
-    - "Lab 09 - 08: Expose Services": Resources/Lab09-Event-Monitor/step08-expose-ingress.md
-    - "Lab 09 : K8S Resources": Resources/Lab09-Event-Monitor/resources.md
-    - "Lab 07 - 00: Getting Started": Resources/Lab07-MCP-Ollama/step00-getting-started.md
-    - "Lab 07 - 01: Imports": Resources/Lab07-MCP-Ollama/step01-imports.md
-    - "Lab 07 - 02: Skeleton Code": Resources/Lab07-MCP-Ollama/step02-skeleton-code.md
-    - "Lab 07 - 03: Constructor": Resources/Lab07-MCP-Ollama/step03-constructor.md
-    - "Lab 07 - 04: Register Tools": Resources/Lab07-MCP-Ollama/step04-list-tools.md
-    - "Lab 07 - 05: Tool Handlers": Resources/Lab07-MCP-Ollama/step05-call-tools.md
-    - "Lab 07 - 06: Register Resources": Resources/Lab07-MCP-Ollama/step06-list-resources.md
-    - "Lab 07 - 07: Resource Handlers": Resources/Lab07-MCP-Ollama/step07-read-resources.md
-    - "Lab 07 - 08: Register Prompts": Resources/Lab07-MCP-Ollama/step08-list_prompts.md
-    - "Lab 07 - 09: Prompt Handlers": Resources/Lab07-MCP-Ollama/step09-get_prompt.md
-    - "Lab 07 - 10: Setup Handlers": Resources/Lab07-MCP-Ollama/step10-setup-handlers.md
-    - "Lab 07 - 11: Run Server": Resources/Lab07-MCP-Ollama/step11-run-server.md
-    - "Lab 07 - 12: Main Entry Point": Resources/Lab07-MCP-Ollama/step12-main-entry-point.md
+      - "Lab 09 - 01: Install Kagent": Resources/Lab09-Event-Monitor/step01-install-kagent.md
+      - "Lab 09 - 02: Create MCP Server": Resources/Lab09-Event-Monitor/step02-create-mcp-server.md
+      - "Lab 09 - 03: Build with KMCP": Resources/Lab09-Event-Monitor/step03-kmcp-build.md
+      - "Lab 09 - 04: Verify Registration": Resources/Lab09-Event-Monitor/step04-verify-registration.md
+      - "Lab 09 - 05: Create Agent": Resources/Lab09-Event-Monitor/step05-create-agent.md
+      - "Lab 09 - 06: Install Ingress": Resources/Lab09-Event-Monitor/step06-install-ingress.md
+      - "Lab 09 - 07: Prometheus & Grafana": Resources/Lab09-Event-Monitor/step07-deploy-prometheus-grafana.md
+      - "Lab 09 - 08: Expose Services": Resources/Lab09-Event-Monitor/step08-expose-ingress.md
+      - "Lab 09 : K8S Resources": Resources/Lab09-Event-Monitor/resources.md
+      - "Lab 07 - 00: Getting Started": Resources/Lab07-MCP-Ollama/step00-getting-started.md
+      - "Lab 07 - 01: Imports": Resources/Lab07-MCP-Ollama/step01-imports.md
+      - "Lab 07 - 02: Skeleton Code": Resources/Lab07-MCP-Ollama/step02-skeleton-code.md
+      - "Lab 07 - 03: Constructor": Resources/Lab07-MCP-Ollama/step03-constructor.md
+      - "Lab 07 - 04: Register Tools": Resources/Lab07-MCP-Ollama/step04-list-tools.md
+      - "Lab 07 - 05: Tool Handlers": Resources/Lab07-MCP-Ollama/step05-call-tools.md
+      - "Lab 07 - 06: Register Resources": Resources/Lab07-MCP-Ollama/step06-list-resources.md
+      - "Lab 07 - 07: Resource Handlers": Resources/Lab07-MCP-Ollama/step07-read-resources.md
+      - "Lab 07 - 08: Register Prompts": Resources/Lab07-MCP-Ollama/step08-list_prompts.md
+      - "Lab 07 - 09: Prompt Handlers": Resources/Lab07-MCP-Ollama/step09-get_prompt.md
+      - "Lab 07 - 10: Setup Handlers": Resources/Lab07-MCP-Ollama/step10-setup-handlers.md
+      - "Lab 07 - 11: Run Server": Resources/Lab07-MCP-Ollama/step11-run-server.md
+      - "Lab 07 - 12: Main Entry Point": Resources/Lab07-MCP-Ollama/step12-main-entry-point.md
 
   - Explanations: explanations.md
 ###
@@ -186,4 +188,5 @@ plugins:
       timezone: UTC
       type: date
   - search:
-      separator: '[\s\u200b\-_,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
+      separator: "[\\s\\u200b\\-_,:!=\\[\\]()\"`/]+|\\.(?!\\d)|&[lg]t;|(?!\\b)(?=[A-Z\
+        ][a-z])"
