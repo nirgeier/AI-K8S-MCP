@@ -1167,8 +1167,6 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
-        
-      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
@@ -1211,8 +1209,6 @@
   
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -1221,126 +1217,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#31-install-kmcp-cli" class="md-nav__link">
+  <a href="#step-3-use-kmcp-to-build-the-server" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.1 Install kmcp CLI
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#32-initialize-project" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3.2 Initialize Project
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#33-add-dependencies" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3.3 Add Dependencies
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#34-create-k8s_toolspy" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3.4 Create k8s_tools.py
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#35-run-locally" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3.5 Run Locally
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#36-build-docker-image" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3.6 Build Docker Image
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#37-push-or-load-image" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3.7 Push or Load Image
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="3.7 Push or Load Image">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#docker-hub" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Docker Hub
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#kind" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Kind
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#minikube" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Minikube
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#38-deploy-to-kubernetes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3.8 Deploy to Kubernetes
+        Step 3: Use kmcp to Build the Server
       
     </span>
   </a>
@@ -1955,60 +1835,62 @@
   
 
 
-<h1 id="step-3-use-kmcp-to-build-the-server">Step 3: Use kmcp to Build the Server</h1>
-<h2 id="31-install-kmcp-cli">3.1 Install kmcp CLI</h2>
-<pre><code class="language-bash">curl -fsSL https://raw.githubusercontent.com/kagent-dev/kmcp/refs/heads/main/scripts/get-kmcp.sh | bash
-</code></pre>
-<h2 id="32-initialize-project">3.2 Initialize Project</h2>
-<pre><code class="language-bash">cd ~
-kmcp init python kagent-monitor-kmcp
-cd kagent-monitor-kmcp
-</code></pre>
-<h2 id="33-add-dependencies">3.3 Add Dependencies</h2>
-<pre><code class="language-bash">echo &quot;kubernetes&gt;=28.1.0&quot; &gt;&gt; requirements.txt
-echo &quot;prometheus-client&gt;=0.19.0&quot; &gt;&gt; requirements.txt
-</code></pre>
-<h2 id="34-create-k8s_toolspy">3.4 Create k8s_tools.py</h2>
+  <h1>Lab 09 - 03: Build with KMCP</h1>
+
+<h3 id="step-3-use-kmcp-to-build-the-server">Step 3: Use kmcp to Build the Server</h3>
+<h4 id="31-install-kmcp-cli">3.1 Install kmcp CLI</h4>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://raw.githubusercontent.com/kagent-dev/kmcp/refs/heads/main/scripts/get-kmcp.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>bash
+</span></code></pre></div>
+<h4 id="32-initialize-project">3.2 Initialize Project</h4>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nb">cd</span><span class="w"> </span>~
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>kmcp<span class="w"> </span>init<span class="w"> </span>python<span class="w"> </span>kagent-monitor-kmcp
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nb">cd</span><span class="w"> </span>kagent-monitor-kmcp
+</span></code></pre></div>
+<h4 id="33-add-dependencies">3.3 Add Dependencies</h4>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;kubernetes&gt;=28.1.0&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>requirements.txt
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;prometheus-client&gt;=0.19.0&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>requirements.txt
+</span></code></pre></div>
+<h4 id="34-create-k8s_toolspy">3.4 Create k8s_tools.py</h4>
 <p>Create the file <code>src/k8s_tools.py</code> with the following content:</p>
-<pre><code class="language-python">from core.server import mcp
-from kubernetes import client, config
-
-# Initialize K8s client
-try:
-    config.load_kube_config()
-except:
-    config.load_incluster_config()
-v1 = client.CoreV1Api()
-
-@mcp.tool(description=&quot;Collect logs and events from the Kubernetes cluster&quot;)
-async def collect_logs(namespace: str = &quot;default&quot;) -&gt; str:
-    &quot;&quot;&quot;Collect logs and events from the Kubernetes cluster&quot;&quot;&quot;
-    # Fetch events
-    events = v1.list_namespaced_event(namespace)
-    output = []
-    for e in events.items:
-        output.append(f&quot;[EVENT] {e.last_timestamp} {e.type} {e.reason}: {e.message}&quot;)
-    return &quot;\n&quot;.join(output)
-</code></pre>
-<h2 id="35-run-locally">3.5 Run Locally</h2>
-<pre><code class="language-bash">kmcp run --project-dir .
-</code></pre>
-<h2 id="36-build-docker-image">3.6 Build Docker Image</h2>
-<pre><code class="language-bash">docker build -t nirgeier/my-kagent-monitor:v1 .
-</code></pre>
-<h2 id="37-push-or-load-image">3.7 Push or Load Image</h2>
-<h3 id="docker-hub">Docker Hub</h3>
-<pre><code class="language-bash">docker push nirgeier/my-kagent-monitor:v1
-</code></pre>
-<h3 id="kind">Kind</h3>
-<pre><code class="language-bash">kind load docker-image my-kagent-monitor:v1 --name &lt;cluster-name&gt;
-</code></pre>
-<h3 id="minikube">Minikube</h3>
-<pre><code class="language-bash">minikube image load my-kagent-monitor:v1
-</code></pre>
-<h2 id="38-deploy-to-kubernetes">3.8 Deploy to Kubernetes</h2>
-<pre><code class="language-bash">kmcp deploy --namespace default --image nirgeier/my-kagent-monitor:v1
-</code></pre>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">core.server</span><span class="w"> </span><span class="kn">import</span> <span class="n">mcp</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">kubernetes</span><span class="w"> </span><span class="kn">import</span> <span class="n">client</span><span class="p">,</span> <span class="n">config</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># Initialize K8s client</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="k">try</span><span class="p">:</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="n">config</span><span class="o">.</span><span class="n">load_kube_config</span><span class="p">()</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="k">except</span><span class="p">:</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    <span class="n">config</span><span class="o">.</span><span class="n">load_incluster_config</span><span class="p">()</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="n">v1</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">CoreV1Api</span><span class="p">()</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="nd">@mcp</span><span class="o">.</span><span class="n">tool</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Collect logs and events from the Kubernetes cluster&quot;</span><span class="p">)</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">collect_logs</span><span class="p">(</span><span class="n">namespace</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Collect logs and events from the Kubernetes cluster&quot;&quot;&quot;</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>    <span class="c1"># Fetch events</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>    <span class="n">events</span> <span class="o">=</span> <span class="n">v1</span><span class="o">.</span><span class="n">list_namespaced_event</span><span class="p">(</span><span class="n">namespace</span><span class="p">)</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>    <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">events</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[EVENT] </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">last_timestamp</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">reason</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>    <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+</span></code></pre></div>
+<h4 id="35-run-locally">3.5 Run Locally</h4>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>kmcp<span class="w"> </span>run<span class="w"> </span>--project-dir<span class="w"> </span>.
+</span></code></pre></div>
+<h4 id="36-build-docker-image">3.6 Build Docker Image</h4>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>nirgeier/my-kagent-monitor:v1<span class="w"> </span>.
+</span></code></pre></div>
+<h4 id="37-push-or-load-image">3.7 Push or Load Image</h4>
+<h5 id="docker-hub">Docker Hub</h5>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>docker<span class="w"> </span>push<span class="w"> </span>nirgeier/my-kagent-monitor:v1
+</span></code></pre></div>
+<h5 id="kind">Kind</h5>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>kind<span class="w"> </span>load<span class="w"> </span>docker-image<span class="w"> </span>my-kagent-monitor:v1<span class="w"> </span>--name<span class="w"> </span>&lt;cluster-name&gt;
+</span></code></pre></div>
+<h5 id="minikube">Minikube</h5>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>minikube<span class="w"> </span>image<span class="w"> </span>load<span class="w"> </span>my-kagent-monitor:v1
+</span></code></pre></div>
+<h4 id="38-deploy-to-kubernetes">3.8 Deploy to Kubernetes</h4>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>kmcp<span class="w"> </span>deploy<span class="w"> </span>--namespace<span class="w"> </span>default<span class="w"> </span>--image<span class="w"> </span>nirgeier/my-kagent-monitor:v1
+</span></code></pre></div>
 <!--
   Copyright (c) 2016-2025 Martin Donath <martin.donath@squidfunk.com>
 

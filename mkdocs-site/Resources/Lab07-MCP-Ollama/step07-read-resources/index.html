@@ -1559,8 +1559,6 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
-        
-      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
@@ -1603,8 +1601,6 @@
   
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -1613,10 +1609,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#method-read_resource" class="md-nav__link">
+  <a href="#step-07-resource-handlers" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Method read_resource
+        Step 07: Resource Handlers
       
     </span>
   </a>
@@ -1839,8 +1835,10 @@
   
 
 
-<h1 id="step-07-resource-handlers">Step 07: Resource Handlers</h1>
-<h3 id="method-read_resource">Method <code>read_resource</code></h3>
+  <h1>Lab 07 - 07: Resource Handlers</h1>
+
+<h3 id="step-07-resource-handlers">Step 07: Resource Handlers</h3>
+<h5 id="method-read_resource">Method <code>read_resource</code></h5>
 <p><strong>Capabilities:</strong></p>
 <ul>
 <li>Implements resource reading logic</li>
@@ -1853,34 +1851,34 @@
 </ul>
 <hr />
 <p>Add this method to your class:</p>
-<pre><code class="language-python">@self.server.read_resource()
-async def read_resource(self, uri: str) -&gt; str:
-  uri_str = str(uri).strip()
-
-  # Debug log to help diagnose the mismatch
-  print(f&quot;DEBUG: Requesting URI: '{uri_str}'&quot;, file=sys.stderr)
-
-  # Allow exact match or match without scheme to be robust
-  if uri_str == &quot;resource://server-info&quot; or uri_str.endswith(&quot;server-info&quot;):
-    info = {
-      &quot;name&quot;: &quot;Complete Ollama MCP Server&quot;,
-      &quot;version&quot;: &quot;1.0.0&quot;,
-      &quot;capabilities&quot;: [&quot;tools&quot;, &quot;resources&quot;, &quot;ollama-integration&quot;],
-      &quot;tools&quot;: [&quot;country_info&quot;, &quot;read_file&quot;, &quot;query_database&quot;],
-      &quot;country_database&quot;: &quot;193 UN member states with capitals, populations, topographic heights, and foundation years&quot;
-    }
-    return json.dumps(info, indent=2)
-
-  elif uri_str == &quot;resource://ollama-models&quot; or uri_str.endswith(&quot;ollama-models&quot;):
-    try:
-      models = self.ollama_client.list()
-      return json.dumps(models, indent=2)
-    except Exception as e:
-      return json.dumps({&quot;error&quot;: str(e)}, indent=2)
-
-  else:
-    raise ValueError(f&quot;Unknown resource: {uri_str}&quot;)
-</code></pre>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nd">@self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">read_resource</span><span class="p">()</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">read_resource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  <span class="n">uri_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  <span class="c1"># Debug log to help diagnose the mismatch</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;DEBUG: Requesting URI: &#39;</span><span class="si">{</span><span class="n">uri_str</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>  <span class="c1"># Allow exact match or match without scheme to be robust</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>  <span class="k">if</span> <span class="n">uri_str</span> <span class="o">==</span> <span class="s2">&quot;resource://server-info&quot;</span> <span class="ow">or</span> <span class="n">uri_str</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;server-info&quot;</span><span class="p">):</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="n">info</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>      <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Complete Ollama MCP Server&quot;</span><span class="p">,</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>      <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;1.0.0&quot;</span><span class="p">,</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>      <span class="s2">&quot;capabilities&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;tools&quot;</span><span class="p">,</span> <span class="s2">&quot;resources&quot;</span><span class="p">,</span> <span class="s2">&quot;ollama-integration&quot;</span><span class="p">],</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>      <span class="s2">&quot;tools&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;country_info&quot;</span><span class="p">,</span> <span class="s2">&quot;read_file&quot;</span><span class="p">,</span> <span class="s2">&quot;query_database&quot;</span><span class="p">],</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>      <span class="s2">&quot;country_database&quot;</span><span class="p">:</span> <span class="s2">&quot;193 UN member states with capitals, populations, topographic heights, and foundation years&quot;</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    <span class="p">}</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>  <span class="k">elif</span> <span class="n">uri_str</span> <span class="o">==</span> <span class="s2">&quot;resource://ollama-models&quot;</span> <span class="ow">or</span> <span class="n">uri_str</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;ollama-models&quot;</span><span class="p">):</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    <span class="k">try</span><span class="p">:</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>      <span class="n">models</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ollama_client</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>      <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>      <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)},</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>  <span class="k">else</span><span class="p">:</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown resource: </span><span class="si">{</span><span class="n">uri_str</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></code></pre></div>
 <!--
   Copyright (c) 2016-2025 Martin Donath <martin.donath@squidfunk.com>
 

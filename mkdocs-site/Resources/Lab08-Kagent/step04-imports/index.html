@@ -87,11 +87,6 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
-        
-        <a href="#import-breakdown" class="md-skip">
-          Skip to content
-        </a>
-      
     </div>
     <div data-md-component="announce">
       
@@ -1779,33 +1774,33 @@
 
   <h1>Step04 imports</h1>
 
-<pre><code class="language-markdown"># Step 04: Imports and Dependencies
-
-## Understanding the Imports
-
-Add the following imports to your `src/index.ts` file:
-
-```typescript
-// MCP SDK - Server Infrastructure
-import { Server } from &quot;@modelcontextprotocol/sdk/server/index.js&quot;;
-import { StdioServerTransport } from &quot;@modelcontextprotocol/sdk/server/stdio.js&quot;;
-
-// MCP SDK - Protocol Types and Schemas
-import {
-  CallToolRequestSchema,
-  ErrorCode,
-  ListResourcesRequestSchema,
-  ListToolsRequestSchema,
-  McpError,
-  ReadResourceRequestSchema,
-} from &quot;@modelcontextprotocol/sdk/types.js&quot;;
-
-// Kubernetes Client
-import * as k8s from &quot;@kubernetes/client-node&quot;;
-```
-</code></pre>
-<h2 id="import-breakdown">Import Breakdown</h2>
-<h3 id="mcp-server-components">MCP Server Components</h3>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="gh"># Step 04: Imports and Dependencies</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="gu">## Understanding the Imports</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>Add the following imports to your <span class="sb">`src/index.ts`</span> file:
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="sb">```typescript</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="c1">// MCP SDK - Server Infrastructure</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Server</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;@modelcontextprotocol/sdk/server/index.js&quot;</span><span class="p">;</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">StdioServerTransport</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;@modelcontextprotocol/sdk/server/stdio.js&quot;</span><span class="p">;</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="c1">// MCP SDK - Protocol Types and Schemas</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">  </span><span class="nx">CallToolRequestSchema</span><span class="p">,</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">  </span><span class="nx">ErrorCode</span><span class="p">,</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">  </span><span class="nx">ListResourcesRequestSchema</span><span class="p">,</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">  </span><span class="nx">ListToolsRequestSchema</span><span class="p">,</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">  </span><span class="nx">McpError</span><span class="p">,</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">  </span><span class="nx">ReadResourceRequestSchema</span><span class="p">,</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;@modelcontextprotocol/sdk/types.js&quot;</span><span class="p">;</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="c1">// Kubernetes Client</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="k">import</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="kr">as</span><span class="w"> </span><span class="nx">k8s</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;@kubernetes/client-node&quot;</span><span class="p">;</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="sb">```</span>
+</span></code></pre></div>
+<h4 id="import-breakdown">Import Breakdown</h4>
+<h5 id="mcp-server-components">MCP Server Components</h5>
 <table>
 <thead>
 <tr>
@@ -1824,7 +1819,7 @@ import * as k8s from &quot;@kubernetes/client-node&quot;;
 </tr>
 </tbody>
 </table>
-<h3 id="mcp-types-and-schemas">MCP Types and Schemas</h3>
+<h5 id="mcp-types-and-schemas">MCP Types and Schemas</h5>
 <table>
 <thead>
 <tr>
@@ -1859,7 +1854,7 @@ import * as k8s from &quot;@kubernetes/client-node&quot;;
 </tr>
 </tbody>
 </table>
-<h3 id="kubernetes-client">Kubernetes Client</h3>
+<h5 id="kubernetes-client">Kubernetes Client</h5>
 <table>
 <thead>
 <tr>
@@ -1886,14 +1881,14 @@ import * as k8s from &quot;@kubernetes/client-node&quot;;
 </tr>
 </tbody>
 </table>
-<h2 id="why-these-imports">Why These Imports?</h2>
+<h4 id="why-these-imports">Why These Imports?</h4>
 <ol>
 <li><strong>MCP SDK</strong> provides the server infrastructure and protocol handling</li>
 <li><strong>Kubernetes Client</strong> enables API communication with your cluster</li>
 <li><strong>Type Schemas</strong> ensure type-safe request/response handling</li>
 </ol>
-<pre><code>
-</code></pre>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>
+</span></code></pre></div>
 <!--
   Copyright (c) 2016-2025 Martin Donath <martin.donath@squidfunk.com>
 

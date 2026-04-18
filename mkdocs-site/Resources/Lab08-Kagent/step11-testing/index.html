@@ -87,11 +87,6 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
-        
-        <a href="#using-mcp-inspector" class="md-skip">
-          Skip to content
-        </a>
-      
     </div>
     <div data-md-component="announce">
       
@@ -1779,68 +1774,68 @@
 
   <h1>Step11 testing</h1>
 
-<pre><code class="language-markdown"># Step 11: Testing with MCP Inspector
-
-## Build and Run
-
-```bash
-# Build the TypeScript code
-npm run build
-
-# Start the server in development mode
-npm run dev
-```
-</code></pre>
-<h2 id="using-mcp-inspector">Using MCP Inspector</h2>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="gh"># Step 11: Testing with MCP Inspector</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="gu">## Build and Run</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="sb">```bash</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1"># Build the TypeScript code</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>npm<span class="w"> </span>run<span class="w"> </span>build
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="c1"># Start the server in development mode</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>npm<span class="w"> </span>run<span class="w"> </span>dev
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="sb">```</span>
+</span></code></pre></div>
+<h4 id="using-mcp-inspector">Using MCP Inspector</h4>
 <p>MCP Inspector is a web-based debugging tool for MCP servers.</p>
-<h3 id="start-inspector">Start Inspector</h3>
-<pre><code class="language-bash">npx @modelcontextprotocol/inspector node_modules/.bin/tsx src/index.ts
-</code></pre>
+<h5 id="start-inspector">Start Inspector</h5>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>npx<span class="w"> </span>@modelcontextprotocol/inspector<span class="w"> </span>node_modules/.bin/tsx<span class="w"> </span>src/index.ts
+</span></code></pre></div>
 <p>This will:</p>
 <ol>
 <li>Start your K-Agent server</li>
 <li>Launch MCP Inspector web interface</li>
 <li>Open your browser automatically</li>
 </ol>
-<h3 id="connect-to-server">Connect to Server</h3>
+<h5 id="connect-to-server">Connect to Server</h5>
 <ol>
-<li>Click the <strong>"Connect"</strong> button at the bottom left</li>
-<li>Wait for "Connected" status (green indicator)</li>
-<li>You should see "k-agent-logs v1.0.0" in the title</li>
+<li>Click the <strong>&ldquo;Connect&rdquo;</strong> button at the bottom left</li>
+<li>Wait for &ldquo;Connected&rdquo; status (green indicator)</li>
+<li>You should see &ldquo;k-agent-logs v1.0.0&rdquo; in the title</li>
 </ol>
-<h3 id="test-list_pods-tool">Test list_pods Tool</h3>
+<h5 id="test-list_pods-tool">Test list_pods Tool</h5>
 <ol>
-<li>Click the <strong>"Tools"</strong> tab</li>
-<li>Click <strong>"List Tools"</strong> to refresh</li>
+<li>Click the <strong>&ldquo;Tools&rdquo;</strong> tab</li>
+<li>Click <strong>&ldquo;List Tools&rdquo;</strong> to refresh</li>
 <li>Click on <strong><code>list_pods</code></strong></li>
 <li>Optionally enter a namespace in the input field</li>
-<li>Click <strong>"Run Tool"</strong></li>
+<li>Click <strong>&ldquo;Run Tool&rdquo;</strong></li>
 </ol>
 <p><strong>Expected Result:</strong></p>
-<pre><code class="language-json">[
-  {
-    &quot;name&quot;: &quot;coredns-abc123&quot;,
-    &quot;namespace&quot;: &quot;kube-system&quot;,
-    &quot;status&quot;: &quot;Running&quot;,
-    &quot;containers&quot;: [&quot;coredns&quot;]
-  }
-]
-</code></pre>
-<h3 id="test-collect_pod_logs-tool">Test collect_pod_logs Tool</h3>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">[</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="p">{</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;coredns-abc123&quot;</span><span class="p">,</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="nt">&quot;namespace&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;kube-system&quot;</span><span class="p">,</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Running&quot;</span><span class="p">,</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="nt">&quot;containers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;coredns&quot;</span><span class="p">]</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="p">]</span>
+</span></code></pre></div>
+<h5 id="test-collect_pod_logs-tool">Test collect_pod_logs Tool</h5>
 <ol>
 <li>Click on <strong><code>collect_pod_logs</code></strong> in the tools list</li>
 <li>In the <strong>namespace</strong> field, enter: <code>kube-system</code></li>
 <li>Optionally specify a <strong>podName</strong></li>
 <li>Set <strong>tailLines</strong> to <code>50</code></li>
-<li>Click <strong>"Run Tool"</strong></li>
+<li>Click <strong>&ldquo;Run Tool&rdquo;</strong></li>
 </ol>
 <p><strong>Expected Result:</strong></p>
-<pre><code>=== coredns-abc123/coredns ===
-2024-01-15T10:30:45.123Z [INFO] CoreDNS-1.11.1
-2024-01-15T10:30:45.124Z linux/amd64, go1.21.1
-...
-</code></pre>
-<h2 id="troubleshooting">Troubleshooting</h2>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>=== coredns-abc123/coredns ===
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>2024-01-15T10:30:45.123Z [INFO] CoreDNS-1.11.1
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>2024-01-15T10:30:45.124Z linux/amd64, go1.21.1
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>...
+</span></code></pre></div>
+<h4 id="troubleshooting">Troubleshooting</h4>
 <table>
 <thead>
 <tr>
@@ -1850,33 +1845,33 @@ npm run dev
 </thead>
 <tbody>
 <tr>
-<td>"Cannot connect"</td>
+<td>&ldquo;Cannot connect&rdquo;</td>
 <td>Ensure server is running</td>
 </tr>
 <tr>
-<td>"Permission denied"</td>
+<td>&ldquo;Permission denied&rdquo;</td>
 <td>Check kubectl permissions</td>
 </tr>
 <tr>
-<td>"No pods found"</td>
+<td>&ldquo;No pods found&rdquo;</td>
 <td>Verify cluster is running</td>
 </tr>
 <tr>
-<td>"Timeout"</td>
+<td>&ldquo;Timeout&rdquo;</td>
 <td>Increase wait time, check cluster</td>
 </tr>
 </tbody>
 </table>
-<h2 id="alternative-manual-testing">Alternative: Manual Testing</h2>
+<h4 id="alternative-manual-testing">Alternative: Manual Testing</h4>
 <p>You can also test by piping JSON-RPC messages:</p>
-<pre><code class="language-bash"># Test tools/list
-echo '{&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:1,&quot;method&quot;:&quot;tools/list&quot;,&quot;params&quot;:{}}' | npm run dev
-
-# Test list_pods tool
-echo '{&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:2,&quot;method&quot;:&quot;tools/call&quot;,&quot;params&quot;:{&quot;name&quot;:&quot;list_pods&quot;,&quot;arguments&quot;:{}}}' | npm run dev
-</code></pre>
-<pre><code>
-</code></pre>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Test tools/list</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;{&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:1,&quot;method&quot;:&quot;tools/list&quot;,&quot;params&quot;:{}}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>npm<span class="w"> </span>run<span class="w"> </span>dev
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Test list_pods tool</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;{&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:2,&quot;method&quot;:&quot;tools/call&quot;,&quot;params&quot;:{&quot;name&quot;:&quot;list_pods&quot;,&quot;arguments&quot;:{}}}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>npm<span class="w"> </span>run<span class="w"> </span>dev
+</span></code></pre></div>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>
+</span></code></pre></div>
 <!--
   Copyright (c) 2016-2025 Martin Donath <martin.donath@squidfunk.com>
 

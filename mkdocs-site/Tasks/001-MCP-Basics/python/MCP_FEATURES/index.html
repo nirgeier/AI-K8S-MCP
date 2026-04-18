@@ -25,7 +25,7 @@
     
     
       
-        <title>MCP Server Features - K-Agent Labs</title>
+        <title>MCP FEATURES - K-Agent Labs</title>
       
     
     
@@ -161,7 +161,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-            MCP Server Features
+            MCP FEATURES
             
           </span>
         </div>
@@ -1777,10 +1777,12 @@
   
 
 
-<h1 id="mcp-server-features">MCP Server Features</h1>
-<h2 id="overview">Overview</h2>
+  <h1>MCP FEATURES</h1>
+
+<h3 id="mcp-server-features">MCP Server Features</h3>
+<h4 id="overview">Overview</h4>
 <p>K-Agent MCP Server with comprehensive MCP protocol support including Tools, Prompts, Resources, Sampling, Roots, Ping, and Metadata. <strong>Now integrated with Ollama for real LLM capabilities and full function call workflow!</strong></p>
-<h2 id="server-information">Server Information</h2>
+<h4 id="server-information">Server Information</h4>
 <ul>
 <li><strong>Name:</strong> kagent-mcp-server</li>
 <li><strong>Version:</strong> 0.1.0</li>
@@ -1789,7 +1791,7 @@
 <li><strong>Inspector:</strong> http://localhost:6274</li>
 <li><strong>Ollama:</strong> http://localhost:11434</li>
 </ul>
-<h2 id="capabilities">Capabilities</h2>
+<h4 id="capabilities">Capabilities</h4>
 <p>✅ <strong>Tools</strong> - Execute functions (hello, add, ollama_generate, ollama_chat, ollama_list_models)<br />
 ✅ <strong>Prompts</strong> - Reusable templates (code_review_prompt, debug_prompt)<br />
 ✅ <strong>Resources</strong> - Access server data (code, server-info)<br />
@@ -1800,175 +1802,175 @@
 ✅ <strong>Auth</strong> - Token-based authentication support<br />
 🤖 <strong>Ollama Integration</strong> - Direct connection to local LLMs<br />
 🔧 <strong>Function Call Workflow</strong> - Execute, batch, stream, and track tool calls</p>
-<h2 id="function-call-workflow">Function Call Workflow</h2>
-<h3 id="execute-single-tool">Execute Single Tool</h3>
+<h4 id="function-call-workflow">Function Call Workflow</h4>
+<h5 id="execute-single-tool">Execute Single Tool</h5>
 <p>Execute any registered tool with arguments.</p>
 <p><strong>Endpoint:</strong> <code>POST /tools/execute</code></p>
-<p><strong>Request:</strong></p>
-<pre><code class="language-json">{
-  &quot;tool&quot;: &quot;hello&quot;,
-  &quot;arguments&quot;: {
-    &quot;name&quot;: &quot;Alice&quot;
-  }
-}
-</code></pre>
-<p><strong>Response:</strong></p>
-<pre><code class="language-json">{
-  &quot;execution_id&quot;: &quot;exec_1&quot;,
-  &quot;tool&quot;: &quot;hello&quot;,
-  &quot;arguments&quot;: {&quot;name&quot;: &quot;Alice&quot;},
-  &quot;success&quot;: true,
-  &quot;result&quot;: &quot;Hello, Alice! Welcome to K-Agent Labs.&quot;,
-  &quot;duration_ms&quot;: 0.05,
-  &quot;timestamp&quot;: 1766964398.639798
-}
-</code></pre>
-<h3 id="batch-tool-execution">Batch Tool Execution</h3>
+<p><strong>Request:</strong>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;hello&quot;</span><span class="p">,</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">&quot;arguments&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Alice&quot;</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">}</span>
+</span></code></pre></div></p>
+<p><strong>Response:</strong>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">&quot;execution_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;exec_1&quot;</span><span class="p">,</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;hello&quot;</span><span class="p">,</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nt">&quot;arguments&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Alice&quot;</span><span class="p">},</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="nt">&quot;success&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="nt">&quot;result&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Hello, Alice! Welcome to K-Agent Labs.&quot;</span><span class="p">,</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="nt">&quot;duration_ms&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.05</span><span class="p">,</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1766964398.639798</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="p">}</span>
+</span></code></pre></div></p>
+<h5 id="batch-tool-execution">Batch Tool Execution</h5>
 <p>Execute multiple tools in sequence.</p>
 <p><strong>Endpoint:</strong> <code>POST /tools/batch</code></p>
-<p><strong>Request:</strong></p>
-<pre><code class="language-json">{
-  &quot;calls&quot;: [
-    {&quot;tool&quot;: &quot;hello&quot;, &quot;arguments&quot;: {&quot;name&quot;: &quot;Alice&quot;}},
-    {&quot;tool&quot;: &quot;add&quot;, &quot;arguments&quot;: {&quot;a&quot;: 10, &quot;b&quot;: 20}}
-  ]
-}
-</code></pre>
-<p><strong>Response:</strong></p>
-<pre><code class="language-json">{
-  &quot;success&quot;: true,
-  &quot;total&quot;: 2,
-  &quot;results&quot;: [
-    {
-      &quot;execution_id&quot;: &quot;exec_9&quot;,
-      &quot;tool&quot;: &quot;hello&quot;,
-      &quot;success&quot;: true,
-      &quot;result&quot;: &quot;Hello, Alice! Welcome to K-Agent Labs.&quot;,
-      &quot;duration_ms&quot;: 0.04
-    },
-    {
-      &quot;execution_id&quot;: &quot;exec_10&quot;,
-      &quot;tool&quot;: &quot;add&quot;,
-      &quot;success&quot;: true,
-      &quot;result&quot;: &quot;The sum of 10 and 20 is 30&quot;,
-      &quot;duration_ms&quot;: 0.01
-    }
-  ]
-}
-</code></pre>
-<h3 id="streaming-tool-execution">Streaming Tool Execution</h3>
+<p><strong>Request:</strong>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">&quot;calls&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="p">{</span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;hello&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;arguments&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Alice&quot;</span><span class="p">}},</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="p">{</span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;add&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;arguments&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;a&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;b&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">}}</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="p">}</span>
+</span></code></pre></div></p>
+<p><strong>Response:</strong>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">{</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">&quot;success&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">&quot;total&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="nt">&quot;results&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">      </span><span class="nt">&quot;execution_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;exec_9&quot;</span><span class="p">,</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">      </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;hello&quot;</span><span class="p">,</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">      </span><span class="nt">&quot;success&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">      </span><span class="nt">&quot;result&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Hello, Alice! Welcome to K-Agent Labs.&quot;</span><span class="p">,</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">      </span><span class="nt">&quot;duration_ms&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.04</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">    </span><span class="p">},</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">      </span><span class="nt">&quot;execution_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;exec_10&quot;</span><span class="p">,</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">      </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;add&quot;</span><span class="p">,</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">      </span><span class="nt">&quot;success&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">      </span><span class="nt">&quot;result&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;The sum of 10 and 20 is 30&quot;</span><span class="p">,</span>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">      </span><span class="nt">&quot;duration_ms&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.01</span>
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="p">}</span>
+</span></code></pre></div></p>
+<h5 id="streaming-tool-execution">Streaming Tool Execution</h5>
 <p>Execute tools with streaming responses.</p>
 <p><strong>Endpoint:</strong> <code>POST /tools/stream</code></p>
 <p><strong>Features:</strong>
 - Real-time execution updates
 - NDJSON format
 - Event-based responses (start, result, end)</p>
-<h3 id="execution-history">Execution History</h3>
+<h5 id="execution-history">Execution History</h5>
 <p>View past tool executions.</p>
 <p><strong>Endpoint:</strong> <code>GET /tools/history?limit=10</code></p>
-<p><strong>Response:</strong></p>
-<pre><code class="language-json">{
-  &quot;total&quot;: 25,
-  &quot;executions&quot;: [
-    {
-      &quot;execution_id&quot;: &quot;exec_10&quot;,
-      &quot;tool&quot;: &quot;add&quot;,
-      &quot;success&quot;: true,
-      &quot;duration_ms&quot;: 0.01,
-      &quot;result&quot;: &quot;The sum of 10 and 20 is 30&quot;
-    }
-  ]
-}
-</code></pre>
-<h3 id="get-execution-details">Get Execution Details</h3>
+<p><strong>Response:</strong>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">&quot;total&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nt">&quot;executions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">      </span><span class="nt">&quot;execution_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;exec_10&quot;</span><span class="p">,</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">      </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;add&quot;</span><span class="p">,</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">      </span><span class="nt">&quot;success&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">      </span><span class="nt">&quot;duration_ms&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.01</span><span class="p">,</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">      </span><span class="nt">&quot;result&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;The sum of 10 and 20 is 30&quot;</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="p">}</span>
+</span></code></pre></div></p>
+<h5 id="get-execution-details">Get Execution Details</h5>
 <p>Retrieve details of a specific execution.</p>
 <p><strong>Endpoint:</strong> <code>GET /tools/execution/{execution_id}</code></p>
-<h2 id="ollama-tools">Ollama Tools</h2>
-<h3 id="ollama_generateprompt-model-max_tokens"><code>ollama_generate(prompt, model?, max_tokens?)</code></h3>
-<p>Generate text using Ollama's generate API.</p>
-<p><strong>Example:</strong></p>
-<pre><code class="language-bash">curl -X POST http://localhost:8889/tools/call \
-  -H &quot;Content-Type: application/json&quot; \
-  -d '{
-    &quot;tool&quot;: &quot;ollama_generate&quot;,
-    &quot;arguments&quot;: {
-      &quot;prompt&quot;: &quot;Explain quantum computing&quot;,
-      &quot;model&quot;: &quot;codestral:latest&quot;,
-      &quot;max_tokens&quot;: 200
-    }
-  }'
-</code></pre>
-<h3 id="ollama_chatmessage-model-system"><code>ollama_chat(message, model?, system?)</code></h3>
+<h4 id="ollama-tools">Ollama Tools</h4>
+<h5 id="ollama_generateprompt-model-max_tokens"><code>ollama_generate(prompt, model?, max_tokens?)</code></h5>
+<p>Generate text using Ollama&rsquo;s generate API.</p>
+<p><strong>Example:</strong>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8889/tools/call<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="s1">    &quot;tool&quot;: &quot;ollama_generate&quot;,</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="s1">    &quot;arguments&quot;: {</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="s1">      &quot;prompt&quot;: &quot;Explain quantum computing&quot;,</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="s1">      &quot;model&quot;: &quot;codestral:latest&quot;,</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="s1">      &quot;max_tokens&quot;: 200</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="s1">    }</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="s1">  }&#39;</span>
+</span></code></pre></div></p>
+<h5 id="ollama_chatmessage-model-system"><code>ollama_chat(message, model?, system?)</code></h5>
 <p>Chat with Ollama using the chat API.</p>
-<h3 id="ollama_list_models"><code>ollama_list_models()</code></h3>
+<h5 id="ollama_list_models"><code>ollama_list_models()</code></h5>
 <p>List all available Ollama models.</p>
-<h2 id="available-models">Available Models</h2>
+<h4 id="available-models">Available Models</h4>
 <ul>
 <li>codestral:latest (12GB)</li>
 <li>qwen3-coder:30b (18GB)</li>
 <li>gpt-oss:20b (13GB)</li>
 </ul>
-<h2 id="quick-test-commands">Quick Test Commands</h2>
-<pre><code class="language-bash"># Health &amp; Ping
-curl http://localhost:8889/health
-curl http://localhost:8889/ping | jq .
-
-# Ollama Status
-curl http://localhost:8889/ollama/status | jq .
-
-# Execute Single Tool
-curl -X POST http://localhost:8889/tools/execute \
-  -H &quot;Content-Type: application/json&quot; \
-  -d '{&quot;tool&quot;: &quot;hello&quot;, &quot;arguments&quot;: {&quot;name&quot;: &quot;Alice&quot;}}' | jq .
-
-# Batch Tool Execution
-curl -X POST http://localhost:8889/tools/batch \
-  -H &quot;Content-Type: application/json&quot; \
-  -d '{
-    &quot;calls&quot;: [
-      {&quot;tool&quot;: &quot;hello&quot;, &quot;arguments&quot;: {&quot;name&quot;: &quot;Alice&quot;}},
-      {&quot;tool&quot;: &quot;add&quot;, &quot;arguments&quot;: {&quot;a&quot;: 10, &quot;b&quot;: 20}}
-    ]
-  }' | jq .
-
-# Execution History
-curl &quot;http://localhost:8889/tools/history?limit=5&quot; | jq .
-
-# Metadata &amp; Capabilities
-curl http://localhost:8889/metadata | jq .
-curl http://localhost:8889/.well-known/mcp | jq .
-
-# MCP Protocol Features
-curl http://localhost:8889/tools | jq .
-curl http://localhost:8889/prompts | jq .
-curl http://localhost:8889/resources | jq .
-curl http://localhost:8889/roots | jq .
-curl http://localhost:8889/negotiate | jq .
-
-# Real LLM Sampling via Ollama
-curl -X POST http://localhost:8889/sampling \
-  -H &quot;Content-Type: application/json&quot; \
-  -d '{
-    &quot;prompt&quot;: &quot;Write a hello world in Python&quot;,
-    &quot;maxTokens&quot;: 100,
-    &quot;model&quot;: &quot;codestral:latest&quot;
-  }' | jq .
-</code></pre>
-<h2 id="test-scripts">Test Scripts</h2>
-<p>Run comprehensive tests:</p>
-<pre><code class="language-bash"># Function call workflow tests
-./test_function_calls.sh
-
-# Ollama integration tests
-./test_ollama.sh
-</code></pre>
-<h2 id="running">Running</h2>
-<pre><code class="language-bash"># Start Ollama (if not running)
-ollama serve &amp;
-
-# Start MCP Server
-./setup.sh
-</code></pre>
+<h4 id="quick-test-commands">Quick Test Commands</h4>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Health &amp; Ping</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>curl<span class="w"> </span>http://localhost:8889/health
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>curl<span class="w"> </span>http://localhost:8889/ping<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="c1"># Ollama Status</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>curl<span class="w"> </span>http://localhost:8889/ollama/status<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="c1"># Execute Single Tool</span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8889/tools/execute<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;tool&quot;: &quot;hello&quot;, &quot;arguments&quot;: {&quot;name&quot;: &quot;Alice&quot;}}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="c1"># Batch Tool Execution</span>
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8889/tools/batch<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+</span><span id="__span-6-17"><a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="s1">    &quot;calls&quot;: [</span>
+</span><span id="__span-6-18"><a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="s1">      {&quot;tool&quot;: &quot;hello&quot;, &quot;arguments&quot;: {&quot;name&quot;: &quot;Alice&quot;}},</span>
+</span><span id="__span-6-19"><a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="s1">      {&quot;tool&quot;: &quot;add&quot;, &quot;arguments&quot;: {&quot;a&quot;: 10, &quot;b&quot;: 20}}</span>
+</span><span id="__span-6-20"><a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="s1">    ]</span>
+</span><span id="__span-6-21"><a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="s1">  }&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
+</span><span id="__span-6-22"><a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a>
+</span><span id="__span-6-23"><a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a><span class="c1"># Execution History</span>
+</span><span id="__span-6-24"><a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a>curl<span class="w"> </span><span class="s2">&quot;http://localhost:8889/tools/history?limit=5&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
+</span><span id="__span-6-25"><a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a>
+</span><span id="__span-6-26"><a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a><span class="c1"># Metadata &amp; Capabilities</span>
+</span><span id="__span-6-27"><a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a>curl<span class="w"> </span>http://localhost:8889/metadata<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
+</span><span id="__span-6-28"><a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a>curl<span class="w"> </span>http://localhost:8889/.well-known/mcp<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
+</span><span id="__span-6-29"><a id="__codelineno-6-29" name="__codelineno-6-29" href="#__codelineno-6-29"></a>
+</span><span id="__span-6-30"><a id="__codelineno-6-30" name="__codelineno-6-30" href="#__codelineno-6-30"></a><span class="c1"># MCP Protocol Features</span>
+</span><span id="__span-6-31"><a id="__codelineno-6-31" name="__codelineno-6-31" href="#__codelineno-6-31"></a>curl<span class="w"> </span>http://localhost:8889/tools<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
+</span><span id="__span-6-32"><a id="__codelineno-6-32" name="__codelineno-6-32" href="#__codelineno-6-32"></a>curl<span class="w"> </span>http://localhost:8889/prompts<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
+</span><span id="__span-6-33"><a id="__codelineno-6-33" name="__codelineno-6-33" href="#__codelineno-6-33"></a>curl<span class="w"> </span>http://localhost:8889/resources<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
+</span><span id="__span-6-34"><a id="__codelineno-6-34" name="__codelineno-6-34" href="#__codelineno-6-34"></a>curl<span class="w"> </span>http://localhost:8889/roots<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
+</span><span id="__span-6-35"><a id="__codelineno-6-35" name="__codelineno-6-35" href="#__codelineno-6-35"></a>curl<span class="w"> </span>http://localhost:8889/negotiate<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
+</span><span id="__span-6-36"><a id="__codelineno-6-36" name="__codelineno-6-36" href="#__codelineno-6-36"></a>
+</span><span id="__span-6-37"><a id="__codelineno-6-37" name="__codelineno-6-37" href="#__codelineno-6-37"></a><span class="c1"># Real LLM Sampling via Ollama</span>
+</span><span id="__span-6-38"><a id="__codelineno-6-38" name="__codelineno-6-38" href="#__codelineno-6-38"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8889/sampling<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-6-39"><a id="__codelineno-6-39" name="__codelineno-6-39" href="#__codelineno-6-39"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-6-40"><a id="__codelineno-6-40" name="__codelineno-6-40" href="#__codelineno-6-40"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+</span><span id="__span-6-41"><a id="__codelineno-6-41" name="__codelineno-6-41" href="#__codelineno-6-41"></a><span class="s1">    &quot;prompt&quot;: &quot;Write a hello world in Python&quot;,</span>
+</span><span id="__span-6-42"><a id="__codelineno-6-42" name="__codelineno-6-42" href="#__codelineno-6-42"></a><span class="s1">    &quot;maxTokens&quot;: 100,</span>
+</span><span id="__span-6-43"><a id="__codelineno-6-43" name="__codelineno-6-43" href="#__codelineno-6-43"></a><span class="s1">    &quot;model&quot;: &quot;codestral:latest&quot;</span>
+</span><span id="__span-6-44"><a id="__codelineno-6-44" name="__codelineno-6-44" href="#__codelineno-6-44"></a><span class="s1">  }&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
+</span></code></pre></div>
+<h4 id="test-scripts">Test Scripts</h4>
+<p>Run comprehensive tests:
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Function call workflow tests</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>./test_function_calls.sh
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># Ollama integration tests</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>./test_ollama.sh
+</span></code></pre></div></p>
+<h4 id="running">Running</h4>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># Start Ollama (if not running)</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>ollama<span class="w"> </span>serve<span class="w"> </span><span class="p">&amp;</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># Start MCP Server</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>./setup.sh
+</span></code></pre></div>
 <p>Then access: http://localhost:6274</p>
 <!--
   Copyright (c) 2016-2025 Martin Donath <martin.donath@squidfunk.com>
@@ -2039,7 +2041,7 @@ ollama serve &amp;
   <span class="md-icon" title="Last update">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
   </span>
-  <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="April 18, 2026 21:08:33 UTC">April 18, 2026</span>
+  <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="April 18, 2026 21:15:21 UTC">April 18, 2026</span>
 </span>
 
   

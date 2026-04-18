@@ -25,7 +25,7 @@
     
     
       
-        <title>Task: Install and Setup Roo Code - K-Agent Labs</title>
+        <title>000 Setup RooCode - K-Agent Labs</title>
       
     
     
@@ -161,7 +161,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-            Task: Install and Setup Roo Code
+            000 Setup RooCode
             
           </span>
         </div>
@@ -1777,22 +1777,24 @@
   
 
 
-<h1 id="task-install-and-setup-roo-code">Task: Install and Setup Roo Code</h1>
+  <h1>000 Setup RooCode</h1>
+
+<h3 id="task-install-and-setup-roo-code">Task: Install and Setup Roo Code</h3>
 <ul>
-<li>This guide outlines the steps to install Roo Code (formerly Cline), configure it with custom instructions and MCP (Model Context Protocol), and demonstrates a usage example with a hypothetical "Context7" MCP server.</li>
+<li>This guide outlines the steps to install Roo Code (formerly Cline), configure it with custom instructions and MCP (Model Context Protocol), and demonstrates a usage example with a hypothetical &ldquo;Context7&rdquo; MCP server.</li>
 </ul>
 <hr />
-<h2 id="1-install-roo-code">1. Install Roo Code</h2>
+<h4 id="1-install-roo-code">1. Install Roo Code</h4>
 <p>Roo Code is an autonomous coding agent extension for VS Code.</p>
 <ol>
 <li>Open <strong>VS Code</strong>.</li>
 <li>Go to the <strong>Extensions</strong> view (Click the square icon on the sidebar or press <code>Cmd+Shift+X</code>).</li>
-<li>Search for <strong>"Roo Code"</strong>.</li>
+<li>Search for <strong>&ldquo;Roo Code&rdquo;</strong>.</li>
 <li>Look for the extension published by <strong>RooVeterinaryInc</strong> (ID: <code>RooVeterinaryInc.roo-cline</code>).</li>
 <li>Click <strong>Install</strong>.</li>
 </ol>
 <hr />
-<h2 id="2-setup-roo-code">2. Setup Roo Code</h2>
+<h4 id="2-setup-roo-code">2. Setup Roo Code</h4>
 <ol>
 <li>Once installed, you need to configure Roo Code.</li>
 <li>Open the <strong>Roo Code</strong> sidebar by clicking the Roo Code icon on the sidebar.</li>
@@ -1805,49 +1807,67 @@
 </li>
 </ol>
 <hr />
-<h2 id="3-configuring-roo-code-features">3. Configuring Roo Code Features</h2>
-<h3 id="create-profile">Create Profile</h3>
-<p>!!! success "Creating a Profile"
-     1.  Open the <strong>Roo Code</strong> sidebar.
-     2.  Click the <strong>Profile</strong> icon (user icon).
-     3.  Click <strong>"Create Profile"</strong>.
-     4.  Fill in your details and preferences.
-     5.  Click <strong>"Save Profile"</strong>.
-     6.  Your profile will help Roo Code tailor its responses to your coding style and preferences.
-     7.  You can create multiple profiles for different projects or coding styles.
-     8.  Switch between profiles as needed.</p>
-<h3 id="api-keys">API Keys</h3>
-<p>!!! success "Setting Up API Keys"
-     1.  Open the <strong>Roo Code</strong> sidebar.
-     2.  Click the <strong>Settings</strong> (gear icon).
-     3.  Scroll to <strong>"API Keys"</strong>.
-     4.  Enter your API keys for the models you want to use (e.g., OpenAI, Google Gemini).
-     5.  Click <strong>"Save"</strong>.
-     6.  Roo Code will use these keys to access the respective language models for code generation and assistance.</p>
-<h3 id="modes">Modes</h3>
-<p>!!! success "Setting Up Modes"
-     1.  Open the <strong>Roo Code</strong> sidebar.
-     2.  Click the <strong>Settings</strong> (gear icon).
-     3.  Scroll to <strong>"Default Mode"</strong>.
-     4.  Select your preferred default mode (e.g., Code, Architect, Ask).
-     5.  Click <strong>"Save"</strong>.
-     6.  This setting determines how Roo Code will approach tasks by default.</p>
+<h4 id="3-configuring-roo-code-features">3. Configuring Roo Code Features</h4>
+<h5 id="create-profile">Create Profile</h5>
+<div class="admonition success">
+<p class="admonition-title">Creating a Profile</p>
+<ol>
+<li>Open the <strong>Roo Code</strong> sidebar.</li>
+<li>Click the <strong>Profile</strong> icon (user icon).</li>
+<li>Click <strong>&ldquo;Create Profile&rdquo;</strong>.</li>
+<li>Fill in your details and preferences.</li>
+<li>Click <strong>&ldquo;Save Profile&rdquo;</strong>.</li>
+<li>Your profile will help Roo Code tailor its responses to your coding style and preferences.</li>
+<li>You can create multiple profiles for different projects or coding styles.</li>
+<li>Switch between profiles as needed.</li>
+</ol>
+</div>
+<h5 id="api-keys">API Keys</h5>
+<div class="admonition success">
+<p class="admonition-title">Setting Up API Keys</p>
+<ol>
+<li>Open the <strong>Roo Code</strong> sidebar.</li>
+<li>Click the <strong>Settings</strong> (gear icon).</li>
+<li>Scroll to <strong>&ldquo;API Keys&rdquo;</strong>.</li>
+<li>Enter your API keys for the models you want to use (e.g., OpenAI, Google Gemini).</li>
+<li>Click <strong>&ldquo;Save&rdquo;</strong>.</li>
+<li>Roo Code will use these keys to access the respective language models for code generation and assistance.</li>
+</ol>
+</div>
+<h5 id="modes">Modes</h5>
+<div class="admonition success">
+<p class="admonition-title">Setting Up Modes</p>
+<ol>
+<li>Open the <strong>Roo Code</strong> sidebar.</li>
+<li>Click the <strong>Settings</strong> (gear icon).</li>
+<li>Scroll to <strong>&ldquo;Default Mode&rdquo;</strong>.</li>
+<li>Select your preferred default mode (e.g., Code, Architect, Ask).</li>
+<li>Click <strong>&ldquo;Save&rdquo;</strong>.</li>
+<li>This setting determines how Roo Code will approach tasks by default.</li>
+</ol>
+</div>
 <hr />
-<h3 id="4-advanced-configuration">4. Advanced Configuration</h3>
-<h4 id="mcp-servers">MCP Servers</h4>
+<h5 id="4-advanced-configuration">4. Advanced Configuration</h5>
+<h6 id="mcp-servers">MCP Servers</h6>
 <ul>
 <li>MCP (Model Context Protocol) allows Roo Code to connect to external tools and data sources.</li>
 </ul>
-<p>!!! success "Setting Up MCP Servers"
-    1.  In the Roo Code sidebar, click the <strong>MCP</strong> icon (server icon) or go to <strong>Settings &gt; MCP Servers</strong>.
-    2.  Click <strong>"Edit MCP Settings"</strong> (Global or Project).<br />
-    3.  This will open a JSON file for the MCP settings.
-    4.  Add your MCP servers to the <code>mcpServers</code> object.
-        *   Each server configuration includes the command to start the server, arguments, and environment variables if needed.
-    5.  Save the file. 
-    6.  Roo Code will now be able to use these MCP servers for enhanced context and capabilities.</p>
+<div class="admonition success">
+<p class="admonition-title">Setting Up MCP Servers</p>
+<ol>
+<li>In the Roo Code sidebar, click the <strong>MCP</strong> icon (server icon) or go to <strong>Settings &gt; MCP Servers</strong>.</li>
+<li>Click <strong>&ldquo;Edit MCP Settings&rdquo;</strong> (Global or Project).  </li>
+<li>This will open a JSON file for the MCP settings.</li>
+<li>Add your MCP servers to the <code>mcpServers</code> object.<ul>
+<li>Each server configuration includes the command to start the server, arguments, and environment variables if needed.</li>
+</ul>
+</li>
+<li>Save the file. </li>
+<li>Roo Code will now be able to use these MCP servers for enhanced context and capabilities.</li>
+</ol>
+</div>
 <hr />
-<h3 id="additional-settings">Additional Settings</h3>
+<h5 id="additional-settings">Additional Settings</h5>
 <ul>
 <li>
 <p>We will cover these in the lecture.</p>
@@ -1861,7 +1881,7 @@
 <tbody>
 <tr>
 <td style="text-align: left;"><strong>Auto-Approve</strong></td>
-<td style="text-align: left;">Automatically approve Roo Code's suggested changes.</td>
+<td style="text-align: left;">Automatically approve Roo Code&rsquo;s suggested changes.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>Slash Commands</strong></td>
@@ -1880,12 +1900,12 @@
 </li>
 </ul>
 <hr />
-<h2 id="4-adding-custom-instructions">4. Adding Custom Instructions</h2>
+<h4 id="4-adding-custom-instructions">4. Adding Custom Instructions</h4>
 <ul>
 <li>Adding custom instructions to Roo Code is a powerful way to enforce coding standards, project context, or specific AI behaviors. </li>
 <li>There are three primary ways to do this: Project-specific files, the UI (Prompts Tab), and Global configuration.</li>
 </ul>
-<h4 id="1-project-specific-instructions-recommended">1. Project-Specific Instructions (Recommended)</h4>
+<h6 id="1-project-specific-instructions-recommended">1. Project-Specific Instructions (Recommended)</h6>
 <ul>
 <li>This is the best way to ensure that any developer working on your specific project gets the same AI behavior.</li>
 </ul>
@@ -1893,51 +1913,59 @@
 <ul>
 <li>
 <p>Roo Code now looks for a directory in your project root to load instructions.</p>
-<p>!!! success "Setting Up Custom Rules"
-    * Create a folder named <code>.roo/rules/</code> in your project's root directory.<br />
-    * Roo Code will read all files in this directory and apply the instructions when working on the project. <br />
-    * Example filenames: <br />
-<code>markdown
-        coding-standards.md
-        project-context.md
-        api-guidelines.md
-        testing-instructions.md</code>  <br />
-    * Add any number of <code>.md</code> (Markdown) files in this directory.<br />
-      ```markdown
-        your-project/
-        ├── .roo/
-        │   └── rules/
-        │       ├── coding-standards.md
-        │       ├── project-context.md
-        │       └── api-guidelines.md
-        └── src/
-            └── main.py</p>
-<pre><code>    # Each file can contain specific instructions or context for Roo Code.      
-  ``` 
-*  Example content for `coding-standards.md`:
-    ```markdown
-    # Coding Standards
-    - Follow PEP 8 for Python code.
-    - Use meaningful variable names.
-    - Write unit tests for all new features.
-    ```
-*  This method allows for easy version control and sharing of instructions with your team.
-*  Roo Code will automatically pick up changes to these files.
-</code></pre>
+<div class="admonition success">
+<p class="admonition-title">Setting Up Custom Rules</p>
+<ul>
+<li>Create a folder named <code>.roo/rules/</code> in your project&rsquo;s root directory.  </li>
+<li>Roo Code will read all files in this directory and apply the instructions when working on the project.   </li>
+<li>Example filenames: <br />
+  <div class="language-markdown highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>  coding-standards.md
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  project-context.md
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  api-guidelines.md
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  testing-instructions.md
+</span></code></pre></div></li>
+<li>Add any number of <code>.md</code> (Markdown) files in this directory.<br />
+  <div class="language-markdown highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>  your-project/
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  ├── .roo/
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  │   └── rules/
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  │       ├── coding-standards.md
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  │       ├── project-context.md
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>  │       └── api-guidelines.md
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>  └── src/
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>      └── main.py
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>  # Each file can contain specific instructions or context for Roo Code.      
+</span></code></pre></div></li>
+<li>Example content for <code>coding-standards.md</code>:
+    <div class="language-markdown highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="gh"># Coding Standards</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">-</span><span class="w"> </span>Follow PEP 8 for Python code.
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="k">-</span><span class="w"> </span>Use meaningful variable names.
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="k">-</span><span class="w"> </span>Write unit tests for all new features.
+</span></code></pre></div></li>
+<li>This method allows for easy version control and sharing of instructions with your team.</li>
+<li>Roo Code will automatically pick up changes to these files.</li>
+</ul>
+</div>
 </li>
 </ul>
 <hr />
-<h4 id="2-using-the-prompts-tab-in-the-ui-globalquick-edits">2. Using the Prompts Tab in the UI (Global/Quick Edits)</h4>
+<h6 id="2-using-the-prompts-tab-in-the-ui-globalquick-edits">2. Using the Prompts Tab in the UI (Global/Quick Edits)</h6>
 <ul>
 <li>You can also add custom instructions directly through the Roo Code UI.</li>
 <li>
 <p>This method is less ideal for project-specific instructions but can be useful for quick adjustments.</p>
-<p>!!! success "Adding Custom Prompts via UI"
-    *  Open the <strong>Roo Code</strong> sidebar.
-    *  Click on the <strong>Prompts</strong> tab.
-    *  Here, you can add or edit custom prompts for different modes.
-    *  Save your changes.
-* Roo Code will use these prompts when generating code.</p>
+<div class="admonition success">
+<p class="admonition-title">Adding Custom Prompts via UI</p>
+<ul>
+<li>Open the <strong>Roo Code</strong> sidebar.</li>
+<li>Click on the <strong>Prompts</strong> tab.</li>
+<li>Here, you can add or edit custom prompts for different modes.</li>
+<li>Save your changes.</li>
+</ul>
+</div>
+<ul>
+<li>Roo Code will use these prompts when generating code.</li>
+</ul>
 </li>
 </ul>
 <!--

@@ -25,7 +25,7 @@
     
     
       
-        <title>MCP Fundementals Tasks - Lab 1 - K-Agent Labs</title>
+        <title>Lab1 tasks - K-Agent Labs</title>
       
     
     
@@ -161,7 +161,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-            MCP Fundementals Tasks - Lab 1
+            Lab1 tasks
             
           </span>
         </div>
@@ -1777,96 +1777,147 @@
   
 
 
-<h1 id="mcp-fundementals-tasks-lab-1">MCP Fundementals Tasks - Lab 1</h1>
+  <h1>Lab1 tasks</h1>
+
+<h3 id="mcp-fundementals-tasks-lab-1">MCP Fundementals Tasks - Lab 1</h3>
 <p>Welcome to the MCP Lab Tasks section! </p>
 <p>This comprehensive collection of hands-on exercises will help you master the Model Context Protocol through practical implementation.</p>
 <p>Each lab has 15 exercises designed to build your skills progressively. Try to solve each exercise on your own before clicking the solution dropdown.</p>
 <hr />
-<h3 id="exercise-11-identify-mcp-components">Exercise 1.1: Identify MCP Components</h3>
+<h5 id="exercise-11-identify-mcp-components">Exercise 1.1: Identify MCP Components</h5>
 <p>Identify the three main components of the MCP architecture and explain their roles.</p>
-<p>??? "Solution"
-    The three main components are:</p>
-<pre><code>1. &lt;strong&gt;MCP Client&lt;/strong&gt;: Applications that host LLMs (like Roo Code, Claude Desktop)
-2. &lt;strong&gt;MCP Server&lt;/strong&gt;: Exposes capabilities to clients (tools, resources, prompts)
-3. &lt;strong&gt;MCP Protocol&lt;/strong&gt;: JSON-RPC 2.0 based communication standard
-</code></pre>
-<h3 id="exercise-12-mcp-vs-traditional-apis">Exercise 1.2: MCP vs Traditional APIs</h3>
+<details>
+<summary>Solution</summary>
+<p>The three main components are:</p>
+<ol>
+<li><strong>MCP Client</strong>: Applications that host LLMs (like Roo Code, Claude Desktop)</li>
+<li><strong>MCP Server</strong>: Exposes capabilities to clients (tools, resources, prompts)</li>
+<li><strong>MCP Protocol</strong>: JSON-RPC 2.0 based communication standard</li>
+</ol>
+</details>
+<h5 id="exercise-12-mcp-vs-traditional-apis">Exercise 1.2: MCP vs Traditional APIs</h5>
 <p>Explain how MCP differs from traditional REST APIs in terms of LLM integration.</p>
-<p>??? "Solution"
-    MCP provides a standardized protocol specifically designed for LLM integration, while traditional APIs require custom integration code for each application. MCP enables universal connectivity across all MCP-compatible clients.</p>
-<h3 id="exercise-13-transport-layers">Exercise 1.3: Transport Layers</h3>
+<details>
+<summary>Solution</summary>
+<p>MCP provides a standardized protocol specifically designed for LLM integration, while traditional APIs require custom integration code for each application. MCP enables universal connectivity across all MCP-compatible clients.</p>
+</details>
+<h5 id="exercise-13-transport-layers">Exercise 1.3: Transport Layers</h5>
 <p>List the three main transport mechanisms supported by MCP and their use cases.</p>
-<p>??? "Solution"
-    1. <strong>STDIO</strong>: Most common, for local subprocess communication
-    2. <strong>SSE (Server-Sent Events)</strong>: HTTP-based for remote servers
-    3. <strong>Streamable HTTP</strong>: Modern standard for remote MCP servers</p>
-<h3 id="exercise-14-mcp-capabilities">Exercise 1.4: MCP Capabilities</h3>
+<details>
+<summary>Solution</summary>
+<ol>
+<li><strong>STDIO</strong>: Most common, for local subprocess communication</li>
+<li><strong>SSE (Server-Sent Events)</strong>: HTTP-based for remote servers</li>
+<li><strong>Streamable HTTP</strong>: Modern standard for remote MCP servers</li>
+</ol>
+</details>
+<h5 id="exercise-14-mcp-capabilities">Exercise 1.4: MCP Capabilities</h5>
 <p>Name the three types of capabilities MCP servers can expose.</p>
-<p>??? "Solution"
-    1. <strong>Tools</strong>: Functions for performing actions
-    2. <strong>Resources</strong>: Contextual data for reading
-    3. <strong>Prompts</strong>: Pre-built prompt templates</p>
-<h3 id="exercise-15-json-rpc-message-types">Exercise 1.5: JSON-RPC Message Types</h3>
+<details>
+<summary>Solution</summary>
+<ol>
+<li><strong>Tools</strong>: Functions for performing actions</li>
+<li><strong>Resources</strong>: Contextual data for reading</li>
+<li><strong>Prompts</strong>: Pre-built prompt templates</li>
+</ol>
+</details>
+<h5 id="exercise-15-json-rpc-message-types">Exercise 1.5: JSON-RPC Message Types</h5>
 <p>Identify the three types of messages used in MCP communication.</p>
-<p>??? "Solution"
-    1. <strong>Requests</strong>: Require responses (tools/list, resources/read)
-    2. <strong>Responses</strong>: Match to requests with results or errors
-    3. <strong>Notifications</strong>: One-way messages (initialized, cancelled)</p>
-<h3 id="exercise-16-mcp-initialization-flow">Exercise 1.6: MCP Initialization Flow</h3>
+<details>
+<summary>Solution</summary>
+<ol>
+<li><strong>Requests</strong>: Require responses (tools/list, resources/read)</li>
+<li><strong>Responses</strong>: Match to requests with results or errors</li>
+<li><strong>Notifications</strong>: One-way messages (initialized, cancelled)</li>
+</ol>
+</details>
+<h5 id="exercise-16-mcp-initialization-flow">Exercise 1.6: MCP Initialization Flow</h5>
 <p>Describe the sequence of messages during MCP server initialization.</p>
-<p>??? "Solution"
-    1. Client sends <code>initialize</code> request
-    2. Server processes and responds with <code>initialize</code> response
-    3. Client sends <code>initialized</code> notification
-    4. Connection is established</p>
-<h3 id="exercise-17-tool-definition-schema">Exercise 1.7: Tool Definition Schema</h3>
+<details>
+<summary>Solution</summary>
+<ol>
+<li>Client sends <code>initialize</code> request</li>
+<li>Server processes and responds with <code>initialize</code> response</li>
+<li>Client sends <code>initialized</code> notification</li>
+<li>Connection is established</li>
+</ol>
+</details>
+<h5 id="exercise-17-tool-definition-schema">Exercise 1.7: Tool Definition Schema</h5>
 <p>What information must be included when defining an MCP tool?</p>
-<p>??? "Solution"
-    - Tool name
-    - Description
-    - Input parameters (JSON Schema)
-    - Whether it has side effects</p>
-<h3 id="exercise-18-resource-identifiers">Exercise 1.8: Resource Identifiers</h3>
+<details>
+<summary>Solution</summary>
+<ul>
+<li>Tool name</li>
+<li>Description</li>
+<li>Input parameters (JSON Schema)</li>
+<li>Whether it has side effects</li>
+</ul>
+</details>
+<h5 id="exercise-18-resource-identifiers">Exercise 1.8: Resource Identifiers</h5>
 <p>How are MCP resources identified and what types of data can they contain?</p>
-<p>??? "Solution"
-    Resources are identified by URIs and can contain text, binary data, or structured data. They are typically read-only.</p>
-<h3 id="exercise-19-prompt-templates">Exercise 1.9: Prompt Templates</h3>
+<details>
+<summary>Solution</summary>
+<p>Resources are identified by URIs and can contain text, binary data, or structured data. They are typically read-only.</p>
+</details>
+<h5 id="exercise-19-prompt-templates">Exercise 1.9: Prompt Templates</h5>
 <p>Explain the purpose of MCP prompts and how they differ from regular prompts.</p>
-<p>??? "Solution"
-    MCP prompts are pre-built, reusable prompt templates that can include embedded resources and support arguments for customization, ensuring consistency across applications.</p>
-<h3 id="exercise-110-security-considerations">Exercise 1.10: Security Considerations</h3>
+<details>
+<summary>Solution</summary>
+<p>MCP prompts are pre-built, reusable prompt templates that can include embedded resources and support arguments for customization, ensuring consistency across applications.</p>
+</details>
+<h5 id="exercise-110-security-considerations">Exercise 1.10: Security Considerations</h5>
 <p>List three security best practices for MCP implementations.</p>
-<p>??? "Solution"
-    1. <strong>Authentication &amp; Authorization</strong>: Validate requests and use least-privilege access
-    2. <strong>Data Privacy</strong>: Control what data is exposed
-    3. <strong>Input Validation</strong>: Sanitize user inputs to prevent injection attacks</p>
-<h3 id="exercise-111-mcp-client-examples">Exercise 1.11: MCP Client Examples</h3>
+<details>
+<summary>Solution</summary>
+<ol>
+<li><strong>Authentication &amp; Authorization</strong>: Validate requests and use least-privilege access</li>
+<li><strong>Data Privacy</strong>: Control what data is exposed</li>
+<li><strong>Input Validation</strong>: Sanitize user inputs to prevent injection attacks</li>
+</ol>
+</details>
+<h5 id="exercise-111-mcp-client-examples">Exercise 1.11: MCP Client Examples</h5>
 <p>Name three popular MCP client applications.</p>
-<p>??? "Solution"
-    1. Roo Code (VS Code extension)
-    2. Claude Desktop
-    3. Continue.dev</p>
-<h3 id="exercise-112-protocol-versioning">Exercise 1.12: Protocol Versioning</h3>
+<details>
+<summary>Solution</summary>
+<ol>
+<li>Roo Code (VS Code extension)</li>
+<li>Claude Desktop</li>
+<li>Continue.dev</li>
+</ol>
+</details>
+<h5 id="exercise-112-protocol-versioning">Exercise 1.12: Protocol Versioning</h5>
 <p>How does MCP handle protocol versioning and backward compatibility?</p>
-<p>??? "Solution"
-    MCP uses capability negotiation during initialization, allowing clients and servers to agree on supported features and maintain backward compatibility.</p>
-<h3 id="exercise-113-error-handling">Exercise 1.13: Error Handling</h3>
+<details>
+<summary>Solution</summary>
+<p>MCP uses capability negotiation during initialization, allowing clients and servers to agree on supported features and maintain backward compatibility.</p>
+</details>
+<h5 id="exercise-113-error-handling">Exercise 1.13: Error Handling</h5>
 <p>How are errors communicated in MCP?</p>
-<p>??? "Solution"
-    Errors are communicated through JSON-RPC error responses with error codes, messages, and optional data fields.</p>
-<h3 id="exercise-114-connection-lifecycle">Exercise 1.14: Connection Lifecycle</h3>
+<details>
+<summary>Solution</summary>
+<p>Errors are communicated through JSON-RPC error responses with error codes, messages, and optional data fields.</p>
+</details>
+<h5 id="exercise-114-connection-lifecycle">Exercise 1.14: Connection Lifecycle</h5>
 <p>Describe the complete MCP connection lifecycle from start to finish.</p>
-<p>??? "Solution"
-    1. Initialization handshake
-    2. Capability discovery
-    3. Normal operation (tool calls, resource access)
-    4. Cleanup and graceful shutdown</p>
-<h3 id="exercise-115-mcp-ecosystem-benefits">Exercise 1.15: MCP Ecosystem Benefits</h3>
+<details>
+<summary>Solution</summary>
+<ol>
+<li>Initialization handshake</li>
+<li>Capability discovery</li>
+<li>Normal operation (tool calls, resource access)</li>
+<li>Cleanup and graceful shutdown</li>
+</ol>
+</details>
+<h5 id="exercise-115-mcp-ecosystem-benefits">Exercise 1.15: MCP Ecosystem Benefits</h5>
 <p>Explain three key benefits of the MCP ecosystem approach.</p>
-<p>??? "Solution"
-    1. <strong>Universal Integration</strong>: One server works with all MCP clients
-    2. <strong>Standardized Communication</strong>: Consistent interface across applications
-    3. <strong>Rapid Development</strong>: Reduced integration time and duplication</p>
+<details>
+<summary>Solution</summary>
+<ol>
+<li><strong>Universal Integration</strong>: One server works with all MCP clients</li>
+<li><strong>Standardized Communication</strong>: Consistent interface across applications</li>
+<li><strong>Rapid Development</strong>: Reduced integration time and duplication</li>
+</ol>
+</details>
 <!--
   Copyright (c) 2016-2025 Martin Donath <martin.donath@squidfunk.com>
 
