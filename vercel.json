@@ -1,5 +1,7 @@
 {
   "version": 2,
+  "buildCommand": "pip install -r requirements.txt && mkdocs build -f mkdocs.yml",
+  "outputDirectory": "mkdocs-site",
   "builds": [
     {
       "src": "mkdocs-site/**",
