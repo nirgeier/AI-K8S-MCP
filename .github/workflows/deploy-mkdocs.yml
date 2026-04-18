@@ -1,9 +1,9 @@
 name: Deploy MKdocs to GitHub Pages
 
+# DISABLED: Use 'vercel --prod' manually for deployment
 on:
-  push:
-    branches: [main]
-  workflow_dispatch:
+  workflow_dispatch: null
+  # Automatic push trigger disabled
 
 permissions:
   contents: write
