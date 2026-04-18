@@ -2,13 +2,12 @@
 
 ## Overview
 
-* `MCP` is a game-changer for AI application development .
-* In this lab, you'll learn about the Model Context Protocol (`MCP`), the communication standard that enables AI assistants to interact with external tools and services. 
-* You'll explore MCP concepts, test simple tools, and understand the protocol structure.
-* This lab uses the MCP server included in the K-Agent labs environment.
+- `MCP` is a game-changer for AI application development .
+- In this lab, you'll learn about the Model Context Protocol (`MCP`), the communication standard that enables AI assistants to interact with external tools and services.
+- You'll explore MCP concepts, test simple tools, and understand the protocol structure.
+- This lab uses the MCP server included in the K-Agent labs environment.
 
-    !!! danger "Prerequisites"
-        * Make sure you have completed [Lab 000 - Environment Setup](../000-setup/) before starting this lab.
+  !!! danger "Prerequisites" \* Make sure you have completed [Lab 000 - Environment Setup](../000-setup/) before starting this lab.
 
 ---
 
@@ -28,9 +27,9 @@ By the end of this lab, you will:
 
 ## What is MCP?
 
-* The **Model Context Protocol (MCP)** is an open protocol that standardizes how AI applications interact with external data sources and tools. 
-* It defines a structured way for AI assistants (clients) to discover, call, and receive responses from tools (servers) using JSON-RPC over various transport layers.
-* MCP is designed to be flexible and extensible, allowing developers to create custom tools that can be easily integrated with different AI models.
+- The **Model Context Protocol (MCP)** is an open protocol that standardizes how AI applications interact with external data sources and tools.
+- It defines a structured way for AI assistants (clients) to discover, call, and receive responses from tools (servers) using JSON-RPC over various transport layers.
+- MCP is designed to be flexible and extensible, allowing developers to create custom tools that can be easily integrated with different AI models.
 
 ---
 
@@ -38,26 +37,32 @@ By the end of this lab, you will:
 
 <div class="grid cards" markdown>
 
--   #### Standardized Communication
-    AI assistants can work with any MCP-compatible tool
+- #### Standardized Communication
 
--   #### Tool Discovery
-    Clients can discover available tools from servers
+  AI assistants can work with any MCP-compatible tool
 
--   #### Structured Interaction 
-    Well-defined input/output schemas using JSON
+- #### Tool Discovery
 
--   #### Standardized Communication
-    AI assistants can work with any MCP-compatible tool
+  Clients can discover available tools from servers
 
--   #### Tool Discovery
-    Clients can discover available tools from servers
+- #### Structured Interaction
 
--   #### Structured Interaction
-    Well-defined input/output schemas using JSON
+  Well-defined input/output schemas using JSON
 
--   #### Multiple Transports
-    Supports stdio, HTTP, WebSocket
+- #### Standardized Communication
+
+  AI assistants can work with any MCP-compatible tool
+
+- #### Tool Discovery
+
+  Clients can discover available tools from servers
+
+- #### Structured Interaction
+
+  Well-defined input/output schemas using JSON
+
+- #### Multiple Transports
+  Supports stdio, HTTP, WebSocket
 
 </div>
 
@@ -100,6 +105,15 @@ graph TD
     E --> F[MCP Server]
     F --> G[Exposes: Tools, Resources & Prompts]
     F --> H[Connects to: APIs, Databases, Files, etc.]
+
+    style A fill:#E8EAF6,stroke:#3949AB,color:#000
+    style B fill:#E8EAF6,stroke:#3949AB,color:#000
+    style C fill:#E8EAF6,stroke:#3949AB,color:#000
+    style D fill:#E8EAF6,stroke:#3949AB,color:#000
+    style E fill:#3949AB,stroke:#1A237E,color:#fff
+    style F fill:#E8EAF6,stroke:#3949AB,color:#000
+    style G fill:#E8EAF6,stroke:#3949AB,color:#000
+    style H fill:#E8EAF6,stroke:#3949AB,color:#000
 ```
 
 ---
@@ -123,6 +137,14 @@ flowchart TD
         datastore
         observ
     end
+
+    style assistant fill:#E8EAF6,stroke:#3949AB,color:#000
+    style kagent fill:#3949AB,stroke:#1A237E,color:#fff
+    style toolRouter fill:#E8EAF6,stroke:#3949AB,color:#000
+    style k8s fill:#E8EAF6,stroke:#3949AB,color:#000
+    style clouds fill:#E8EAF6,stroke:#3949AB,color:#000
+    style datastore fill:#E8EAF6,stroke:#3949AB,color:#000
+    style observ fill:#E8EAF6,stroke:#3949AB,color:#000
 ```
 
 ---
@@ -136,56 +158,52 @@ flowchart TD
 <div class="cards grid single-column" markdown>
 
 - #### Exposes tools/resources to clients
-
-    * Provides a standardized interface for tool interaction
-    * Allows AI assistants to discover and call tools
-    * Manages tool lifecycle and execution
-    * Handles tool errors and retries
+  - Provides a standardized interface for tool interaction
+  - Allows AI assistants to discover and call tools
+  - Manages tool lifecycle and execution
+  - Handles tool errors and retries
 
 </div>
 
 <div class="cards grid single-column" markdown>
 
 - #### Implements the MCP protocol
-
-    * Follows JSON-RPC 2.0 specification
-    * Supports multiple transport layers (stdio, HTTP, WebSocket)
-    * Manages tool schemas and validation
-    * Supports tool discovery and listing
-    * Provides structured responses
+  - Follows JSON-RPC 2.0 specification
+  - Supports multiple transport layers (stdio, HTTP, WebSocket)
+  - Manages tool schemas and validation
+  - Supports tool discovery and listing
+  - Provides structured responses
 
 </div>
 <div class="cards grid single-column" markdown>
 
 - #### Typical MCP Server Features
- 
-    * Runs as a standalone process or service
-    * Can be deployed locally or in the cloud
-  	* Can run in containers or serverless environments
-    * Scales based on demand
-    * Monitors tool usage and performance
-    * Logs tool interactions for auditing
-    * Supports authentication and authorization
-    * Integrates with AI assistants and applications
-    * Defines tool schemas (inputs/outputs)
-    * Handles tool execution
-  
+  - Runs as a standalone process or service
+  - Can be deployed locally or in the cloud
+    - Can run in containers or serverless environments
+  - Scales based on demand
+  - Monitors tool usage and performance
+  - Logs tool interactions for auditing
+  - Supports authentication and authorization
+  - Integrates with AI assistants and applications
+  - Defines tool schemas (inputs/outputs)
+  - Handles tool execution
+
 </div>
 
 <div class="cards grid single-column" markdown>
 
 - #### MCP Server Notes
+  - Communicates via transport layer (stdio, HTTP, WebSocket)
+  - Typically runs as a local process or container
+  - In K-Agent, the MCP server exposes Kubernetes and cloud management tools.
+  - The server listens for incoming MCP requests from AI assistants and executes the requested tools.
+  - In our lab The server translates MCP tool calls into Kubernetes API calls or cloud service operations.
+  - The server returns structured responses back to the AI assistant.
+  - The server can also update context/state in a datastore for persistent information.
+  - The server is implemented using the MCP SDK, which simplifies tool definition and communication handling.
+  - The server supports multiple transport layers, allowing it to communicate with different types of AI assistants.
 
-    * Communicates via transport layer (stdio, HTTP, WebSocket)
-    * Typically runs as a local process or container
-    * In K-Agent, the MCP server exposes Kubernetes and cloud management tools.
-    * The server listens for incoming MCP requests from AI assistants and executes the requested tools.
-    * In our lab The server translates MCP tool calls into Kubernetes API calls or cloud service operations.
-    * The server returns structured responses back to the AI assistant.
-    * The server can also update context/state in a datastore for persistent information.
-    * The server is implemented using the MCP SDK, which simplifies tool definition and communication handling.
-    * The server supports multiple transport layers, allowing it to communicate with different types of AI assistants.
-    
 </div>
 
 ---
@@ -195,33 +213,31 @@ flowchart TD
 <div class="cards grid single-column" markdown>
 
 - ### General MCP Client Features
-
-    * The application that hosts the LLM (e.g., Roo Code, VS Code, Visual Studio, etc.)
-    * Discovers available tools from MCP servers
-    * Sends tool call requests with parameters
-    * Receives and processes tool responses
-    * Manages tool invocation lifecycle
-    * Handles errors and retries
-    * Typically embedded in remote AI assistants (Claude, ChatGPT, etc.) or local models (Ollama, etc.)
-    * Presents server capabilities to the user/LLM
+  - The application that hosts the LLM (e.g., Roo Code, VS Code, Visual Studio, etc.)
+  - Discovers available tools from MCP servers
+  - Sends tool call requests with parameters
+  - Receives and processes tool responses
+  - Manages tool invocation lifecycle
+  - Handles errors and retries
+  - Typically embedded in remote AI assistants (Claude, ChatGPT, etc.) or local models (Ollama, etc.)
+  - Presents server capabilities to the user/LLM
 
 </div>
 
 <div class="cards grid single-column" markdown>
 
 - ### The Host Application
-
-    * The `Client` is often part of a **Host Application** (like VS Code, Claude Desktop, or a CLI).
-    * The Host manages the connection to the MCP Server.
-    * It provides the user interface for interacting with the AI.
-    * It handles permissions (asking the user before running a tool).
+  - The `Client` is often part of a **Host Application** (like VS Code, Claude Desktop, or a CLI).
+  - The Host manages the connection to the MCP Server.
+  - It provides the user interface for interacting with the AI.
+  - It handles permissions (asking the user before running a tool).
 
 </div>
 
 ### Client Capabilities
 
 | Capability          | Description                                                                 |
-|---------------------|-----------------------------------------------------------------------------|
+| ------------------- | --------------------------------------------------------------------------- |
 | **Sampling**        | The server can request the client to sample an LLM (generate text).         |
 | **Roots**           | The client can tell the server which files/folders are accessible.          |
 | **Notifications**   | The client can receive notifications from the server (e.g. logs, progress). |
@@ -232,16 +248,15 @@ flowchart TD
 | **Tool Discovery**  | The client can list available tools from the server.                        |
 | **Tool Invocation** | The client can call tools with parameters and receive structured responses. |
 | **Logging**         | The client can log tool interactions for auditing and debugging.            |
-	
 
 ---
 
 ### Transport Layer - MCP Communication
 
-* MCP supports multiple transport mechanisms:
+- MCP supports multiple transport mechanisms:
 
 | Protocol    | Description                             |
-|-------------|-----------------------------------------|
+| ----------- | --------------------------------------- |
 | `stdio`     | Standard input/output (used in K-Agent) |
 | `HTTP`      | RESTful API communication               |
 | `WebSocket` | Real-time bidirectional communication   |
@@ -268,7 +283,7 @@ sequenceDiagram
 
 ## MCP Tool Structure
 
-* An MCP tool consists of:
+- An MCP tool consists of:
 
 <div class="cards grid single-column" markdown>
 - #### Tool Definition
@@ -281,6 +296,7 @@ sequenceDiagram
     * Authentication requirements
     * Rate limiting information
     * Error handling strategies
+
 </div>
 
 <div class="cards grid single-column" markdown>
@@ -323,6 +339,7 @@ sequenceDiagram
 `MCP` servers can expose three main types of capabilities:
 
 ### 1. **Tools**
+
 Functions that the LLM can call to perform actions or retrieve information.
 
 **Examples:**
@@ -340,43 +357,44 @@ Functions that the LLM can call to perform actions or retrieve information.
 
 #### Examples:
 
-* **Tool Definition**:
-  
-    ```typescript
-    {
-      name: "hello",
-      description: "Returns a greeting message",
-      inputSchema: {
-        type: "object",
-        properties: {
-          name: {
-            type: "string",
-            description: "Name to greet"
-          }
+- **Tool Definition**:
+
+  ```typescript
+  {
+    name: "hello",
+    description: "Returns a greeting message",
+    inputSchema: {
+      type: "object",
+      properties: {
+        name: {
+          type: "string",
+          description: "Name to greet"
+        }
+      },
+      required: ["name"]
+    }
+  }
+  ```
+
+- **Tool Handler:**
+
+  ```typescript
+  async function handleHello(args: { name: string }) {
+    return {
+      content: [
+        {
+          type: "text",
+          text: `Hello, ${args.name}!`,
         },
-        required: ["name"]
-      }
-    }
-    ```
-
-* **Tool Handler:**
-
-    ```typescript
-    async function handleHello(args: { name: string }) {
-      return {
-        content: [
-          {
-            type: "text",
-            text: `Hello, ${args.name}!`
-          }
-        ]
-      };
-    }
-    ```
+      ],
+    };
+  }
+  ```
 
 ---
 
 ### 2. **Resources**
+
 Contextual data that can be read by the LLM.
 
 **Examples:**
@@ -396,6 +414,7 @@ Contextual data that can be read by the LLM.
 ---
 
 ### 3. **Prompts**
+
 Pre-built prompt templates that users can invoke.
 
 **Examples:**
@@ -412,7 +431,6 @@ Pre-built prompt templates that users can invoke.
 - Help standardize common tasks
 - Improve consistency and quality
 
-
 ---
 
 ## The MCP Lifecycle
@@ -420,24 +438,28 @@ Pre-built prompt templates that users can invoke.
 Understanding how `MCP` clients and servers interact:
 
 ### 1. **Initialization**
+
 - Client connects to server via transport layer
 - Handshake to establish protocol version and capabilities
 - Server sends initial tool/resource/prompt listings
 - Client acknowledges and prepares for interaction
-    
+
 ### 2. **Capability Discovery**
+
 - Client requests list of available tools, resources, or prompts
 - Server responds with detailed descriptions
 - Client presents these to the user/LLM
 - Client selects tools/resources/prompts to use
 
 ### 3. **Execution**
+
 - Client sends requests to invoke tools, read resources, or render prompts
 - Server processes the request
 - Server returns results in standardized format
 - Client handles the response and continues interaction
 
 ### 4. **Cleanup**
+
 - Either party can close the connection
 - Graceful shutdown with notifications
 
@@ -448,52 +470,48 @@ Understanding how `MCP` clients and servers interact:
 `MCP` uses **three types of messages**:
 
 ### 1. **Requests**
+
 - Require a response
 - Include a unique request ID
 - Examples: `tools/list`, `resources/read`, `tools/call`
 
 ### 2. **Responses**
+
 - Match to requests by ID
 - Contain either results or errors
 - Must be sent for every request
 
 ### 3. **Notifications**
+
 - One-way messages
 - Don't require responses
 - Examples: `notifications/initialized`, `notifications/cancelled`
 
 ---
 
-
 ## Security Considerations
 
 When working with `MCP`, keep these best practices in mind:
 
 1. **Authentication & Authorization**
-   
-      - Servers should validate requests
-      - Use appropriate credentials management
-      - Implement least-privilege access
+   - Servers should validate requests
+   - Use appropriate credentials management
+   - Implement least-privilege access
 
 2. **Data Privacy**
-   
-      - Be mindful of what data is exposed
-      - Implement proper access controls
-      - Consider encryption for sensitive data
+   - Be mindful of what data is exposed
+   - Implement proper access controls
+   - Consider encryption for sensitive data
 
 3. **Rate Limiting**
-   
-      - Protect against abuse
-      - Implement appropriate throttling
-      - Monitor usage patterns
+   - Protect against abuse
+   - Implement appropriate throttling
+   - Monitor usage patterns
 
 4. **Input Validation**
-   
-      - Always validate tool inputs
-      - Sanitize user-provided data
-      - Prevent injection attacks
-
-
+   - Always validate tool inputs
+   - Sanitize user-provided data
+   - Prevent injection attacks
 
 ---
 
@@ -502,23 +520,27 @@ When working with `MCP`, keep these best practices in mind:
 `MCP` is ideal for:
 
 ### Enterprise Integration
+
 - Connect LLMs to internal databases
 - Access corporate knowledge bases
 - Integrate with business tools (CRM, ERP, etc.)
 
 ### Developer Tools
+
 - File system access
 - Git operations
 - Database queries
 - API testing and documentation
 
 ### Data Analysis
+
 - Query and visualize data
 - Generate reports
 - Perform statistical analysis
 - Access multiple data sources
 
 ### Productivity
+
 - Calendar and email management
 - Task and project tracking
 - Document processing
@@ -528,11 +550,11 @@ When working with `MCP`, keep these best practices in mind:
 
 ## MCP vs. Other Approaches
 
-| Approach | Pros | Cons |
-|----------|------|------|
-| **Function Calling** | Simple, direct | Requires custom implementation per app |
-| **API Integration** | Flexible | No standard, duplicated effort |
-| **MCP** | Universal standard, reusable, scalable | Requires initial setup |
+| Approach             | Pros                                   | Cons                                   |
+| -------------------- | -------------------------------------- | -------------------------------------- |
+| **Function Calling** | Simple, direct                         | Requires custom implementation per app |
+| **API Integration**  | Flexible                               | No standard, duplicated effort         |
+| **MCP**              | Universal standard, reusable, scalable | Requires initial setup                 |
 
 ---
 
@@ -564,77 +586,72 @@ Look at how an `MCP` server is configured in a client application (like Roo Code
 
 `MCP Inspector` is a tool for testing MCP servers interactively.
 
-  ```bash
-  # Install mcp-inspector (if not already installed)
-  npm install -g @modelcontextprotocol/inspector
+```bash
+# Install mcp-inspector (if not already installed)
+npm install -g @modelcontextprotocol/inspector
 
-  # Start the MCP Inspector with the TS code
-  npx @modelcontextprotocol/inspector node ./build/index.js
-  ```
+# Start the MCP Inspector with the TS code
+npx @modelcontextprotocol/inspector node ./build/index.js
+```
 
 !!! info "MCP Inspector UI"
-    * MCP Inspector will start a web interface at `http://localhost:6274`
-    * You can also test tools programmatically using the examples below.
+_ MCP Inspector will start a web interface at `http://localhost:6274`
+_ You can also test tools programmatically using the examples below.
 
 ---
 
 **Step-by-step MCP Inspector Testing:**
 
-1. Get the Authentication Token  
+1. Get the Authentication Token
    When you start MCP Inspector, the terminal displays:
-   
-    ```
-    🔑 Session token: [long-token-string]
-    
-    🔗 Open inspector with token pre-filled:
-        http://localhost:6274/?MCP_PROXY_AUTH_TOKEN=[token]
-    ```
 
-2. Copy the Authentication URL  
+   ```
+   🔑 Session token: [long-token-string]
+
+   🔗 Open inspector with token pre-filled:
+       http://localhost:6274/?MCP_PROXY_AUTH_TOKEN=[token]
+   ```
+
+2. Copy the Authentication URL
    Copy the complete URL with the token (the second line starting with `http://`)
 
-3. Open MCP Inspector in Your Browser  
+3. Open MCP Inspector in Your Browser
    Paste the complete URL with the token from step 2 into your browser. You'll be authenticated immediately.
 
-4. Configure the Server Connection  
+4. Configure the Server Connection
    In the MCP Inspector interface:
-   
-      - Verify the **"Transport"** is set to **`stdio`** (NOT http or streamable-http)
-      - You'll see a **"Command"** field - it should already show: `node`
-      - look for the **"Argument"** field - it should show: `/app/build/index.js`
-      - Click the **"Connect"** button
-      - Wait for the status to show **"Connected"** with a green indicator
+   - Verify the **"Transport"** is set to **`stdio`** (NOT http or streamable-http)
+   - You'll see a **"Command"** field - it should already show: `node`
+   - look for the **"Argument"** field - it should show: `/app/build/index.js`
+   - Click the **"Connect"** button
+   - Wait for the status to show **"Connected"** with a green indicator
 
 5. Explore Available Tools:
-  
-      - Once connected, click on the **"Tools"** tab at the top of the interface, and the on **"List Tools"** button
-      - You'll see a list of available tools from your MCP server
+   - Once connected, click on the **"Tools"** tab at the top of the interface, and the on **"List Tools"** button
+   - You'll see a list of available tools from your MCP server
 
-        
 !!! warning "Authentication Required"
-    * The MCP Inspector requires authentication by default. 
-    * Always use the URL with the token (shown in the terminal when you start the inspector), or manually enter the token in the Configuration settings. 
-    * If you forget the token, restart the MCP Inspector to generate a new one.
+_ The MCP Inspector requires authentication by default.
+_ Always use the URL with the token (shown in the terminal when you start the inspector), or manually enter the token in the Configuration settings. \* If you forget the token, restart the MCP Inspector to generate a new one.
 
 !!! tip "Disabling Authentication (Development Only)"
-    Y* ou can disable authentication by setting the `DANGEROUSLY_OMIT_AUTH=true` environment variable:
-    ```bash
+Y\* ou can disable authentication by setting the `DANGEROUSLY_OMIT_AUTH=true` environment variable:
+`bash
     DANGEROUSLY_OMIT_AUTH=true npx @modelcontextprotocol/inspector node /app/build/index.js
-    ```
-    **⚠️ WARNING**: This is dangerous and should ONLY be used in isolated development environments, never in production or when exposed to the internet.
+    `
+**⚠️ WARNING**: This is dangerous and should ONLY be used in isolated development environments, never in production or when exposed to the internet.
 
 !!! warning "Keep MCP Inspector Running"
-    * Make sure the MCP Inspector command (`npx @modelcontextprotocol/inspector node /app/build/index.js`) is still running in your terminal. 
-    * If the connection fails or you see errors, restart the command in the container.
+_ Make sure the MCP Inspector command (`npx @modelcontextprotocol/inspector node /app/build/index.js`) is still running in your terminal.
+_ If the connection fails or you see errors, restart the command in the container.
 
 !!! tip "Interactive Testing"
-    * The MCP Inspector provides a user-friendly web interface to test your MCP server without writing code. 
-    * This is perfect for debugging and understanding how MCP tools work before integrating them with AI assistants.
-    
+_ The MCP Inspector provides a user-friendly web interface to test your MCP server without writing code.
+_ This is perfect for debugging and understanding how MCP tools work before integrating them with AI assistants.
+
 !!! explore "Understanding MCP Inspector Output"
-    * The Inspector displays tool results in a readable format. 
-    * Internally, MCP uses JSON-RPC 2.0 protocol with structured responses, but the UI shows you the human-readable content. 
-    * For JSON view, see the "History" section below the UI
+_ The Inspector displays tool results in a readable format.
+_ Internally, MCP uses JSON-RPC 2.0 protocol with structured responses, but the UI shows you the human-readable content. \* For JSON view, see the "History" section below the UI
 
 ---
 
@@ -699,7 +716,7 @@ Resources provide read-only data access:
 def get_server_info() -> str:
     """Returns information about this MCP server"""
     return """K-Agent MCP Server
-    
+
 Version: 0.1.0
 Capabilities:
 - Tools: hello, add
@@ -721,7 +738,7 @@ Capabilities:
 
 Reusable prompt templates for consistent interactions:
 
-```python
+````python
 @mcp.prompt()
 def code_review_prompt(code: str, language: str = "python") -> str:
     """Generate a code review prompt for the given code"""
@@ -738,7 +755,7 @@ Focus on:
 - Security concerns
 """
     return template
-```
+````
 
 **What it produces:**
 
@@ -750,6 +767,7 @@ Focus on:
 - Consistent output formatting
 
 **Example output when called:**
+
 ```
 Please review this python code and provide feedback:
 
@@ -763,7 +781,6 @@ Focus on:
 - Performance improvements
 - Security concerns
 ```
-
 
 ### 5. **Transport Layer (HTTP Routes)**
 
@@ -803,7 +820,7 @@ def main():
     print("🔧 Initializing MCP server...")
     mcp = FastMCP("kagent-mcp-server", port=8889)
     print("✅ Server instance created with port 8889")
-    
+
     # Register tools
     print("🛠️  Registering tools...")
     @mcp.tool()
@@ -811,7 +828,7 @@ def main():
         print(f"👋 Executing hello tool for {name}")
         return f"Hello, {name}!"
     print("✅ Tool 'hello' registered")
-    
+
     # Start the server
     print("🚀 Starting MCP server...")
     mcp.run(transport="streamable-http", mount_path="/mcp")
@@ -820,81 +837,81 @@ def main():
 # 2. Client Connection Process
 async def connect_to_server():
     print("🔗 Connecting to MCP server...")
-    
+
     # Get manifest
     print("📋 Fetching server manifest...")
     manifest = await client.get(f"{base_url}/.well-known/mcp")
     print(f"✅ Got manifest: {manifest['name']} v{manifest['version']}")
-    
+
     # Negotiate connection
     print("🤝 Negotiating connection...")
     negotiate_response = await client.get(f"{base_url}/negotiate")
     print(f"✅ Negotiation complete: {negotiate_response['transport']}")
-    
+
     # List tools
     print("📋 Listing available tools...")
     tools = await client.post(f"{base_url}/tools")
     print(f"✅ Found {len(tools['tools'])} tools")
-    
+
     return True
 
 # 3. Tool Execution Flow
 async def execute_tool_flow():
     print("🎯 Executing tool 'hello'...")
-    
+
     # Validate arguments
     print("🔍 Validating tool arguments...")
     # (validation logic here)
     print("✅ Arguments valid")
-    
+
     # Execute tool
     print("⚡ Calling tool function...")
     result = await execute_tool("hello", {"name": "Alice"})
     print(f"✅ Tool executed successfully: {result['result']}")
-    
+
     # Track execution
     print("📊 Recording execution metrics...")
     # (tracking logic here)
     print("✅ Execution tracked")
-    
+
     return result
 
 # 4. Resource Access Flow
 async def access_resource_flow():
     print("📖 Accessing resource...")
-    
+
     # Resolve resource URI
     print("🔗 Resolving resource URI...")
     # (URI resolution logic)
     print("✅ Resource resolved")
-    
+
     # Fetch resource content
     print("📥 Fetching resource content...")
     content = await get_resource_content("mcp://server-info")
     print(f"✅ Resource content retrieved ({len(content)} chars)")
-    
+
     return content
 
 # 5. Prompt Usage Flow
 async def use_prompt_flow():
     print("📝 Using prompt template...")
-    
+
     # Get prompt template
     print("🔍 Finding prompt template...")
-    template = await get_prompt_template("code_review_prompt", 
+    template = await get_prompt_template("code_review_prompt",
                                        code="def test(): pass")
     print(f"✅ Template retrieved ({len(template)} chars)")
-    
+
     # Render with arguments
     print("🎨 Rendering prompt with arguments...")
     final_prompt = template  # Already rendered
     print("✅ Prompt rendered")
-    
+
     # Send to LLM
     print("🤖 Sending to LLM for processing...")
     response = await sample_llm(final_prompt)
     print(f"✅ LLM response received ({len(response)} chars)")
-    
+
     return response
 ```
 
@@ -919,18 +936,21 @@ async def use_prompt_flow():
 MCP is realized through several key mechanisms:
 
 #### 1. **Protocol Standardization**
+
 - **JSON-RPC 2.0** as the communication protocol
 - **HTTP transport** for reliable message delivery
 - **Capability negotiation** during connection establishment
 - **Structured error handling** and response formatting
 
 #### 2. **Component Integration**
+
 - **Server frameworks** (FastMCP, MCP SDK) that implement the protocol
 - **Client libraries** that know how to communicate with servers
 - **Tool execution engines** that safely run server-provided functions
 - **Resource resolution systems** that handle URI-based data access
 
 #### 3. **Security Boundaries**
+
 - **Process isolation** between client and server
 - **Input validation** using JSON Schema
 - **Access control** through authentication tokens
@@ -941,21 +961,25 @@ MCP is realized through several key mechanisms:
 While MCP provides a solid foundation, some aspects are still evolving:
 
 #### 1. **Advanced Authentication**
+
 - OAuth 2.0 integration patterns
 - Role-based access control (RBAC)
 - Token refresh mechanisms
 
 #### 2. **Streaming and Real-time Updates**
+
 - Server-sent events for live data
 - WebSocket support for bidirectional streaming
 - Real-time resource subscriptions
 
 #### 3. **Performance Optimization**
+
 - Connection pooling
 - Caching strategies
 - Batch operation optimizations
 
 #### 4. **Enterprise Features**
+
 - Audit logging and compliance
 - Multi-tenant isolation
 - Service mesh integration
@@ -965,24 +989,28 @@ While MCP provides a solid foundation, some aspects are still evolving:
 Beyond basic integration, MCP adds significant value:
 
 #### 1. **Developer Experience**
+
 - **Consistent APIs** across different tools and services
 - **Auto-discovery** of capabilities
 - **Type safety** through schema validation
 - **Rich tooling** (debuggers, inspectors, documentation)
 
 #### 2. **Operational Benefits**
+
 - **Centralized management** of AI integrations
 - **Version compatibility** checking
 - **Health monitoring** and metrics
 - **Graceful degradation** when services are unavailable
 
 #### 3. **Security Advantages**
+
 - **Controlled access** to external systems
 - **Audit trails** of AI actions
 - **Input sanitization** and validation
 - **Isolation** between different integrations
 
 #### 4. **Scalability Features**
+
 - **Horizontal scaling** of MCP servers
 - **Load balancing** across multiple instances
 - **Caching layers** for performance
@@ -996,9 +1024,10 @@ Let's examine the fundamental MCP operations that make everything work:
 
 ### 1. **wellknown/mcp** - Server Discovery
 
-**Location:** `/.well-known/mcp` endpoint  
-**When it happens:** During initial client connection  
+**Location:** `/.well-known/mcp` endpoint
+**When it happens:** During initial client connection
 **How it works:**
+
 ```python
 @mcp.custom_route("/.well-known/mcp", methods=["GET"])
 async def mcp_manifest(request: Request) -> JSONResponse:
@@ -1025,9 +1054,10 @@ async def mcp_manifest(request: Request) -> JSONResponse:
 
 ### 2. **negotiate** - Connection Establishment
 
-**Location:** `/negotiate` endpoint  
-**When it happens:** After manifest discovery, before using server  
+**Location:** `/negotiate` endpoint
+**When it happens:** After manifest discovery, before using server
 **How it works:**
+
 ```python
 @mcp.custom_route("/negotiate", methods=["GET", "POST"])
 async def negotiate(request: Request) -> JSONResponse:
@@ -1045,16 +1075,17 @@ async def negotiate(request: Request) -> JSONResponse:
 
 ### 3. **tool/call** - Tool Execution
 
-**Location:** `/tools/execute` endpoint  
-**When it happens:** When client wants to execute a tool function  
+**Location:** `/tools/execute` endpoint
+**When it happens:** When client wants to execute a tool function
 **How it works:**
+
 ```python
 @mcp.custom_route("/tools/execute", methods=["POST"])
 async def tool_execute(request: Request) -> JSONResponse:
     body = await request.json()
     tool_name = body.get("tool")
     arguments = body.get("arguments", {})
-    
+
     # Validate and execute
     result = await execute_tool(tool_name, arguments)
     return JSONResponse(result)
@@ -1064,9 +1095,10 @@ async def tool_execute(request: Request) -> JSONResponse:
 
 ### 4. **resource/read** - Resource Access
 
-**Location:** `/resources` endpoint (for listing) or direct URI resolution  
-**When it happens:** When client needs to access data resources  
+**Location:** `/resources` endpoint (for listing) or direct URI resolution
+**When it happens:** When client needs to access data resources
 **How it works:**
+
 ```python
 @mcp.resource("mcp://server-info")
 def get_server_info() -> str:
@@ -1089,15 +1121,16 @@ async def resources_list(request: Request) -> JSONResponse:
 
 ### 5. **sampling** - LLM Integration
 
-**Location:** `/sampling` endpoint  
-**When it happens:** When client needs LLM processing  
+**Location:** `/sampling` endpoint
+**When it happens:** When client needs LLM processing
 **How it works:**
+
 ```python
 @mcp.custom_route("/sampling", methods=["POST"])
 async def sampling(request: Request) -> JSONResponse:
     body = await request.json()
     prompt = body.get("prompt")
-    
+
     # Call LLM API
     response = await call_llm_api(prompt)
     return JSONResponse({
@@ -1139,11 +1172,13 @@ if __name__ == "__main__":
 ```
 
 **What this produces:**
+
 - A tool that can be called by MCP clients
 - A resource that can be read by clients
 - A complete MCP server ready to run
 
 **What's inside each component:**
+
 - **Tool:** Function + JSON schema + metadata
 - **Resource:** URI + content generator + MIME type
 - **Server:** HTTP handlers + protocol implementation + capability management

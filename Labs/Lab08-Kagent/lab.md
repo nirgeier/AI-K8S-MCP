@@ -110,6 +110,20 @@ graph TB
         Pods --> Logs
     end
 
+    Client --> Server
+    K8sClient --> API
+
+    style Client fill:#E8EAF6,stroke:#3949AB,color:#000
+    style Server fill:#3949AB,stroke:#1A237E,color:#fff
+    style Tools fill:#E8EAF6,stroke:#3949AB,color:#000
+    style K8sClient fill:#E8EAF6,stroke:#3949AB,color:#000
+    style API fill:#E8EAF6,stroke:#3949AB,color:#000
+    style Pods fill:#E8EAF6,stroke:#3949AB,color:#000
+    style Logs fill:#E8EAF6,stroke:#3949AB,color:#000
+```
+
+    end
+
     Client -->|"stdio/JSON-RPC"| Server
     K8sClient -->|"REST API"| API
 
@@ -120,7 +134,8 @@ graph TB
     style Tools fill:#2196F3
     style K8sClient fill:#FF9800
     style API fill:#9C27B0
-```
+
+````
 
 ---
 
@@ -153,7 +168,7 @@ Create a new MCP server project with Kubernetes dependencies:
 # Create project directory and navigate to it
 mkdir k-agent-logs
 cd k-agent-logs
-```
+````
 
 <br>
 

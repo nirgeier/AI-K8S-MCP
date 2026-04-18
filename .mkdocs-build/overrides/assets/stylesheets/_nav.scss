@@ -30,6 +30,10 @@
     outline: solid 0.0625rem rgba(0, 0, 0, 0) !important;
 }
 
+/* Hide sidebar items that are not in the active tab */
+.md-nav__list > .md-nav__item--nested:not(.md-nav__item--active) {
+    display: none;
+}
 
 .m-social__top {
     white-space: nowrap;

@@ -1,5 +1,5 @@
 ###
-### mkdocs-extra.yml (project override)
+### mkdocs-extra.yml
 ###
 
 extra:
@@ -8,17 +8,17 @@ extra:
   generator: false
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/nirgeier/n8nLab
+      link: https://github.com/nirgeier/AI-K8S-MCP
       name: View on GitHub
       class: social-class__github
 
     - icon: octicons/repo-forked-16
-      link: https://github.com/nirgeier/n8nLab/network/members
+      link: https://github.com/nirgeier/AI-K8S-MCP/network/members
       name: Fork this repo
       class: social-class__fork
 
     - icon: octicons/star-16
-      link: https://github.com/nirgeier/n8nLab/stargazers
+      link: https://github.com/nirgeier/AI-K8S-MCP/stargazers
       name: Star this repo
       class: social-class__star
 
@@ -48,6 +48,6 @@ extra:
       class: social-class__email
 
 extra_css:
-  - ./assets/stylesheets/codewizard.css?v=1776542701
+  - ./assets/stylesheets/codewizard.css?v=1776547148
 extra_javascript:
-  - https://buttons.github.io/buttons.js?v=1776542701
+  - https://buttons.github.io/buttons.js?v=1776547149

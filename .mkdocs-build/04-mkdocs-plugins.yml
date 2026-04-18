@@ -16,7 +16,7 @@ plugins:
           branch: main
           docs_path: Labs # set if your docs folder is not root
           enabled: true
-          repository: nirgeier/n8nLab
+          repository: nirgeier/AI-K8S-MCP
     - git-revision-date-localized:
           enable_creation_date: true
           enable_git_follow: false
