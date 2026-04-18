@@ -1,17 +1,4 @@
 {
   "version": 2,
-  "buildCommand": "pip install -r requirements.txt && mkdocs build -f mkdocs.yml",
-  "outputDirectory": "mkdocs-site",
-  "builds": [
-    {
-      "src": "mkdocs-site/**",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/mkdocs-site/$1"
-    }
-  ]
+  "public": "mkdocs-site"
 }
