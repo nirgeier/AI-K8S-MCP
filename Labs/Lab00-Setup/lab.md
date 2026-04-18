@@ -366,36 +366,44 @@ kubectl cluster-info
 - The `K-Agent` labs environment is the fundamental building block for all labs.
 - Its an Open Source framework to write MCP tools and interact with Kubernetes clusters.
 
-=== " macOS"
-`bash
+=== "🍎 macOS"
+
+    ```bash
     brew install kagent
-    `
+    ```
+
 === "🐧 Linux (Ubuntu/Debian)"
-`bash
+
+    ```bash
     curl https://raw.githubusercontent.com/kagent-dev/kagent/refs/heads/main/scripts/get-kagent | bash
+    ```
+
 === "🐧 Linux (CentOS)"
-    `bash
-curl https://raw.githubusercontent.com/kagent-dev/kagent/refs/heads/main/scripts/get-kagent | bash
-`=== "☁️ GCP Cloud Shell"
-   `bash
-curl https://raw.githubusercontent.com/kagent-dev/kagent/refs/heads/main/scripts/get-kagent | bash
 
-````
+    ```bash
+    curl https://raw.githubusercontent.com/kagent-dev/kagent/refs/heads/main/scripts/get-kagent | bash
+    ```
 
-#### Verifty K-Agent Installation
+=== "☁️ GCP Cloud Shell"
+
+    ```bash
+    curl https://raw.githubusercontent.com/kagent-dev/kagent/refs/heads/main/scripts/get-kagent | bash
+    ```
+
+#### Verify K-Agent Installation
 
 ```bash
 kagent version
-````
+```
 
 ---
 
 ## 04. Ollama Setup
 
-- Ollama will be used as our LLLM model for the labs.
+- Ollama will be used as our LLM model for the labs.
 - Ollama is a local LLM server that allows you to run large language models on your machine.
 - Ollama supports various models, for example: Qwen and Llama.
-- We will ise the `qwen3-coder` model which is optimized for coding tasks or the `gpt-oos` model.
+- We will use the `qwen3-coder` model which is optimized for coding tasks or the `llama2` model.
 
 !!! info "Pulling Models (Ollama)"
 _ Pulling models can take a while depending on your internet speed and system performance.
@@ -477,21 +485,23 @@ Helm: v3.13.x
 ## 08. Troubleshooting
 
 !!! warning "Container Won't Start"
-If the container fails to start, check:
-`bash
+    If the container fails to start, check:
+
+    ```bash
     docker compose logs
     docker images | grep kagent
     docker ps -a
-    `
+    ```
 
 !!! warning "Kubectl Not Working in Container"
-If kubectl commands fail in the container:
+    If kubectl commands fail in the container:
 
-````bash # Verify kubeconfig is mounted correctly
-docker exec kagent-controller ls -la /root/.kube/
+    ```bash
+    # Verify kubeconfig is mounted correctly
+    docker exec kagent-controller ls -la /root/.kube/
 
     # Try copying kubeconfig again
-    cp ~/.kube/config $(git rev-parse --show-toplevel)//runtime/.kube/config
+    cp ~/.kube/config $(git rev-parse --show-toplevel)/runtime/.kube/config
 
     # Restart container
     cd labs-environment
@@ -499,11 +509,12 @@ docker exec kagent-controller ls -la /root/.kube/
     ```
 
 !!! warning "Platform Issues (M1/M2 Mac)"
-If you encounter platform errors:
-```bash # Verify platform in .env file
-cat labs-environment/.env
+    If you encounter platform errors:
+
+    ```bash
+    # Verify platform in .env file
+    cat labs-environment/.env
 
     # Should show: TARGET_PLATFORM=linux/arm64
     # If not, update it manually
     ```
-````
