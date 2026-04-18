@@ -275,11 +275,11 @@ Before deploying to the cluster, you need to build the Docker image and make it 
      ```
    - **If using Kind:**
      ```bash
-     kind load docker-image my-kagent-monitor:v1 --name <cluster-name>
+     kind load docker-image nirgeier/my-kagent-monitor:v1 --name <cluster-name>
      ```
    - **If using Minikube:**
      ```bash
-     minikube image load my-kagent-monitor:v1
+     minikube image load nirgeier/my-kagent-monitor:v1
      ```
 
 ### 2a.7 Deploy to Kubernetes
