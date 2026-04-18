@@ -1,0 +1,7 @@
+apiVersion: kagent.dev/v1alpha1
+kind: Tool
+metadata:
+  name: k8s-monitor
+spec:
+  interface: mcp
+  command: [ "python", "/Users/nirg/repositories/Kagent/kagent-monitor/kagent-monitor-kmcp/src/monitor.py" ]

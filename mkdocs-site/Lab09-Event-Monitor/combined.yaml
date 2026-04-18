@@ -1,0 +1,162 @@
+apiVersion: kagent.dev/v1alpha2
+kind: Agent
+metadata:
+  name: k8s-monitor-agent
+  namespace: default
+  labels:
+    app.kubernetes.io/name: k8s-monitor-agent
+    app.kubernetes.io/part-of: kagent
+spec:
+  declarative:
+    modelConfig: default-model-config
+    systemMessage: |
+      You are a Kubernetes monitoring agent that can collect logs and events from a Kubernetes cluster.
+      Use the collect_logs tool to gather information about events and pod logs in a given namespace.
+    tools:
+    - type: McpServer
+      mcpServer:
+        apiGroup: kagent.dev
+        kind: RemoteMCPServer
+        name: k8s-monitor-mcp
+        toolNames:
+        - trace
+        - fail
+        - sleep
+    deployment:
+      resources:
+        requests:
+          cpu: 100m
+          memory: 256Mi
+        limits:
+          cpu: 500m
+          memory: 512Mi
+---
+adminPassword: admin123
+grafana.ini:
+  server:
+    domain: cluster.local
+    root_url: "%(protocol)s://%(domain)s/grafana"
+    serve_from_sub_path: true
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: observability-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: cluster.local
+    http:
+      paths:
+      - path: /prometheus
+        pathType: Prefix
+        backend:
+          service:
+            name: prometheus-server
+            port:
+              number: 80
+      - path: /grafana
+        pathType: Prefix
+        backend:
+          service:
+            name: grafana
+            port:
+              number: 80
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: kagent-ui
+            port:
+              number: 8080
+---
+apiVersion: kagent.dev/v1alpha1
+kind: Tool
+metadata:
+  name: k8s-monitor
+spec:
+  interface: mcp
+  command: [ "python", "/Users/nirg/repositories/Kagent/kagent-monitor/kagent-monitor-kmcp/src/monitor.py" ]
+---
+apiVersion: kagent.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: k8s-monitor
+  namespace: default
+  labels:
+    app.kubernetes.io/name: k8s-monitor
+    app.kubernetes.io/part-of: kagent
+    app.kubernetes.io/component: mcp-server
+spec:
+  deployment:
+    args:
+    - src/main.py
+    cmd: python
+    image: nirgeier/my-kagent-monitor:v1
+    port: 3000
+  stdioTransport: {}
+  transportType: stdio
+---
+apiVersion: kagent.dev/v1alpha2
+kind: ModelConfig
+metadata:
+  name: default-model-config
+  namespace: default
+spec:
+  provider: Ollama
+  model: gpt-oss:20b # The model already on your laptop
+  ollama:
+    # Use 'host.docker.internal' for Docker Desktop / Minikube
+    host: http://host.docker.internal:11434
+---
+erver:
+  baseURL: /prometheus
+
+  # Fix probes to check status at /prometheus/-/ready instead of /-/ready
+  readinessProbe:
+    httpGet:
+      path: /prometheus/-/ready
+      port: 9090
+      scheme: HTTP
+    initialDelaySeconds: 30
+    periodSeconds: 5
+    timeoutSeconds: 4
+    failureThreshold: 3
+    successThreshold: 1
+
+  livenessProbe:
+    httpGet:
+      path: /prometheus/-/healthy
+      port: 9090
+      scheme: HTTP
+    initialDelaySeconds: 30
+    periodSeconds: 15
+    timeoutSeconds: 10
+    failureThreshold: 3
+    successThreshold: 1
+
+extraScrapeConfigs: |
+  - job_name: 'mcp-monitor'
+    kubernetes_sd_configs:
+      - role: pod
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_name]
+        regex: .*monitor.*
+        action: keep
+      - source_labels: [__address__]
+        regex: ([^:]+)(?::\d+)?
+        replacement: ${1}:8000
+        target_label: __address__
+---
+apiVersion: kagent.dev/v1alpha2
+kind: RemoteMCPServer
+metadata:
+  name: k8s-monitor-mcp
+  namespace: default
+  labels:
+    app.kubernetes.io/name: k8s-monitor-mcp
+    app.kubernetes.io/part-of: kagent
+spec:
+  description: K8s Event and Log Monitor MCP Server
+  protocol: STREAMABLE_HTTP
+  url: http://k8s-monitor.default:3000/mcp

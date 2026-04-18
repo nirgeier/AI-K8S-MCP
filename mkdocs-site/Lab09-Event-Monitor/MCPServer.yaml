@@ -1,0 +1,18 @@
+apiVersion: kagent.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: k8s-monitor
+  namespace: default
+  labels:
+    app.kubernetes.io/name: k8s-monitor
+    app.kubernetes.io/part-of: kagent
+    app.kubernetes.io/component: mcp-server
+spec:
+  deployment:
+    args:
+    - src/main.py
+    cmd: python
+    image: nirgeier/my-kagent-monitor:v1
+    port: 3000
+  stdioTransport: {}
+  transportType: stdio

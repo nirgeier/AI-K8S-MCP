@@ -1,0 +1,38 @@
+erver:
+  baseURL: /prometheus
+
+  # Fix probes to check status at /prometheus/-/ready instead of /-/ready
+  readinessProbe:
+    httpGet:
+      path: /prometheus/-/ready
+      port: 9090
+      scheme: HTTP
+    initialDelaySeconds: 30
+    periodSeconds: 5
+    timeoutSeconds: 4
+    failureThreshold: 3
+    successThreshold: 1
+
+  livenessProbe:
+    httpGet:
+      path: /prometheus/-/healthy
+      port: 9090
+      scheme: HTTP
+    initialDelaySeconds: 30
+    periodSeconds: 15
+    timeoutSeconds: 10
+    failureThreshold: 3
+    successThreshold: 1
+
+extraScrapeConfigs: |
+  - job_name: 'mcp-monitor'
+    kubernetes_sd_configs:
+      - role: pod
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_name]
+        regex: .*monitor.*
+        action: keep
+      - source_labels: [__address__]
+        regex: ([^:]+)(?::\d+)?
+        replacement: ${1}:8000
+        target_label: __address__

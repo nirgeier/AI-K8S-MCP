@@ -1,0 +1,3198 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Hands-on labs for the K-Agent framework - Kubernetes-native MCP server">
+      
+      
+        <meta name="author" content="CodeWizard-IL">
+      
+      
+        <link rel="canonical" href="https://nirgeier.github.io/AI-K8S-MCP/Lab09-Event-Monitor/lab/">
+      
+      
+        <link rel="prev" href="../../Lab08-Kagent/lab/">
+      
+      
+        <link rel="next" href="../../Tasks/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Lab 09: K8S Event Monitor - K-Agent Labs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%202a7%207%200%200%200-7%207c0%202.38%201.19%204.47%203%205.74V17a1%201%200%200%200%201%201h6a1%201%200%200%200%201-1v-2.26c1.81-1.27%203-3.36%203-5.74a7%207%200%200%200-7-7M9%2021a1%201%200%200%200%201%201h4a1%201%200%200%200%201-1v-1H9z%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Mulish";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/codewizard.css?v=1766553928">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#lab-09-k8s-event-log-monitor-with-kagent" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      <!--
+  Copyright (c) 2016-2025 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- Determine classes -->
+
+
+
+
+
+<!-- Header -->
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+
+    <!-- Link to home -->
+    <a href="../.." title="K-Agent Labs"
+      class="md-header__button md-logo" aria-label="K-Agent Labs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89 89">
+  <path d="M3.136,17.387l0,42.932l42.932,21.467l-42.932,-64.399Z" />
+  <path d="M21.91,8l42.933,64.398l-18.775,9.388l-42.932,-64.399l18.774,-9.387Z" style="fill-opacity: 0.5" />
+  <path d="M67.535,17.387l-27.262,18.156l21.878,32.818l5.384,2.691l0,-53.665Z" />
+  <path d="M67.535,17.387l0,53.666l18.774,-9.388l0,-53.665l-18.774,9.387Z" style="fill-opacity: 0.25" />
+</svg>
+
+    </a>
+
+    <!-- Button to open drawer -->
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+
+    <!-- Header title -->
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            K-Agent Labs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+            Lab 09: K8S Event Monitor
+            
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="m-social__top">
+      <!-- Social links -->
+      
+      
+<div class="md-social">
+    
+    
+    
+    
+    
+    <a href="https://github.com/nirgeier/AI-K8S-MCP" target="_blank" rel="noopener" title="View on GitHub"
+        class="md-social__link social-class__github">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://github.com/nirgeier/AI-K8S-MCP/network/members" target="_blank" rel="noopener" title="Fork this repo"
+        class="md-social__link social-class__fork">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0M5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0m6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5m-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://github.com/nirgeier/AI-K8S-MCP/stargazers" target="_blank" rel="noopener" title="Star this repo"
+        class="md-social__link social-class__star">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25m0 2.445L6.615 5.5a.75.75 0 0 1-.564.41l-3.097.45 2.24 2.184a.75.75 0 0 1 .216.664l-.528 3.084 2.769-1.456a.75.75 0 0 1 .698 0l2.77 1.456-.53-3.084a.75.75 0 0 1 .216-.664l2.24-2.183-3.096-.45a.75.75 0 0 1-.564-.41z"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://www.linkedin.com/in/nirgeier/" target="_blank" rel="noopener" title="Connect on LinkedIn"
+        class="md-social__link social-class__linkedin">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://discord.gg/U6xW23Ss" target="_blank" rel="noopener" title="Follow me on Discord"
+        class="md-social__link social-class__discord">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M492.5 69.8c-.2-.3-.4-.6-.8-.7-38.1-17.5-78.4-30-119.7-37.1-.4-.1-.8 0-1.1.1s-.6.4-.8.8c-5.5 9.9-10.5 20.2-14.9 30.6-44.6-6.8-89.9-6.8-134.4 0-4.5-10.5-9.5-20.7-15.1-30.6-.2-.3-.5-.6-.8-.8s-.7-.2-1.1-.2C162.5 39 122.2 51.5 84.1 69c-.3.1-.6.4-.8.7C7.1 183.5-13.8 294.6-3.6 404.2c0 .3.1.5.2.8s.3.4.5.6c44.4 32.9 94 58 146.8 74.2.4.1.8.1 1.1 0s.7-.4.9-.7c11.3-15.4 21.4-31.8 30-48.8.1-.2.2-.5.2-.8s0-.5-.1-.8-.2-.5-.4-.6-.4-.3-.7-.4c-15.8-6.1-31.2-13.4-45.9-21.9-.3-.2-.5-.4-.7-.6s-.3-.6-.3-.9 0-.6.2-.9.3-.5.6-.7c3.1-2.3 6.2-4.7 9.1-7.1.3-.2.6-.4.9-.4s.7 0 1 .1c96.2 43.9 200.4 43.9 295.5 0 .3-.1.7-.2 1-.2s.7.2.9.4c2.9 2.4 6 4.9 9.1 7.2.2.2.4.4.6.7s.2.6.2.9-.1.6-.3.9-.4.5-.6.6c-14.7 8.6-30 15.9-45.9 21.8-.2.1-.5.2-.7.4s-.3.4-.4.7-.1.5-.1.8.1.5.2.8c8.8 17 18.8 33.3 30 48.8.2.3.6.6.9.7s.8.1 1.1 0c52.9-16.2 102.6-41.3 147.1-74.2.2-.2.4-.4.5-.6s.2-.5.2-.8c12.3-126.8-20.5-236.9-86.9-334.5zm-302 267.7c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.4 59.2-52.8 59.2m195.4 0c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.2 59.2-52.8 59.2"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://stackoverflow.com/users/1755598/codewizard" target="_blank" rel="noopener" title="Follow me on Stack Overflow"
+        class="md-social__link social-class__stackoverflow">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M291 311 95.3 269.7 87.1 309l195.7 41zm51-87L188.5 95.7 163 126.5l153.5 128.3zm-31.2 39.7L129.5 179l-16.7 36.5L294 300zM262.3 32l-32 24 119.3 160.3 32-24zm20.5 328h-200v39.7h200zm39.7 80H43V320H3v160h359.5V320h-40z"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://wa.me/972548122310" target="_blank" rel="noopener" title="Follow me on WhatsApp"
+        class="md-social__link social-class__whatsapp">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157m-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1s56.2 81.2 56.1 130.5c0 101.8-84.9 184.6-186.6 184.6m101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8s-14.3 18-17.6 21.8c-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7s-12.5-30.1-17.1-41.2c-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2s-9.7 1.4-14.8 6.9c-5.1 5.6-19.4 19-19.4 46.3s19.9 53.7 22.6 57.4c2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4s4.6-24.1 3.2-26.4c-1.3-2.5-5-3.9-10.5-6.6"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="mailto:nirg@codewizard.co.il" target="_blank" rel="noopener" title="Email me"
+        class="md-social__link social-class__email">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4l208 156a48 48 0 0 0 57.6 0l208-156c12.1-9.1 19.2-23.3 19.2-38.4 0-26.5-21.5-48-48-48zM0 196v188c0 35.3 28.7 64 64 64h384c35.3 0 64-28.7 64-64V196L313.6 344.8c-34.1 25.6-81.1 25.6-115.2 0z"/></svg>
+    </a>
+    
+</div>
+      
+    </div>
+
+    <!-- Color palette toggle -->
+    
+    
+    <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+    
+    
+
+    <!-- User preference: color palette -->
+    
+    <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+
+    <!-- Site language selector -->
+    
+
+    <!-- Button to open search modal -->
+    
+    
+
+    <!-- Check if search is actually enabled - see https://t.ly/DT_0V -->
+    
+    <label class="md-header__button md-icon" for="__search">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+    </label>
+
+    <!-- Search interface -->
+    <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+
+    <!-- Repository information -->
+    
+    <div class="md-header__source">
+      <a href="https://github.com/nirgeier/AI-K8S-MCP.git" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nirgeier/AI-K8S-MCP
+  </div>
+</a>
+    </div>
+    
+  </nav>
+
+  <!-- Navigation tabs (sticky) -->
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="K-Agent Labs" class="md-nav__button md-logo" aria-label="K-Agent Labs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89 89">
+  <path d="M3.136,17.387l0,42.932l42.932,21.467l-42.932,-64.399Z" />
+  <path d="M21.91,8l42.933,64.398l-18.775,9.388l-42.932,-64.399l18.774,-9.387Z" style="fill-opacity: 0.5" />
+  <path d="M67.535,17.387l-27.262,18.156l21.878,32.818l5.384,2.691l0,-53.665Z" />
+  <path d="M67.535,17.387l0,53.666l18.774,-9.388l0,-53.665l-18.774,9.387Z" style="fill-opacity: 0.25" />
+</svg>
+
+    </a>
+    K-Agent Labs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/nirgeier/AI-K8S-MCP.git" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nirgeier/AI-K8S-MCP
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../welcome/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Welcome
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../labs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Labs Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../.." class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Labs
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Labs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab00-Setup/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 00: Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab01-MCP-Fundamentals/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 01: MCP Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab02-First-MCP-Server/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 02: First MCP Server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab03-MCP-Tools/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 03: MCP Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab04-MCP-Resources/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 04: MCP Resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab05-MCP-Prompts/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 05: MCP Prompts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab06-MCP-Workflow/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 06: MCP Workflow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab07-MCP-Ollama/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07: MCP Ollama
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab08-Kagent/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 08: Kagent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09: K8S Event Monitor
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09: K8S Event Monitor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-install-kagent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Install Kagent
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 1: Install Kagent">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-install-kagent-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Install Kagent CLI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-install-kagent-platform" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Install Kagent Platform
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-create-custom-mcp-tool-python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Create Custom MCP Tool (Python)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 2: Create Custom MCP Tool (Python)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-project-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Project Setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-install-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Install Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-create-the-mcp-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Create the MCP Server
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-test-the-tool-offline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Test the Tool (Offline)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-use-kmcp-to-build-the-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Use kmcp to Build the Server
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 2: Use kmcp to Build the Server">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-install-kmcp-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Install kmcp CLI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-initialize-a-new-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Initialize a New Project
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2a3-add-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2a.3 Add Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2a4-implement-the-tool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2a.4 Implement the Tool
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2a5-run-locally-with-kmcp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2a.5 Run Locally with kmcp
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2a6-build-and-push-docker-image" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2a.6 Build and Push Docker Image
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2a7-deploy-to-kubernetes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2a.7 Deploy to Kubernetes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-verify-tool-registration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Verify Tool Registration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 3: Verify Tool Registration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-check-deployment-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Check Deployment Status
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-verify-mcp-server-registration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Verify MCP Server Registration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-optional-manual-registration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 (Optional) Manual Registration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-create-the-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Create the Agent
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 4: Create the Agent">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-create-remotemcpserver-resource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Create RemoteMCPServer Resource
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-create-agent-resource" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Create Agent Resource
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-verify-the-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Verify the Agent
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-install-nginx-ingress-controller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: Install NGINX Ingress Controller
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 5: Install NGINX Ingress Controller">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-install-via-helm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Install via Helm
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-6-deploy-prometheus-grafana-helm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6: Deploy Prometheus &amp; Grafana (Helm)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 6: Deploy Prometheus &amp; Grafana (Helm)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-add-helm-repos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Add Helm Repos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-install-prometheus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Install Prometheus
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-install-grafana" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Install Grafana
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-verify-deployments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 Verify Deployments
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-7-expose-services-via-ingress" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 7: Expose Services via Ingress
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 7: Expose Services via Ingress">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-create-ingress-manifest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Create Ingress Manifest
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-apply-the-ingress" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Apply the Ingress
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-update-hosts-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Update Hosts File
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-8-access-and-configure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8: Access and Configure
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 8: Access and Configure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-access-grafana" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 Access Grafana
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-access-prometheus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 Access Prometheus
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-access-kagent-dashboard-mcp-tool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 Access Kagent Dashboard &amp; MCP Tool
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../Tasks/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tasks
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tasks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tasks/000-Setup-RooCode/README.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup with RooCode
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tasks/001-MCP-Basics/README.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP Basics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tasks/002-MCP-FastMCP/README.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP FastMCP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Resources
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Resources
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step01-install-kagent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 01: Install Kagent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step02-create-mcp-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 02: Create MCP Server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step03-kmcp-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 03: Build with KMCP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step04-verify-registration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 04: Verify Registration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step05-create-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 05: Create Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step06-install-ingress/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 06: Install Ingress
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step07-deploy-prometheus-grafana/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 07: Prometheus & Grafana
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step08-expose-ingress/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 08: Expose Services
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/resources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 : K8S Resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step00-getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 00: Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step01-imports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 01: Imports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step02-skeleton-code/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 02: Skeleton Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step03-constructor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 03: Constructor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step04-list-tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 04: Register Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step05-call-tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 05: Tool Handlers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step06-list-resources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 06: Register Resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step07-read-resources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 07: Resource Handlers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step08-list_prompts.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 08: Register Prompts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step09-get_prompt/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 09: Prompt Handlers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step10-setup-handlers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 10: Setup Handlers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step11-run-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 11: Run Server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step12-main-entry-point/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 12: Main Entry Point
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../explanations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Explanations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/nirgeier/AI-K8S-MCP.git/edit/master/docs/Lab09-Event-Monitor/lab.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/nirgeier/AI-K8S-MCP.git/raw/master/docs/Lab09-Event-Monitor/lab.md" title="View source of this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
+    </a>
+  
+
+
+<h1 id="lab-09-k8s-event-log-monitor-with-kagent">Lab 09: K8s Event &amp; Log Monitor with Kagent</h1>
+<h2 id="overview">Overview</h2>
+<p>In this lab, you will build a complete observability solution using MCP. You will:</p>
+<ol>
+<li>Perform a minimal installation of <strong>Kagent</strong>.</li>
+<li>Create a custom <strong>MCP Server in Python</strong> (using the <code>mcp</code> SDK) to monitor Kubernetes events and logs.</li>
+<li>Register/Connect this tool to Kagent.</li>
+<li>Deploy <strong>Prometheus</strong> and <strong>Grafana</strong> using <strong>Helm Charts</strong> to visualize the data.</li>
+</ol>
+<p>This lab demonstrates how to extend Kagent's capabilities with custom Python-based tools and integrate K8s observability.</p>
+<hr />
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li><strong>Kubernetes Cluster</strong>: A running cluster (Docker Desktop, OrbStack, Minikube, or remote).</li>
+<li><strong>kubectl</strong>: Configured to access your cluster.</li>
+<li><strong>Python 3.10+</strong>: Installed on your local machine.</li>
+<li><strong>Helm</strong>: Installed (<code>brew install helm</code> or equivalent).</li>
+<li><strong>Kagent CLI</strong>: Installed (or we will install it).</li>
+</ul>
+<hr />
+<h2 id="step-1-install-kagent">Step 1: Install Kagent</h2>
+<p>First, we need to set up the Kagent platform. We will perform a minimal installation for development/demo purposes.</p>
+<h3 id="11-install-kagent-cli">1.1 Install Kagent CLI</h3>
+<p>If you haven't installed the <code>kagent</code> CLI yet, run the following command:</p>
+<pre><code class="language-bash">curl https://raw.githubusercontent.com/kagent-dev/kagent/refs/heads/main/scripts/get-kagent | bash
+</code></pre>
+<h3 id="12-install-kagent-platform">1.2 Install Kagent Platform</h3>
+<p>Install Kagent into your cluster with the <code>demo</code> profile, which sets up the necessary components with minimal resources.</p>
+<pre><code class="language-bash">kagent install --profile demo
+</code></pre>
+<p>Verify the installation:</p>
+<pre><code class="language-bash">kubectl get pods -n kagent
+</code></pre>
+<p>Wait until all pods are in the <code>Running</code> state.</p>
+<hr />
+<h2 id="step-2-create-custom-mcp-tool-python">Step 2: Create Custom MCP Tool (Python)</h2>
+<p>We will use the <strong>MCP Python SDK</strong> to create a tool that connects to Kubernetes, collects events/logs, and exposes metrics.</p>
+<h3 id="21-project-setup">2.1 Project Setup</h3>
+<p>Create a new directory for your tool:</p>
+<pre><code class="language-bash">mkdir -p kagent-monitor/src
+cd kagent-monitor
+python3 -m venv venv
+source venv/bin/activate
+</code></pre>
+<h3 id="22-install-dependencies">2.2 Install Dependencies</h3>
+<p>Create a <code>requirements.txt</code> file:</p>
+<pre><code class="language-text">mcp&gt;=1.0.0
+kubernetes&gt;=28.1.0
+prometheus-client&gt;=0.19.0
+</code></pre>
+<p>Install the <code>requirements.txt</code>:</p>
+<pre><code class="language-bash">pip install -r requirements.txt
+</code></pre>
+<h3 id="23-create-the-mcp-server">2.3 Create the MCP Server</h3>
+<p>Create <code>src/monitor.py</code>. This script implements an MCP server that lists K8s events and collects logs.</p>
+<pre><code class="language-python">import asyncio
+import os
+from kubernetes import client, config
+from mcp.server import Server
+from mcp.server.stdio import stdio_server
+from mcp.types import Tool, TextContent
+from prometheus_client import start_http_server, Counter
+
+# Prometheus Metrics
+EVENTS_FETCHED = Counter('k8s_events_fetched_total', 'Total number of K8s events fetched')
+
+# Connect to K8s
+try:
+    config.load_kube_config()
+except:
+    config.load_incluster_config()
+
+v1 = client.CoreV1Api()
+server = Server(&quot;k8s-monitor&quot;)
+
+@server.list_tools()
+async def list_tools() -&gt; list[Tool]:
+    return [
+        Tool(
+            name=&quot;collect_logs&quot;,
+            description=&quot;Collect logs and events from the Kubernetes cluster&quot;,
+            inputSchema={
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;namespace&quot;: {&quot;type&quot;: &quot;string&quot;, &quot;description&quot;: &quot;Namespace to filter (default: default)&quot;},
+                }
+            }
+        )
+    ]
+
+@server.call_tool()
+async def call_tool(name: str, arguments: dict) -&gt; list[TextContent]:
+    if name == &quot;collect_logs&quot;:
+        ns = arguments.get(&quot;namespace&quot;, &quot;default&quot;)
+
+        # 1. Fetch Events
+        events = v1.list_namespaced_event(ns)
+        EVENTS_FETCHED.inc(len(events.items))
+
+        event_logs = []
+        for e in events.items:
+            event_logs.append(f&quot;[EVENT] {e.last_timestamp} {e.type} {e.reason}: {e.message}&quot;)
+
+        # 2. Fetch Pod Logs (Sample from first pod)
+        pods = v1.list_namespaced_pod(ns)
+        pod_logs = []
+        if pods.items:
+            p = pods.items[0]
+            try:
+                logs = v1.read_namespaced_pod_log(p.metadata.name, ns, tail_lines=5)
+                pod_logs.append(f&quot;[POD {p.metadata.name}] {logs}&quot;)
+            except:
+                pod_logs.append(f&quot;[POD {p.metadata.name}] Could not read logs&quot;)
+
+        full_log = &quot;\n&quot;.join(event_logs + pod_logs)
+        return [TextContent(type=&quot;text&quot;, text=full_log)]
+
+    raise ValueError(f&quot;Unknown tool: {name}&quot;)
+
+async def main():
+    # Start Prometheus Metrics endpoint on port 8000
+    start_http_server(8000)
+
+    async with stdio_server() as (read, write):
+        await server.run(read, write, server.create_initialization_options())
+
+if __name__ == &quot;__main__&quot;:
+    asyncio.run(main())
+</code></pre>
+<h3 id="24-test-the-tool-offline">2.4 Test the Tool (Offline)</h3>
+<p>You can run the tool directly to Verify it starts:</p>
+<pre><code class="language-bash"># This will listen on stdio (blocking) and Metrics port 8000
+# Press Ctrl+C to stop
+npx @modelcontextprotocol/inspector python3 src/monitor.py
+</code></pre>
+<hr />
+<h2 id="step-2-use-kmcp-to-build-the-server">Step 2: Use <code>kmcp</code> to Build the Server</h2>
+<ul>
+<li>Kagent provides a CLI tool called <code>kmcp</code> that simplifies bootstrapping, building, and deploying MCP servers.</li>
+<li>It handles the boilerplate and provides a structured way to manage tools.</li>
+</ul>
+<h3 id="21-install-kmcp-cli">2.1 Install <code>kmcp</code> CLI</h3>
+<p>Install the <code>kmcp</code> CLI on your local machine:</p>
+<pre><code class="language-bash">curl -fsSL https://raw.githubusercontent.com/kagent-dev/kmcp/refs/heads/main/scripts/get-kmcp.sh | bash
+</code></pre>
+<p>Verify the installation:</p>
+<pre><code class="language-bash">kmcp --help
+</code></pre>
+<h3 id="22-initialize-a-new-project">2.2 Initialize a New Project</h3>
+<p>Create a new Python MCP project using <code>kmcp</code>. This will set up a project structure with best practices.</p>
+<pre><code class="language-bash">cd ~
+kmcp init python kagent-monitor-kmcp
+cd kagent-monitor-kmcp
+</code></pre>
+<p>This creates a directory structure like this:</p>
+<ul>
+<li><code>src/main.py</code>: The entry point for the server.</li>
+<li><code>src/tools/</code>: Directory where you can add your custom tools.</li>
+<li><code>requirements.txt</code>: Python dependencies.</li>
+<li><code>kmcp.yaml</code>: Project configuration.</li>
+</ul>
+<h3 id="2a3-add-dependencies">2a.3 Add Dependencies</h3>
+<p>Edit standard <code>requirements.txt</code> to include the Kubernetes and Prometheus libraries:</p>
+<pre><code class="language-bash">echo &quot;kubernetes&gt;=28.1.0&quot; &gt;&gt; requirements.txt
+echo &quot;prometheus-client&gt;=0.19.0&quot; &gt;&gt; requirements.txt
+</code></pre>
+<h3 id="2a4-implement-the-tool">2a.4 Implement the Tool</h3>
+<ul>
+<li>In <code>kmcp</code> projects, tools are automatically discovered from the <code>src/tools/</code> directory.</li>
+<li>Create a new file <code>src/tools/monitor.py</code> and add the logic.</li>
+</ul>
+<p>Create <code>src/tools/k8s_tools.py</code>:</p>
+<pre><code class="language-python">from core.server import mcp
+from kubernetes import client, config
+
+# Initialize K8s client
+try:
+    config.load_kube_config()
+except:
+    config.load_incluster_config()
+v1 = client.CoreV1Api()
+
+@mcp.tool(description=&quot;Collect logs and events from the Kubernetes cluster&quot;)
+async def collect_logs(namespace: str = &quot;default&quot;) -&gt; str:
+    &quot;&quot;&quot;Collect logs and events from the Kubernetes cluster&quot;&quot;&quot;
+    # Fetch events
+    events = v1.list_namespaced_event(namespace)
+    output = []
+    for e in events.items:
+        output.append(f&quot;[EVENT] {e.last_timestamp} {e.type} {e.reason}: {e.message}&quot;)
+    return &quot;\n&quot;.join(output)
+</code></pre>
+<h3 id="2a5-run-locally-with-kmcp">2a.5 Run Locally with <code>kmcp</code></h3>
+<p>Run the server locally with the MCP Inspector attached:</p>
+<pre><code class="language-bash">kmcp run --project-dir .
+</code></pre>
+<h3 id="2a6-build-and-push-docker-image">2a.6 Build and Push Docker Image</h3>
+<p>Before deploying to the cluster, you need to build the Docker image and make it available to your Kubernetes cluster (by pushing to a registry or loading it directly).</p>
+<ol>
+<li><strong>Build the image using Docker:</strong></li>
+</ol>
+<p><code>bash
+   docker build -t nirgeier/my-kagent-monitor:v1 .</code></p>
+<ol>
+<li><strong>Push or Load the image:</strong></li>
+<li><strong>If using a Registry (Docker Hub, etc.):</strong>
+     <code>bash
+     docker push nirgeier/my-kagent-monitor:v1</code></li>
+<li><strong>If using Kind:</strong>
+     <code>bash
+     kind load docker-image nirgeier/my-kagent-monitor:v1 --name &lt;cluster-name&gt;</code></li>
+<li><strong>If using Minikube:</strong>
+     <code>bash
+     minikube image load nirgeier/my-kagent-monitor:v1</code></li>
+</ol>
+<h3 id="2a7-deploy-to-kubernetes">2a.7 Deploy to Kubernetes</h3>
+<p>Deploy the MCP server to your cluster using <code>kmcp</code>. You must specify the image you built.</p>
+<pre><code class="language-bash"># Deploy with the custom image
+kmcp deploy --namespace default --image nirgeier/my-kagent-monitor:v1
+</code></pre>
+<p><em>(Note: Ensure the image name matches exactly what you built/loaded. If you used a different name, update the command accordingly.)</em></p>
+<hr />
+<h2 id="step-3-verify-tool-registration">Step 3: Verify Tool Registration</h2>
+<p>Since we used <code>kmcp deploy</code> in the previous step, the MCP server is installed and should be registered with Kagent.</p>
+<h3 id="31-check-deployment-status">3.1 Check Deployment Status</h3>
+<p>First, ensure the pod is running. Common issues include <code>ImagePullBackOff</code> if the image name is incorrect or not loaded into the cluster.</p>
+<pre><code class="language-bash">kubectl get pods -n default -l app=kagent-monitor-kmcp
+</code></pre>
+<h3 id="32-verify-mcp-server-registration">3.2 Verify MCP Server Registration</h3>
+<p>Check if the <code>MCPServer</code> resource exists:</p>
+<pre><code class="language-bash">kubectl get mcpservers -n default
+</code></pre>
+<p>You should see your project name (e.g., <code>kagent-monitor-kmcp</code>) in the list.</p>
+<h3 id="33-optional-manual-registration">3.3 (Optional) Manual Registration</h3>
+<p>If <code>kmcp deploy</code> failed or you want to register it manually:</p>
+<ol>
+<li>
+<p><strong>Create Manifest</strong>:
+    Create a file <code>mcpserver.yaml</code>:</p>
+<p><code>yaml
+apiVersion: kagent.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: k8s-monitor
+  namespace: default
+spec:
+  deployment:
+    args:
+      - src/main.py
+    cmd: python
+    image: nirgeier/my-kagent-monitor:v1
+    port: 3000
+  stdioTransport: {}
+  transportType: stdio</code></p>
+</li>
+<li>
+<p><strong>Apply Manifest</strong>:</p>
+<p><code>bash
+kubectl apply -f mcpserver.yaml</code></p>
+</li>
+</ol>
+<hr />
+<h2 id="step-4-create-the-agent">Step 4: Create the Agent</h2>
+<p>The Kagent Dashboard displays <strong>Agent</strong> resources, not MCPServers directly. An MCPServer provides tools, but you need to create an <strong>Agent</strong> resource to make it appear in the dashboard.</p>
+<h3 id="41-create-remotemcpserver-resource">4.1 Create RemoteMCPServer Resource</h3>
+<p>First, create a <code>RemoteMCPServer</code> that provides HTTP access to the MCP server.</p>
+<p>Create a file <code>remotemcpserver.yaml</code>:</p>
+<pre><code class="language-yaml">apiVersion: kagent.dev/v1alpha2
+kind: RemoteMCPServer
+metadata:
+  name: k8s-monitor-mcp
+  namespace: default
+  labels:
+    app.kubernetes.io/name: k8s-monitor-mcp
+    app.kubernetes.io/part-of: kagent
+spec:
+  description: K8s Event and Log Monitor MCP Server
+  protocol: STREAMABLE_HTTP
+  url: http://k8s-monitor.default:3000/mcp
+</code></pre>
+<p>Apply it:</p>
+<pre><code class="language-bash">kubectl apply -f remotemcpserver.yaml
+</code></pre>
+<h3 id="42-create-agent-resource">4.2 Create Agent Resource</h3>
+<p>Now create an <strong>Agent</strong> that uses the tools from your MCP server.</p>
+<p>Create a file <code>agent.yaml</code>:</p>
+<pre><code class="language-yaml">apiVersion: kagent.dev/v1alpha2
+kind: Agent
+metadata:
+  name: k8s-monitor-agent
+  namespace: default
+  labels:
+    app.kubernetes.io/name: k8s-monitor-agent
+    app.kubernetes.io/part-of: kagent
+spec:
+  declarative:
+    modelConfig: default-model-config
+    systemMessage: |
+      You are a Kubernetes monitoring agent that can collect logs and events from a Kubernetes cluster.
+      Use the collect_logs tool to gather information about events and pod logs in a given namespace.
+    tools:
+      - type: McpServer
+        mcpServer:
+          apiGroup: kagent.dev
+          kind: RemoteMCPServer
+          name: k8s-monitor-mcp
+          toolNames:
+            - trace
+            - fail
+            - sleep
+    deployment:
+      resources:
+        requests:
+          cpu: 100m
+          memory: 256Mi
+        limits:
+          cpu: 500m
+          memory: 512Mi
+</code></pre>
+<blockquote>
+<p><strong>Important</strong>: The <code>toolNames</code> field is required. List the tools exposed by your MCP server. You can find these by checking the MCP server logs when it starts.</p>
+</blockquote>
+<p>Apply it:</p>
+<pre><code class="language-bash">kubectl apply -f agent.yaml
+</code></pre>
+<h3 id="43-verify-the-agent">4.3 Verify the Agent</h3>
+<p>Check that the Agent is ready:</p>
+<pre><code class="language-bash">kubectl get agents -n default
+</code></pre>
+<p>You should see <code>k8s-monitor-agent</code> with <code>READY: True</code>:</p>
+<pre><code>NAME                TYPE          READY   ACCEPTED
+k8s-monitor-agent   Declarative   True    True
+</code></pre>
+<p>Also verify the RemoteMCPServer:</p>
+<pre><code class="language-bash">kubectl get remotemcpservers -n default
+</code></pre>
+<p>If the Agent shows <code>READY: False</code>, check the pod logs:</p>
+<pre><code class="language-bash">kubectl logs -l app.kubernetes.io/name=k8s-monitor-agent -n default
+</code></pre>
+<hr />
+<h2 id="step-5-install-nginx-ingress-controller">Step 5: Install NGINX Ingress Controller</h2>
+<p>To expose our services (like Grafana) externally, we will use an Ingress Controller. This allows us to access dashboards via a URL instead of using <code>port-forward</code>.</p>
+<h3 id="41-install-via-helm">4.1 Install via Helm</h3>
+<p>Add the ingress-nginx repository and install the chart:</p>
+<pre><code class="language-bash">helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+
+helm install ingress-nginx ingress-nginx/ingress-nginx \
+  --namespace ingress-nginx \
+  --create-namespace
+</code></pre>
+<p>Wait until the ingress controller pod is running:</p>
+<pre><code class="language-bash">kubectl get pods -n ingress-nginx
+</code></pre>
+<hr />
+<h2 id="step-6-deploy-prometheus-grafana-helm">Step 6: Deploy Prometheus &amp; Grafana (Helm)</h2>
+<p>We will deploy the observability stack using Helm Charts to visualize the metrics exposed by our tool.</p>
+<h3 id="51-add-helm-repos">5.1 Add Helm Repos</h3>
+<pre><code class="language-bash">helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo update
+</code></pre>
+<h3 id="52-install-prometheus">5.2 Install Prometheus</h3>
+<p>We need to configure Prometheus to scrape our MCP tool and also know it is served under a subpath (<code>/prometheus</code>).
+We effectively set the <code>external-url</code> and adjust the health check probes to match that new path.</p>
+<p>Create <code>prometheus-config.yaml</code>:</p>
+<pre><code class="language-yaml">server:
+  baseURL: /prometheus
+
+  # Fix probes to check status at /prometheus/-/ready instead of /-/ready
+  readinessProbe:
+    httpGet:
+      path: /prometheus/-/ready
+      port: 9090
+      scheme: HTTP
+    initialDelaySeconds: 30
+    periodSeconds: 5
+    timeoutSeconds: 4
+    failureThreshold: 3
+    successThreshold: 1
+
+  livenessProbe:
+    httpGet:
+      path: /prometheus/-/healthy
+      port: 9090
+      scheme: HTTP
+    initialDelaySeconds: 30
+    periodSeconds: 15
+    timeoutSeconds: 10
+    failureThreshold: 3
+    successThreshold: 1
+
+extraScrapeConfigs: |
+  - job_name: 'mcp-monitor'
+    kubernetes_sd_configs:
+      - role: pod
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_name]
+        regex: .*monitor.*
+        action: keep
+      - source_labels: [__address__]
+        regex: ([^:]+)(?::\d+)?
+        replacement: ${1}:8000
+        target_label: __address__
+</code></pre>
+<p>Install Prometheus:</p>
+<pre><code class="language-bash">helm upgrade --install prometheus prometheus-community/prometheus -f prometheus-config.yaml
+</code></pre>
+<h3 id="53-install-grafana">5.3 Install Grafana</h3>
+<p>When deploying Grafana behind an ingress with a subpath (e.g. <code>/grafana</code>), we must configure the <code>root_url</code> and <code>serve_from_sub_path</code> settings so it generates correct links.</p>
+<p>Create <code>grafana-config.yaml</code>:</p>
+<pre><code class="language-yaml">adminPassword: admin123
+grafana.ini:
+  server:
+    domain: cluster.local
+    root_url: &quot;%(protocol)s://%(domain)s/grafana&quot;
+    serve_from_sub_path: true
+</code></pre>
+<p>Install Grafana with the configuration:</p>
+<pre><code class="language-bash">helm upgrade --install grafana grafana/grafana -f grafana-config.yaml
+</code></pre>
+<h3 id="54-verify-deployments">5.4 Verify Deployments</h3>
+<p>Ensure all pods are running before proceeding:</p>
+<pre><code class="language-bash">kubectl get pods -n default
+kubectl get pods -n ingress-nginx
+</code></pre>
+<hr />
+<h2 id="step-7-expose-services-via-ingress">Step 7: Expose Services via Ingress</h2>
+<p>Instead of using <code>port-forward</code>, we will expose Prometheus, Grafana, and the Kagent UI using the NGINX Ingress Controller. We will configure them on the hostname <code>cluster.local</code>.</p>
+<h3 id="61-create-ingress-manifest">6.1 Create Ingress Manifest</h3>
+<p>Create a file named <code>observability-ingress.yaml</code>. This defines routing rules for:</p>
+<ul>
+<li><code>/</code> -&gt; Kagent Dashboard (<code>kagent-ui</code>)</li>
+<li><code>/grafana</code> -&gt; Grafana</li>
+<li><code>/prometheus</code> -&gt; Prometheus</li>
+</ul>
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: observability-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: cluster.local
+      http:
+        paths:
+          - path: /prometheus
+            pathType: Prefix
+            backend:
+              service:
+                name: prometheus-server
+                port:
+                  number: 80
+          - path: /grafana
+            pathType: Prefix
+            backend:
+              service:
+                name: grafana
+                port:
+                  number: 80
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kagent-ui
+                port:
+                  number: 8080
+</code></pre>
+<h3 id="62-apply-the-ingress">6.2 Apply the Ingress</h3>
+<pre><code class="language-bash">kubectl apply -f observability-ingress.yaml
+</code></pre>
+<h3 id="63-update-hosts-file">6.3 Update Hosts File</h3>
+<p>To access <code>http://cluster.local</code>, map the hostname to your local machine (or the cluster IP).</p>
+<ol>
+<li>
+<p><strong>Find the IP</strong>:</p>
+<ul>
+<li><strong>Docker Desktop / OrbStack</strong>: Use <code>127.0.0.1</code>.</li>
+<li><strong>Minikube</strong>: Run <code>minikube ip</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Edit Host File</strong>:</p>
+<ul>
+<li><strong>Linux/macOS</strong>: <code>/etc/hosts</code></li>
+<li><strong>Windows</strong>: <code>C:\Windows\System32\drivers\etc\hosts</code></li>
+</ul>
+<p>Add the following line:</p>
+<p><code>text
+127.0.0.1  cluster.local</code></p>
+<p><em>(Replace <code>127.0.0.1</code> with your Minikube IP if applicable)</em>.</p>
+</li>
+</ol>
+<hr />
+<h2 id="step-8-access-and-configure">Step 8: Access and Configure</h2>
+<p>Now you can access all services via the browser.</p>
+<h3 id="71-access-grafana">7.1 Access Grafana</h3>
+<ol>
+<li>Navigate to <strong><a href="http://cluster.local/grafana">http://cluster.local/grafana</a></strong>.</li>
+<li><strong>Login</strong>:<ul>
+<li>User: <code>admin</code></li>
+<li>Password: <code>admin</code> (or the password set in <code>grafana-config.yaml</code>).</li>
+</ul>
+</li>
+<li><strong>Add Data Source</strong>:<ul>
+<li>Go to <strong>Connections &gt; Data Sources &gt; Add data source</strong>.</li>
+<li>Select <strong>Prometheus</strong>.</li>
+<li><strong>Connection URL</strong>: <code>http://prometheus-server</code> (Keep this as the internal K8s Service name).</li>
+<li>Click <strong>Save &amp; Test</strong>.</li>
+</ul>
+</li>
+</ol>
+<h3 id="72-access-prometheus">7.2 Access Prometheus</h3>
+<ul>
+<li>Navigate to <strong><a href="http://cluster.local/prometheus">http://cluster.local/prometheus</a></strong>.</li>
+<li>You can query for <code>k8s_events_fetched_total</code> to verify your MCP tool is sending metrics.</li>
+</ul>
+<h3 id="73-access-kagent-dashboard-mcp-tool">7.3 Access Kagent Dashboard &amp; MCP Tool</h3>
+<ul>
+<li>Navigate to <strong><a href="http://cluster.local">http://cluster.local</a></strong>.</li>
+<li>This loads the <strong>Kagent Dashboard</strong>.</li>
+<li>Look for <strong>k8s-monitor</strong> (or <code>kagent-monitor-kmcp</code>) in the list of active Agents/MCP Servers.</li>
+<li>You can verify that Kagent sees the <code>collect_logs</code> tool capability provided by your server.</li>
+</ul>
+<hr />
+<h2 id="summary">Summary</h2>
+<p>You have successfully:</p>
+<ol>
+<li>Installed Kagent.</li>
+<li>Built a Python MCP tool to collect K8s logs/events.</li>
+<li>Registered the tool.</li>
+<li>Installed NGINX Ingress Controller.</li>
+<li>Deployed an observability stack (Prometheus/Grafana) behind an Ingress.</li>
+<li>Exposed the Kagent Dashboard on the same domain.</li>
+</ol>
+<p>This setup offers a production-like environment where AI agents (via Kagent) and human operators (via Grafana) can monitor the cluster side-by-side.</p>
+<!--
+  Copyright (c) 2016-2025 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- Render date of last update -->
+
+
+<!-- Render date of creation -->
+
+
+<!-- ---------------------------------------------------------------------- -->
+
+<!-- Render authors -->
+
+
+<!-- ---------------------------------------------------------------------- -->
+
+<!-- Render committers from GitHub -->
+
+
+<!-- Render committers from GitLab -->
+
+
+<!-- Render committers -->
+
+
+<!-- ---------------------------------------------------------------------- -->
+
+<!-- Determine date of last update -->
+
+
+
+
+
+<!-- Determine date of creation -->
+
+
+
+
+
+<!-- Source file information -->
+
+<aside class="md-source-file">
+
+  <!-- Date of last update -->
+  
+  
+<span class="md-source-file__fact">
+  <span class="md-icon" title="Last update">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+  </span>
+  <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="April 18, 2026 20:48:19 UTC">April 18, 2026</span>
+</span>
+
+  
+
+  <!-- Authors (git-authors plugin) -->
+  
+
+  <!-- Authors (git-committers plugin) -->
+  
+  <!-- Fallback: Manual GitHub avatar for repository owner -->
+  <span class="md-source-file__fact">
+    <nav>
+      <a href="https://github.com/nirgeier" class="md-author" title="@nirgeier">
+        <img src="https://avatars.githubusercontent.com/u/555154?size=256" alt="Nir Geier" />
+      </a>
+    </nav>
+  </span>
+  
+</aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <!--
+  Copyright (c) 2016-2025 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- Footer -->
+<footer class="md-footer">
+  <div class="logo1"></div>
+  <div class="logo2"></div>
+
+  <!-- Link to previous and/or next page -->
+  
+    
+      
+      <nav
+        class="md-footer__inner md-grid"
+        aria-label="Footer"
+        
+      >
+
+        <!-- Link to previous page -->
+        
+          
+          <a
+            href="../../Lab08-Kagent/lab/"
+            class="md-footer__link md-footer__link--prev"
+            aria-label="Previous: Lab 08: Kagent"
+          >
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Lab 08: Kagent
+              </div>
+            </div>
+          </a>
+        
+        
+        <!-- <ul class="social-badges">
+          <li><a href="https://visitor-badge.laobi.icu/badge?page_id=nirgeier" target="_blank" rel="noopener"><img src="https://visitor-badge.laobi.icu/badge?page_id=nirgeier" alt="Visitor Badge"></a></li>
+          <li><a href="https://www.linkedin.com/in/nirgeier/" target="_blank" rel="noopener"><i class="fab fa-linkedin" aria-hidden="true"></i><span class="sr-only">LinkedIn profile</span></a></li>
+          <li><a href="mailto:nirgeier@gmail.com"><img src="https://img.shields.io/badge/-nirgeier@gmail.com-fcc624?style=flat&logo=Gmail&logoColor=red" alt="Gmail Badge"></a></li>
+          <li><a href="mailto:nirg@codewizard.co.il"><img src="https://img.shields.io/badge/-nirg@codewizard.co.il-fcc624?style=flat&logo=microsoftoutlook&logoColor=blue" alt="Outlook Badge"></a></li>
+        </ul> -->
+        
+        <!-- Link to next page -->
+        
+          
+          <a
+            href="../../Tasks/"
+            class="md-footer__link md-footer__link--next"
+            aria-label="Next: Index"
+          >
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Index
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+
+  <!-- Further information -->
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      ©2021-2025 Nir Geier<br/><a href="https://visitor-badge.laobi.icu/badge?page_id=nirgeier" target="_blank" rel="noopener"><img src="https://visitor-badge.laobi.icu/badge?page_id=nirgeier" alt="Visitor Badge"></a>
+    </div>
+  
+  
+</div>
+
+      <!-- Social links -->
+      
+        
+<div class="md-social">
+    
+    
+    
+    
+    
+    <a href="https://github.com/nirgeier/AI-K8S-MCP" target="_blank" rel="noopener" title="View on GitHub"
+        class="md-social__link social-class__github">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://github.com/nirgeier/AI-K8S-MCP/network/members" target="_blank" rel="noopener" title="Fork this repo"
+        class="md-social__link social-class__fork">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0M5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0m6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5m-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://github.com/nirgeier/AI-K8S-MCP/stargazers" target="_blank" rel="noopener" title="Star this repo"
+        class="md-social__link social-class__star">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25m0 2.445L6.615 5.5a.75.75 0 0 1-.564.41l-3.097.45 2.24 2.184a.75.75 0 0 1 .216.664l-.528 3.084 2.769-1.456a.75.75 0 0 1 .698 0l2.77 1.456-.53-3.084a.75.75 0 0 1 .216-.664l2.24-2.183-3.096-.45a.75.75 0 0 1-.564-.41z"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://www.linkedin.com/in/nirgeier/" target="_blank" rel="noopener" title="Connect on LinkedIn"
+        class="md-social__link social-class__linkedin">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://discord.gg/U6xW23Ss" target="_blank" rel="noopener" title="Follow me on Discord"
+        class="md-social__link social-class__discord">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M492.5 69.8c-.2-.3-.4-.6-.8-.7-38.1-17.5-78.4-30-119.7-37.1-.4-.1-.8 0-1.1.1s-.6.4-.8.8c-5.5 9.9-10.5 20.2-14.9 30.6-44.6-6.8-89.9-6.8-134.4 0-4.5-10.5-9.5-20.7-15.1-30.6-.2-.3-.5-.6-.8-.8s-.7-.2-1.1-.2C162.5 39 122.2 51.5 84.1 69c-.3.1-.6.4-.8.7C7.1 183.5-13.8 294.6-3.6 404.2c0 .3.1.5.2.8s.3.4.5.6c44.4 32.9 94 58 146.8 74.2.4.1.8.1 1.1 0s.7-.4.9-.7c11.3-15.4 21.4-31.8 30-48.8.1-.2.2-.5.2-.8s0-.5-.1-.8-.2-.5-.4-.6-.4-.3-.7-.4c-15.8-6.1-31.2-13.4-45.9-21.9-.3-.2-.5-.4-.7-.6s-.3-.6-.3-.9 0-.6.2-.9.3-.5.6-.7c3.1-2.3 6.2-4.7 9.1-7.1.3-.2.6-.4.9-.4s.7 0 1 .1c96.2 43.9 200.4 43.9 295.5 0 .3-.1.7-.2 1-.2s.7.2.9.4c2.9 2.4 6 4.9 9.1 7.2.2.2.4.4.6.7s.2.6.2.9-.1.6-.3.9-.4.5-.6.6c-14.7 8.6-30 15.9-45.9 21.8-.2.1-.5.2-.7.4s-.3.4-.4.7-.1.5-.1.8.1.5.2.8c8.8 17 18.8 33.3 30 48.8.2.3.6.6.9.7s.8.1 1.1 0c52.9-16.2 102.6-41.3 147.1-74.2.2-.2.4-.4.5-.6s.2-.5.2-.8c12.3-126.8-20.5-236.9-86.9-334.5zm-302 267.7c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.4 59.2-52.8 59.2m195.4 0c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.2 59.2-52.8 59.2"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://stackoverflow.com/users/1755598/codewizard" target="_blank" rel="noopener" title="Follow me on Stack Overflow"
+        class="md-social__link social-class__stackoverflow">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M291 311 95.3 269.7 87.1 309l195.7 41zm51-87L188.5 95.7 163 126.5l153.5 128.3zm-31.2 39.7L129.5 179l-16.7 36.5L294 300zM262.3 32l-32 24 119.3 160.3 32-24zm20.5 328h-200v39.7h200zm39.7 80H43V320H3v160h359.5V320h-40z"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://wa.me/972548122310" target="_blank" rel="noopener" title="Follow me on WhatsApp"
+        class="md-social__link social-class__whatsapp">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157m-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1s56.2 81.2 56.1 130.5c0 101.8-84.9 184.6-186.6 184.6m101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8s-14.3 18-17.6 21.8c-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7s-12.5-30.1-17.1-41.2c-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2s-9.7 1.4-14.8 6.9c-5.1 5.6-19.4 19-19.4 46.3s19.9 53.7 22.6 57.4c2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4s4.6-24.1 3.2-26.4c-1.3-2.5-5-3.9-10.5-6.6"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="mailto:nirg@codewizard.co.il" target="_blank" rel="noopener" title="Email me"
+        class="md-social__link social-class__email">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4l208 156a48 48 0 0 0 57.6 0l208-156c12.1-9.1 19.2-23.3 19.2-38.4 0-26.5-21.5-48-48-48zM0 196v188c0 35.3 28.7 64 64 64h384c35.3 0 64-28.7 64-64V196L313.6 344.8c-34.1 25.6-81.1 25.6-115.2 0z"/></svg>
+    </a>
+    
+</div>
+      
+    </div>
+  </div>
+</footer>
+
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["announce.dismiss", "content.action.edit", "content.action.view", "content.code.annotate", "content.code.copy", "content.code.select", "content.footnote.tooltips", "content.tabs.link", "content.tooltips", "content.footer.last-updated", "content.footer.contributors", "navigation.expand", "navigation.footer", "navigation.indexes", "navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.sections", "navigation.tracking", "search.highlight", "search.share", "search.suggest", "toc.follow", "toc.integrate", "toc.sticky", "mermaid"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://buttons.github.io/buttons.js?v=1766553928"></script>
+      
+    
+  </body>
+</html>

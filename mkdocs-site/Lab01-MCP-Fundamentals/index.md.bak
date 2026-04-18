@@ -1,0 +1,882 @@
+# Lab 1 - MCP Fundamentals
+
+## Overview
+
+* `MCP` is a game-changer for AI application development .
+* In this lab, you'll learn about the Model Context Protocol (`MCP`), the communication standard that enables AI assistants to interact with external tools and services. 
+* You'll explore MCP concepts, test simple tools, and understand the protocol structure.
+* This lab uses the MCP server included in the K-Agent labs environment.
+
+---
+
+## Learning Objectives
+
+By the end of this lab, you will:
+
+- Understand what `MCP` is and why it was created
+- Learn the core architecture and components of `MCP`
+- Identify the key capabilities `MCP` provides
+- Understand the client-server model in `MCP`
+- Recognize common use cases for `MCP`
+- Learn MCP server and client communication
+- Testing MCP tools with stdio transport
+
+---
+
+## What is MCP?
+
+The **`Model Context Protocol (MCP)`** is an open protocol that standardizes how applications provide context to Large Language Models (LLMs). Think of it as a universal adapter that allows AI applications to connect to various data sources, tools, and services in a consistent way.
+
+---
+
+### The Problem MCP Solves
+
+Before `MCP`, every AI application had to build custom integrations for each data source or tool it wanted to use. This led to:
+
+- **Fragmentation**: Each app using different methods to connect to the same services
+- **Duplication**: Developers rebuilding the same integrations repeatedly
+- **Limited scalability**: Adding new integrations was time-consuming and error-prone
+- **Inconsistent experiences**: No standard way for LLMs to interact with external systems
+
+---
+
+### The MCP Solution
+
+`MCP` provides a **standardized protocol** that:
+
+- Enables **universal connectivity** between LLMs and data sources
+- Allows **one integration to work across all MCP-compatible applications**
+- Provides a **consistent interface** for accessing tools, resources, and prompts
+- Supports **secure, controlled access** to external systems
+
+---
+
+## MCP Architecture
+
+
+
+## Architecture Overview
+
+`MCP` follows a **client-server architecture** with clear separation of concerns:
+
+```mermaid
+graph TD
+    A[MCP Client] --> B[Ollama Module]
+    A --> C[IDEs & Apps]
+    A --> D[AI Tools]
+    B --> E[MCP Protocol]
+    C --> E
+    D --> E
+    E --> F[MCP Server]
+    F --> G[Exposes: Tools, Resources & Prompts]
+    F --> H[Connects to: APIs, Databases, Files, etc.]
+```
+
+
+---
+
+
+### Key Components
+
+#### 1. **MCP Client**
+- The application that hosts the LLM (e.g., Roo Code, VS Code, Visual Studio, etc.)
+- Discovers and connects to `MCP`servers
+- Sends requests to servers on behalf of the LLM
+- Presents server capabilities to the user/LLM
+
+#### 2. **MCP Server**
+- Exposes specific capabilities to clients
+- Implements the `MCP` protocol
+- Manages connections to underlying data sources or services
+- Handles requests from clients and returns structured responses
+
+#### 3. **MCP Protocol**
+- Based on **JSON-RPC 2.0** for communication
+- Defines standard message formats and types
+- Supports **bidirectional communication**
+- Provides **capability negotiation** during connection
+
+---
+
+## Core MCP Capabilities
+
+`MCP` servers can expose three main types of capabilities:
+
+### 1. **Tools**
+Functions that the LLM can call to perform actions or retrieve information.
+
+**Examples:**
+
+- Search a database
+- Make an API call
+- Perform calculations
+- Execute system commands
+
+**Characteristics:**
+
+- Defined with JSON Schema for input validation
+- Return structured results
+- Can have side effects (create, update, delete operations)
+
+### 2. **Resources**
+Contextual data that can be read by the LLM.
+
+**Examples:**
+
+- File contents
+- Database records
+- API responses
+- Documentation
+
+**Characteristics:**
+
+- Identified by URI (Uniform Resource Identifier)
+- Can be text, binary, or structured data
+- Typically read-only
+- Support for templates and subscriptions
+
+### 3. **Prompts**
+Pre-built prompt templates that users can invoke.
+
+**Examples:**
+
+- Code review templates
+- Documentation generation prompts
+- Analysis frameworks
+- Interaction patterns
+
+**Characteristics:**
+
+- Can include embedded resources
+- Support arguments for customization
+- Help standardize common tasks
+- Improve consistency and quality
+
+
+---
+
+## The MCP Lifecycle
+
+
+Understanding how `MCP` clients and servers interact:
+
+### 1. **Initialization**
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Server
+    
+    Client->>Server: initialize request
+    Note over Server: Process request
+    Server->>Client: initialize response<br/>(server capabilities)
+    Client->>Server: initialized notification
+    Note over Client,Server: Connection established
+```
+
+### 2. **Capability Discovery**
+- Client requests list of available tools, resources, or prompts
+- Server responds with detailed descriptions
+- Client presents these to the user/LLM
+
+### 3. **Execution**
+- Client sends requests to invoke tools, read resources, or render prompts
+- Server processes the request
+- Server returns results in standardized format
+
+### 4. **Cleanup**
+- Either party can close the connection
+- Graceful shutdown with notifications
+
+---
+
+## MCP Communication Model
+
+`MCP` uses **three types of messages**:
+
+### 1. **Requests**
+- Require a response
+- Include a unique request ID
+- Examples: `tools/list`, `resources/read`, `tools/call`
+
+### 2. **Responses**
+- Match to requests by ID
+- Contain either results or errors
+- Must be sent for every request
+
+### 3. **Notifications**
+- One-way messages
+- Don't require responses
+- Examples: `notifications/initialized`, `notifications/cancelled`
+
+---
+
+
+## Transport Layers
+
+`MCP` supports multiple transport mechanisms:
+
+### - Standard Input/Output (stdio)
+- Most common for local integrations
+- Server runs as a subprocess
+- Communication via stdin/stdout
+- Simple and reliable
+
+### - Server-Sent Events (SSE)
+- HTTP-based communication
+- Supports remote servers
+- Client initiates connection
+- Server can push updates
+
+### - Custom Transports
+- Extensible architecture
+- Can implement custom protocols
+- Useful for specialized environments
+
+---
+
+## Security Considerations
+
+
+When working with `MCP`, keep these best practices in mind:
+
+1. **Authentication & Authorization**
+   
+      - Servers should validate requests
+      - Use appropriate credentials management
+      - Implement least-privilege access
+
+2. **Data Privacy**
+   
+      - Be mindful of what data is exposed
+      - Implement proper access controls
+      - Consider encryption for sensitive data
+
+3. **Rate Limiting**
+   
+      - Protect against abuse
+      - Implement appropriate throttling
+      - Monitor usage patterns
+
+4. **Input Validation**
+   
+      - Always validate tool inputs
+      - Sanitize user-provided data
+      - Prevent injection attacks
+
+
+
+---
+
+## Common Use Cases
+
+`MCP` is ideal for:
+
+### Enterprise Integration
+- Connect LLMs to internal databases
+- Access corporate knowledge bases
+- Integrate with business tools (CRM, ERP, etc.)
+
+### Developer Tools
+- File system access
+- Git operations
+- Database queries
+- API testing and documentation
+
+### Data Analysis
+- Query and visualize data
+- Generate reports
+- Perform statistical analysis
+- Access multiple data sources
+
+### Productivity
+- Calendar and email management
+- Task and project tracking
+- Document processing
+- Automated workflows
+
+---
+
+## MCP vs. Other Approaches
+
+| Approach | Pros | Cons |
+|----------|------|------|
+| **Function Calling** | Simple, direct | Requires custom implementation per app |
+| **API Integration** | Flexible | No standard, duplicated effort |
+| **MCP** | Universal standard, reusable, scalable | Requires initial setup |
+
+---
+
+## Hands-On Exercise
+
+### Explore an MCP Server Configuration
+
+Look at how an `MCP` server is configured in a client application (like Roo Code):
+
+```json
+{
+  "mcpServers": {
+    "example-server": {
+      "command": "node",
+      "args": ["/path/to/server/index.js"],
+      "env": {
+        "API_KEY": "your-api-key"
+      }
+    }
+  }
+}
+```
+
+**Understanding the Configuration:**
+- `command`: The executable to run
+- `args`: Arguments passed to the executable
+- `env`: Environment variables for the server
+
+---
+
+## Deep Dive: MCP Base Components (Python Focus)
+
+Now let's examine the essential building blocks of MCP and how they're implemented in Python. We'll focus on the Python implementation since it's often clearer and more accessible than TypeScript.
+
+### 1. **MCP Server Framework (FastMCP)**
+
+The foundation of any MCP server is the server framework. In Python, we use `FastMCP`:
+
+```python
+from mcp.server.fastmcp import FastMCP
+
+# Create the MCP server instance
+mcp = FastMCP("my-mcp-server", port=8889)
+```
+
+**What it does:**
+
+- Provides the HTTP server infrastructure
+- Handles JSON-RPC communication
+- Manages tool, resource, and prompt registration
+- Implements the MCP protocol handshake
+
+**What's inside:**
+
+- HTTP request handlers for all MCP endpoints
+- Tool execution engine
+- Resource serving system
+- Prompt template management
+
+### 2. **Tool Registration Decorator**
+
+Tools are the core functionality exposed by MCP servers:
+
+```python
+@mcp.tool()
+def hello(name: str) -> str:
+    """Returns a friendly greeting message"""
+    return f"Hello, {name}! Welcome to K-Agent Labs."
+```
+
+**What it produces:**
+
+- A callable function registered with the MCP server
+- JSON Schema for input validation
+- Metadata for client discovery
+
+**What's inside:**
+
+- Function signature inspection
+- Automatic parameter validation
+- Execution tracking and logging
+
+### 3. **Resource Handlers**
+
+Resources provide read-only data access:
+
+```python
+@mcp.resource("mcp://server-info")
+def get_server_info() -> str:
+    """Returns information about this MCP server"""
+    return """K-Agent MCP Server
+    
+Version: 0.1.0
+Capabilities:
+- Tools: hello, add
+- Prompts: code_review_prompt, debug_prompt
+- Resources: code, server-info
+"""
+```
+
+**What it produces:**
+
+- A resource accessible via a URI
+- Content generation logic
+- MIME type specification
+- URI-addressable data endpoints
+- Structured metadata for discovery
+- MIME type information
+
+### 4. **Prompt Templates**
+
+Reusable prompt templates for consistent interactions:
+
+```python
+@mcp.prompt()
+def code_review_prompt(code: str, language: str = "python") -> str:
+    """Generate a code review prompt for the given code"""
+    # Create the prompt template with proper markdown formatting
+    template = f"""Please review this {language} code and provide feedback:
+
+``` + language + f"""
+""" + code + f"""
+
+Focus on:
+- Code quality and best practices
+- Potential bugs or issues
+- Performance improvements
+- Security concerns
+"""
+    return template
+```
+
+**What it produces:**
+
+- A prompt template registered with the MCP server
+- Argument definitions for dynamic rendering
+- Metadata for client discovery
+- Parameterized prompt templates
+- Standardized interaction patterns
+- Consistent output formatting
+
+**Example output when called:**
+```
+Please review this python code and provide feedback:
+
+&#96;&#96;&#96;python
+def hello(): pass
+&#96;&#96;&#96;
+
+Focus on:
+- Code quality and best practices
+- Potential bugs or issues
+- Performance improvements
+- Security concerns
+```
+
+
+### 5. **Transport Layer (HTTP Routes)**
+
+Custom routes handle the MCP protocol communication:
+
+```python
+@mcp.custom_route("/.well-known/mcp", methods=["GET", "OPTIONS"])
+async def mcp_manifest(request: Request) -> JSONResponse:
+    manifest = {
+        "name": "kagent-mcp-server",
+        "version": "0.1.0",
+        "capabilities": {
+            "tools": True,
+            "prompts": True,
+            "resources": True,
+            "sampling": True
+        }
+    }
+    return JSONResponse(manifest)
+```
+
+**What it does:**
+
+- Implements MCP protocol endpoints
+- Handles client-server negotiation
+- Provides capability discovery
+
+---
+
+## MCP Method Flow with Echo Commands
+
+Let's trace through the Python methods called during a typical MCP interaction, with echo commands to show what's happening:
+
+```python
+# 1. Server Initialization
+def main():
+    print("🔧 Initializing MCP server...")
+    mcp = FastMCP("kagent-mcp-server", port=8889)
+    print("✅ Server instance created with port 8889")
+    
+    # Register tools
+    print("🛠️  Registering tools...")
+    @mcp.tool()
+    def hello(name: str) -> str:
+        print(f"👋 Executing hello tool for {name}")
+        return f"Hello, {name}!"
+    print("✅ Tool 'hello' registered")
+    
+    # Start the server
+    print("🚀 Starting MCP server...")
+    mcp.run(transport="streamable-http", mount_path="/mcp")
+    print("✅ Server running on http://localhost:8889")
+
+# 2. Client Connection Process
+async def connect_to_server():
+    print("🔗 Connecting to MCP server...")
+    
+    # Get manifest
+    print("📋 Fetching server manifest...")
+    manifest = await client.get(f"{base_url}/.well-known/mcp")
+    print(f"✅ Got manifest: {manifest['name']} v{manifest['version']}")
+    
+    # Negotiate connection
+    print("🤝 Negotiating connection...")
+    negotiate_response = await client.get(f"{base_url}/negotiate")
+    print(f"✅ Negotiation complete: {negotiate_response['transport']}")
+    
+    # List tools
+    print("📋 Listing available tools...")
+    tools = await client.post(f"{base_url}/tools")
+    print(f"✅ Found {len(tools['tools'])} tools")
+    
+    return True
+
+# 3. Tool Execution Flow
+async def execute_tool_flow():
+    print("🎯 Executing tool 'hello'...")
+    
+    # Validate arguments
+    print("🔍 Validating tool arguments...")
+    # (validation logic here)
+    print("✅ Arguments valid")
+    
+    # Execute tool
+    print("⚡ Calling tool function...")
+    result = await execute_tool("hello", {"name": "Alice"})
+    print(f"✅ Tool executed successfully: {result['result']}")
+    
+    # Track execution
+    print("📊 Recording execution metrics...")
+    # (tracking logic here)
+    print("✅ Execution tracked")
+    
+    return result
+
+# 4. Resource Access Flow
+async def access_resource_flow():
+    print("📖 Accessing resource...")
+    
+    # Resolve resource URI
+    print("🔗 Resolving resource URI...")
+    # (URI resolution logic)
+    print("✅ Resource resolved")
+    
+    # Fetch resource content
+    print("📥 Fetching resource content...")
+    content = await get_resource_content("mcp://server-info")
+    print(f"✅ Resource content retrieved ({len(content)} chars)")
+    
+    return content
+
+# 5. Prompt Usage Flow
+async def use_prompt_flow():
+    print("📝 Using prompt template...")
+    
+    # Get prompt template
+    print("🔍 Finding prompt template...")
+    template = await get_prompt_template("code_review_prompt", 
+                                       code="def test(): pass")
+    print(f"✅ Template retrieved ({len(template)} chars)")
+    
+    # Render with arguments
+    print("🎨 Rendering prompt with arguments...")
+    final_prompt = template  # Already rendered
+    print("✅ Prompt rendered")
+    
+    # Send to LLM
+    print("🤖 Sending to LLM for processing...")
+    response = await sample_llm(final_prompt)
+    print(f"✅ LLM response received ({len(response)} chars)")
+    
+    return response
+```
+
+**Method Call Order:**
+
+1. `FastMCP.__init__()` - Server initialization
+2. `@mcp.tool()` decorator - Tool registration
+3. `mcp.run()` - Start HTTP server
+4. `/.well-known/mcp` GET - Client discovery
+5. `/negotiate` GET - Connection negotiation
+6. `/tools` POST - Tool discovery
+7. `/tools/execute` POST - Tool execution
+8. `/resources` GET - Resource discovery
+9. `/sampling` POST - LLM interaction
+
+---
+
+## What Realizes MCP
+
+### What Makes MCP Work
+
+MCP is realized through several key mechanisms:
+
+#### 1. **Protocol Standardization**
+- **JSON-RPC 2.0** as the communication protocol
+- **HTTP transport** for reliable message delivery
+- **Capability negotiation** during connection establishment
+- **Structured error handling** and response formatting
+
+#### 2. **Component Integration**
+- **Server frameworks** (FastMCP, MCP SDK) that implement the protocol
+- **Client libraries** that know how to communicate with servers
+- **Tool execution engines** that safely run server-provided functions
+- **Resource resolution systems** that handle URI-based data access
+
+#### 3. **Security Boundaries**
+- **Process isolation** between client and server
+- **Input validation** using JSON Schema
+- **Access control** through authentication tokens
+- **Rate limiting** and abuse prevention
+
+### What's Still Missing
+
+While MCP provides a solid foundation, some aspects are still evolving:
+
+#### 1. **Advanced Authentication**
+- OAuth 2.0 integration patterns
+- Role-based access control (RBAC)
+- Token refresh mechanisms
+
+#### 2. **Streaming and Real-time Updates**
+- Server-sent events for live data
+- WebSocket support for bidirectional streaming
+- Real-time resource subscriptions
+
+#### 3. **Performance Optimization**
+- Connection pooling
+- Caching strategies
+- Batch operation optimizations
+
+#### 4. **Enterprise Features**
+- Audit logging and compliance
+- Multi-tenant isolation
+- Service mesh integration
+
+### Extra Value MCP Provides
+
+Beyond basic integration, MCP adds significant value:
+
+#### 1. **Developer Experience**
+- **Consistent APIs** across different tools and services
+- **Auto-discovery** of capabilities
+- **Type safety** through schema validation
+- **Rich tooling** (debuggers, inspectors, documentation)
+
+#### 2. **Operational Benefits**
+- **Centralized management** of AI integrations
+- **Version compatibility** checking
+- **Health monitoring** and metrics
+- **Graceful degradation** when services are unavailable
+
+#### 3. **Security Advantages**
+- **Controlled access** to external systems
+- **Audit trails** of AI actions
+- **Input sanitization** and validation
+- **Isolation** between different integrations
+
+#### 4. **Scalability Features**
+- **Horizontal scaling** of MCP servers
+- **Load balancing** across multiple instances
+- **Caching layers** for performance
+- **Circuit breakers** for resilience
+
+---
+
+## Core Primitive Operations
+
+Let's examine the fundamental MCP operations that make everything work:
+
+### 1. **wellknown/mcp** - Server Discovery
+
+**Location:** `/.well-known/mcp` endpoint  
+**When it happens:** During initial client connection  
+**How it works:**
+```python
+@mcp.custom_route("/.well-known/mcp", methods=["GET"])
+async def mcp_manifest(request: Request) -> JSONResponse:
+    manifest = {
+        "name": "kagent-mcp-server",
+        "version": "0.1.0",
+        "capabilities": {
+            "tools": True,
+            "prompts": True,
+            "resources": True,
+            "sampling": True
+        },
+        "endpoints": {
+            "negotiate": "/negotiate",
+            "tools": "/tools",
+            "resources": "/resources",
+            "sampling": "/sampling"
+        }
+    }
+    return JSONResponse(manifest)
+```
+
+**Outcome:** Client learns server capabilities and available endpoints
+
+### 2. **negotiate** - Connection Establishment
+
+**Location:** `/negotiate` endpoint  
+**When it happens:** After manifest discovery, before using server  
+**How it works:**
+```python
+@mcp.custom_route("/negotiate", methods=["GET", "POST"])
+async def negotiate(request: Request) -> JSONResponse:
+    token = request.headers.get("x-proxy-token")
+    response = {
+        "transport": "streamable-http",
+        "url": f"{request.url.scheme}://{request.host}/mcp"
+    }
+    if token:
+        response["proxy_token"] = token
+    return JSONResponse(response)
+```
+
+**Outcome:** Establishes authenticated connection parameters
+
+### 3. **tool/call** - Tool Execution
+
+**Location:** `/tools/execute` endpoint  
+**When it happens:** When client wants to execute a tool function  
+**How it works:**
+```python
+@mcp.custom_route("/tools/execute", methods=["POST"])
+async def tool_execute(request: Request) -> JSONResponse:
+    body = await request.json()
+    tool_name = body.get("tool")
+    arguments = body.get("arguments", {})
+    
+    # Validate and execute
+    result = await execute_tool(tool_name, arguments)
+    return JSONResponse(result)
+```
+
+**Outcome:** Executes server-side function and returns structured result
+
+### 4. **resource/read** - Resource Access
+
+**Location:** `/resources` endpoint (for listing) or direct URI resolution  
+**When it happens:** When client needs to access data resources  
+**How it works:**
+```python
+@mcp.resource("mcp://server-info")
+def get_server_info() -> str:
+    return "Server information content"
+
+# Or via endpoint:
+@mcp.custom_route("/resources", methods=["GET"])
+async def resources_list(request: Request) -> JSONResponse:
+    resources = [
+        {
+            "uri": "mcp://server-info",
+            "name": "Server Information",
+            "mimeType": "text/plain"
+        }
+    ]
+    return JSONResponse({"resources": resources})
+```
+
+**Outcome:** Provides access to structured data through URI-based addressing
+
+### 5. **sampling** - LLM Integration
+
+**Location:** `/sampling` endpoint  
+**When it happens:** When client needs LLM processing  
+**How it works:**
+```python
+@mcp.custom_route("/sampling", methods=["POST"])
+async def sampling(request: Request) -> JSONResponse:
+    body = await request.json()
+    prompt = body.get("prompt")
+    
+    # Call LLM API
+    response = await call_llm_api(prompt)
+    return JSONResponse({
+        "completion": response,
+        "model": "llama3.2:latest"
+    })
+```
+
+**Outcome:** Enables AI processing through standardized interface
+
+---
+
+## Building Your Own MCP Components
+
+### Step-by-Step: Creating a Basic Tool
+
+```python
+from mcp.server.fastmcp import FastMCP
+
+mcp = FastMCP("my-basic-server")
+
+@mcp.tool()
+def calculate_area(length: float, width: float) -> str:
+    """Calculate the area of a rectangle"""
+    area = length * width
+    return f"The area of a rectangle with length {length} and width {width} is {area}"
+
+@mcp.resource("mcp://math-constants")
+def get_math_constants() -> str:
+    """Returns common mathematical constants"""
+    return """
+Pi: 3.14159
+E: 2.71828
+Golden Ratio: 1.61803
+"""
+
+if __name__ == "__main__":
+    mcp.run()
+```
+
+**What this produces:**
+- A tool that can be called by MCP clients
+- A resource that can be read by clients
+- A complete MCP server ready to run
+
+**What's inside each component:**
+- **Tool:** Function + JSON schema + metadata
+- **Resource:** URI + content generator + MIME type
+- **Server:** HTTP handlers + protocol implementation + capability management
+
+---
+
+## Key Takeaways
+
+✅ MCP consists of **server frameworks**, **tool decorators**, **resource handlers**, and **transport layers**
+
+✅ Python methods follow a **clear execution flow**: init → register → run → handle requests
+
+✅ MCP is realized through **protocol standardization**, **component integration**, and **security boundaries**
+
+✅ Core primitives handle **discovery** (`wellknown/mcp`), **connection** (`negotiate`), **execution** (`tool/call`), and **data access** (`resource/read`)
+
+✅ Each step produces **structured outputs** with **clear interfaces** and **validation**
+
+✅ **Extra value** comes from **consistency**, **security**, **scalability**, and **developer experience**
+
+## Next Steps
+
+In **Lab 2**, you'll get hands-on experience by building your first MCP server from scratch. You'll learn:
+
+- Setting up the development environment
+- Creating a basic MCP server structure
+- Implementing the initialization handshake
+- Testing your server with an MCP client
+
+## Additional Resources
+
+- [MCP Official Documentation](https://modelcontextprotocol.io)
+- [MCP Specification](https://spec.modelcontextprotocol.io)
+- [MCP GitHub Repository](https://github.com/modelcontextprotocol)
+- [JSON-RPC 2.0 Specification](https://www.jsonrpc.org/specification)
+- [FastMCP Python Library](https://github.com/jlowin/fastmcp)
+
+---
+
+**Ready to build your first MCP server? [Continue to Lab 2!](../Lab02-First-MCP-Server/index.md)**

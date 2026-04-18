@@ -1,0 +1,3017 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Hands-on labs for the K-Agent framework - Kubernetes-native MCP server">
+      
+      
+        <meta name="author" content="CodeWizard-IL">
+      
+      
+        <link rel="canonical" href="https://nirgeier.github.io/AI-K8S-MCP/Lab08-Kagent/lab6-tasks/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>MCP Lab Tasks - Lab 6: K-Agent - K-Agent Labs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%202a7%207%200%200%200-7%207c0%202.38%201.19%204.47%203%205.74V17a1%201%200%200%200%201%201h6a1%201%200%200%200%201-1v-2.26c1.81-1.27%203-3.36%203-5.74a7%207%200%200%200-7-7M9%2021a1%201%200%200%200%201%201h4a1%201%200%200%200%201-1v-1H9z%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Mulish";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/codewizard.css?v=1766553928">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#mcp-lab-tasks-lab-6-k-agent" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      <!--
+  Copyright (c) 2016-2025 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- Determine classes -->
+
+
+
+
+
+<!-- Header -->
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+
+    <!-- Link to home -->
+    <a href="../.." title="K-Agent Labs"
+      class="md-header__button md-logo" aria-label="K-Agent Labs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89 89">
+  <path d="M3.136,17.387l0,42.932l42.932,21.467l-42.932,-64.399Z" />
+  <path d="M21.91,8l42.933,64.398l-18.775,9.388l-42.932,-64.399l18.774,-9.387Z" style="fill-opacity: 0.5" />
+  <path d="M67.535,17.387l-27.262,18.156l21.878,32.818l5.384,2.691l0,-53.665Z" />
+  <path d="M67.535,17.387l0,53.666l18.774,-9.388l0,-53.665l-18.774,9.387Z" style="fill-opacity: 0.25" />
+</svg>
+
+    </a>
+
+    <!-- Button to open drawer -->
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+
+    <!-- Header title -->
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            K-Agent Labs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+            MCP Lab Tasks - Lab 6: K-Agent
+            
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="m-social__top">
+      <!-- Social links -->
+      
+      
+<div class="md-social">
+    
+    
+    
+    
+    
+    <a href="https://github.com/nirgeier/AI-K8S-MCP" target="_blank" rel="noopener" title="View on GitHub"
+        class="md-social__link social-class__github">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://github.com/nirgeier/AI-K8S-MCP/network/members" target="_blank" rel="noopener" title="Fork this repo"
+        class="md-social__link social-class__fork">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0M5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0m6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5m-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://github.com/nirgeier/AI-K8S-MCP/stargazers" target="_blank" rel="noopener" title="Star this repo"
+        class="md-social__link social-class__star">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25m0 2.445L6.615 5.5a.75.75 0 0 1-.564.41l-3.097.45 2.24 2.184a.75.75 0 0 1 .216.664l-.528 3.084 2.769-1.456a.75.75 0 0 1 .698 0l2.77 1.456-.53-3.084a.75.75 0 0 1 .216-.664l2.24-2.183-3.096-.45a.75.75 0 0 1-.564-.41z"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://www.linkedin.com/in/nirgeier/" target="_blank" rel="noopener" title="Connect on LinkedIn"
+        class="md-social__link social-class__linkedin">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://discord.gg/U6xW23Ss" target="_blank" rel="noopener" title="Follow me on Discord"
+        class="md-social__link social-class__discord">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M492.5 69.8c-.2-.3-.4-.6-.8-.7-38.1-17.5-78.4-30-119.7-37.1-.4-.1-.8 0-1.1.1s-.6.4-.8.8c-5.5 9.9-10.5 20.2-14.9 30.6-44.6-6.8-89.9-6.8-134.4 0-4.5-10.5-9.5-20.7-15.1-30.6-.2-.3-.5-.6-.8-.8s-.7-.2-1.1-.2C162.5 39 122.2 51.5 84.1 69c-.3.1-.6.4-.8.7C7.1 183.5-13.8 294.6-3.6 404.2c0 .3.1.5.2.8s.3.4.5.6c44.4 32.9 94 58 146.8 74.2.4.1.8.1 1.1 0s.7-.4.9-.7c11.3-15.4 21.4-31.8 30-48.8.1-.2.2-.5.2-.8s0-.5-.1-.8-.2-.5-.4-.6-.4-.3-.7-.4c-15.8-6.1-31.2-13.4-45.9-21.9-.3-.2-.5-.4-.7-.6s-.3-.6-.3-.9 0-.6.2-.9.3-.5.6-.7c3.1-2.3 6.2-4.7 9.1-7.1.3-.2.6-.4.9-.4s.7 0 1 .1c96.2 43.9 200.4 43.9 295.5 0 .3-.1.7-.2 1-.2s.7.2.9.4c2.9 2.4 6 4.9 9.1 7.2.2.2.4.4.6.7s.2.6.2.9-.1.6-.3.9-.4.5-.6.6c-14.7 8.6-30 15.9-45.9 21.8-.2.1-.5.2-.7.4s-.3.4-.4.7-.1.5-.1.8.1.5.2.8c8.8 17 18.8 33.3 30 48.8.2.3.6.6.9.7s.8.1 1.1 0c52.9-16.2 102.6-41.3 147.1-74.2.2-.2.4-.4.5-.6s.2-.5.2-.8c12.3-126.8-20.5-236.9-86.9-334.5zm-302 267.7c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.4 59.2-52.8 59.2m195.4 0c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.2 59.2-52.8 59.2"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://stackoverflow.com/users/1755598/codewizard" target="_blank" rel="noopener" title="Follow me on Stack Overflow"
+        class="md-social__link social-class__stackoverflow">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M291 311 95.3 269.7 87.1 309l195.7 41zm51-87L188.5 95.7 163 126.5l153.5 128.3zm-31.2 39.7L129.5 179l-16.7 36.5L294 300zM262.3 32l-32 24 119.3 160.3 32-24zm20.5 328h-200v39.7h200zm39.7 80H43V320H3v160h359.5V320h-40z"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://wa.me/972548122310" target="_blank" rel="noopener" title="Follow me on WhatsApp"
+        class="md-social__link social-class__whatsapp">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157m-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1s56.2 81.2 56.1 130.5c0 101.8-84.9 184.6-186.6 184.6m101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8s-14.3 18-17.6 21.8c-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7s-12.5-30.1-17.1-41.2c-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2s-9.7 1.4-14.8 6.9c-5.1 5.6-19.4 19-19.4 46.3s19.9 53.7 22.6 57.4c2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4s4.6-24.1 3.2-26.4c-1.3-2.5-5-3.9-10.5-6.6"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="mailto:nirg@codewizard.co.il" target="_blank" rel="noopener" title="Email me"
+        class="md-social__link social-class__email">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4l208 156a48 48 0 0 0 57.6 0l208-156c12.1-9.1 19.2-23.3 19.2-38.4 0-26.5-21.5-48-48-48zM0 196v188c0 35.3 28.7 64 64 64h384c35.3 0 64-28.7 64-64V196L313.6 344.8c-34.1 25.6-81.1 25.6-115.2 0z"/></svg>
+    </a>
+    
+</div>
+      
+    </div>
+
+    <!-- Color palette toggle -->
+    
+    
+    <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+    
+    
+
+    <!-- User preference: color palette -->
+    
+    <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+
+    <!-- Site language selector -->
+    
+
+    <!-- Button to open search modal -->
+    
+    
+
+    <!-- Check if search is actually enabled - see https://t.ly/DT_0V -->
+    
+    <label class="md-header__button md-icon" for="__search">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+    </label>
+
+    <!-- Search interface -->
+    <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+
+    <!-- Repository information -->
+    
+    <div class="md-header__source">
+      <a href="https://github.com/nirgeier/AI-K8S-MCP.git" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nirgeier/AI-K8S-MCP
+  </div>
+</a>
+    </div>
+    
+  </nav>
+
+  <!-- Navigation tabs (sticky) -->
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="K-Agent Labs" class="md-nav__button md-logo" aria-label="K-Agent Labs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89 89">
+  <path d="M3.136,17.387l0,42.932l42.932,21.467l-42.932,-64.399Z" />
+  <path d="M21.91,8l42.933,64.398l-18.775,9.388l-42.932,-64.399l18.774,-9.387Z" style="fill-opacity: 0.5" />
+  <path d="M67.535,17.387l-27.262,18.156l21.878,32.818l5.384,2.691l0,-53.665Z" />
+  <path d="M67.535,17.387l0,53.666l18.774,-9.388l0,-53.665l-18.774,9.387Z" style="fill-opacity: 0.25" />
+</svg>
+
+    </a>
+    K-Agent Labs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/nirgeier/AI-K8S-MCP.git" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nirgeier/AI-K8S-MCP
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../welcome/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Welcome
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../labs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Labs Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../.." class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Labs
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Labs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab00-Setup/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 00: Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab01-MCP-Fundamentals/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 01: MCP Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab02-First-MCP-Server/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 02: First MCP Server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab03-MCP-Tools/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 03: MCP Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab04-MCP-Resources/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 04: MCP Resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab05-MCP-Prompts/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 05: MCP Prompts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab06-MCP-Workflow/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 06: MCP Workflow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab07-MCP-Ollama/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07: MCP Ollama
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 08: Kagent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab09-Event-Monitor/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09: K8S Event Monitor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../Tasks/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tasks
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tasks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tasks/000-Setup-RooCode/README.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup with RooCode
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tasks/001-MCP-Basics/README.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP Basics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tasks/002-MCP-FastMCP/README.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP FastMCP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Resources
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Resources
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step01-install-kagent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 01: Install Kagent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step02-create-mcp-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 02: Create MCP Server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step03-kmcp-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 03: Build with KMCP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step04-verify-registration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 04: Verify Registration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step05-create-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 05: Create Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step06-install-ingress/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 06: Install Ingress
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step07-deploy-prometheus-grafana/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 07: Prometheus & Grafana
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step08-expose-ingress/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 08: Expose Services
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/resources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 : K8S Resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step00-getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 00: Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step01-imports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 01: Imports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step02-skeleton-code/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 02: Skeleton Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step03-constructor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 03: Constructor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step04-list-tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 04: Register Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step05-call-tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 05: Tool Handlers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step06-list-resources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 06: Register Resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step07-read-resources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 07: Resource Handlers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step08-list_prompts.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 08: Register Prompts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step09-get_prompt/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 09: Prompt Handlers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step10-setup-handlers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 10: Setup Handlers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step11-run-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 11: Run Server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step12-main-entry-point/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 12: Main Entry Point
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../explanations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Explanations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/nirgeier/AI-K8S-MCP.git/edit/master/docs/Lab08-Kagent/lab6-tasks.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/nirgeier/AI-K8S-MCP.git/raw/master/docs/Lab08-Kagent/lab6-tasks.md" title="View source of this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
+    </a>
+  
+
+
+<h1 id="mcp-lab-tasks-lab-6-k-agent">MCP Lab Tasks - Lab 6: K-Agent</h1>
+<p>Welcome to Lab 6! In this lab, you'll build a K-Agent - an MCP server specialized for Kubernetes operations with a focus on log collection from all pods.</p>
+<p>The exercises build progressively, starting with basic Kubernetes client setup and culminating in a complete log collection system.</p>
+<hr />
+<h3 id="exercise-61-k-agent-project-setup">Exercise 6.1: K-Agent Project Setup</h3>
+<p>Create a new MCP server project with Kubernetes dependencies.</p>
+<p>??? "Solution"
+    ```bash
+    # Create project directory
+    mkdir k-agent-logs
+    cd k-agent-logs</p>
+<pre><code># Initialize Node.js project
+npm init -y
+
+# Install dependencies
+npm install @modelcontextprotocol/sdk @kubernetes/client-node
+npm install -D typescript @types/node tsx
+
+# Create TypeScript configuration
+npx tsc --init --target ES2022 --module NodeNext --moduleResolution NodeNext --esModuleInterop --allowSyntheticDefaultImports --strict --skipLibCheck --forceConsistentCasingInFileNames --outDir ./dist --rootDir ./src
+
+# Create source directory structure
+mkdir -p src
+```
+</code></pre>
+<h3 id="exercise-62-basic-k-agent-server-structure">Exercise 6.2: Basic K-Agent Server Structure</h3>
+<p>Create the basic MCP server structure with Kubernetes client initialization.</p>
+<p>??? "Solution"
+    ```typescript
+    import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+    import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+    import * as k8s from '@kubernetes/client-node';</p>
+<pre><code>class KAgentServer {
+  private server: Server;
+  private k8sConfig: k8s.KubeConfig;
+  private k8sCoreApi: k8s.CoreV1Api;
+
+  constructor() {
+    this.server = new Server(
+      {
+        name: "k-agent-logs",
+        version: "1.0.0",
+      },
+      {
+        capabilities: {
+          tools: {},
+        },
+      }
+    );
+
+    // Initialize Kubernetes client
+    this.k8sConfig = new k8s.KubeConfig();
+    this.k8sCoreApi = this.k8sConfig.makeApiClient(k8s.CoreV1Api);
+
+    this.setupHandlers();
+  }
+
+  private setupHandlers() {
+    // Tools will be added in subsequent exercises
+  }
+
+  async start() {
+    const transport = new StdioServerTransport();
+    await this.server.connect(transport);
+    console.error("K-Agent server started");
+  }
+}
+
+// Start the server
+const server = new KAgentServer();
+server.start().catch(console.error);
+```
+</code></pre>
+<h3 id="exercise-63-kubernetes-authentication">Exercise 6.3: Kubernetes Authentication</h3>
+<p>Implement secure Kubernetes cluster authentication with proper error handling.</p>
+<p>??? "Solution"
+    ```typescript
+    private loadKubeConfig(): void {
+      try {
+        this.k8sConfig.loadFromDefault();</p>
+<pre><code>    // Validate cluster access
+    this.validateClusterAccess();
+  } catch (error) {
+    throw new Error(`Kubernetes configuration error: ${error.message}`);
+  }
+}
+
+private async validateClusterAccess(): Promise&lt;void&gt; {
+  try {
+    // Test API access by listing namespaces
+    await this.k8sCoreApi.listNamespace();
+  } catch (error: any) {
+    if (error.response?.statusCode === 403) {
+      throw new Error('Access denied: Insufficient permissions to access Kubernetes cluster');
+    }
+    throw new Error(`Cluster access validation failed: ${error.message}`);
+  }
+}
+
+constructor() {
+  // ... existing constructor code ...
+
+  // Initialize Kubernetes client
+  this.loadKubeConfig();
+}
+```
+</code></pre>
+<h3 id="exercise-64-pod-listing-tool">Exercise 6.4: Pod Listing Tool</h3>
+<p>Implement a tool to list all pods across namespaces with their status.</p>
+<p>??? "Solution"
+    ```typescript
+    private setupHandlers() {
+      // Tools list handler
+      this.server.setRequestHandler("tools/list", async () =&gt; {
+        return {
+          tools: [
+            {
+              name: "list_pods",
+              description: "List all pods across namespaces with their status",
+              inputSchema: {
+                type: "object",
+                properties: {
+                  namespace: {
+                    type: "string",
+                    description: "Optional: Filter by specific namespace"
+                  }
+                }
+              }
+            }
+          ]
+        };
+      });</p>
+<pre><code>  // Tools call handler
+  this.server.setRequestHandler("tools/call", async (request) =&gt; {
+    const { name, arguments: args } = request.params;
+
+    switch (name) {
+      case "list_pods":
+        return await this.handleListPods(args);
+      default:
+        throw new Error(`Unknown tool: ${name}`);
+    }
+  });
+}
+
+private async handleListPods(args: any) {
+  try {
+    const namespace = args?.namespace;
+    const pods = namespace
+      ? await this.k8sCoreApi.listNamespacedPod(namespace)
+      : await this.k8sCoreApi.listPodForAllNamespaces();
+
+    const podInfo = pods.body.items.map(pod =&gt; ({
+      name: pod.metadata?.name,
+      namespace: pod.metadata?.namespace,
+      status: pod.status?.phase,
+      containers: pod.spec?.containers?.length || 0
+    }));
+
+    return {
+      content: [{
+        type: "text",
+        text: `Found ${podInfo.length} pods:\n${podInfo.map(p =&gt;
+          `- ${p.namespace}/${p.name}: ${p.status} (${p.containers} containers)`
+        ).join('\n')}`
+      }]
+    };
+  } catch (error: any) {
+    throw this.handleK8sError(error);
+  }
+}
+
+private handleK8sError(error: any): Error {
+  if (error.response?.statusCode === 403) {
+    return new Error('Access denied: Insufficient permissions to access Kubernetes resources');
+  }
+
+  if (error.response?.statusCode === 404) {
+    return new Error('Resource not found: The specified namespace may not exist');
+  }
+
+  return new Error(`Kubernetes operation failed: ${error.message}`);
+}
+```
+</code></pre>
+<h3 id="exercise-65-single-pod-log-collection">Exercise 6.5: Single Pod Log Collection</h3>
+<p>Implement log collection from a specific pod.</p>
+<p>??? "Solution"
+    ```typescript
+    // Add to tools list
+    {
+      name: "get_pod_logs",
+      description: "Get logs from a specific pod",
+      inputSchema: {
+        type: "object",
+        properties: {
+          namespace: {
+            type: "string",
+            description: "Namespace of the pod"
+          },
+          podName: {
+            type: "string",
+            description: "Name of the pod"
+          },
+          tailLines: {
+            type: "number",
+            description: "Number of recent log lines to retrieve",
+            default: 100
+          }
+        },
+        required: ["namespace", "podName"]
+      }
+    }</p>
+<pre><code>// Add to tools call handler
+case "get_pod_logs":
+  return await this.handleGetPodLogs(args);
+
+private async handleGetPodLogs(args: any) {
+  const { namespace, podName, tailLines = 100 } = args;
+
+  try {
+    const logResponse = await this.k8sCoreApi.readNamespacedPodLog(
+      podName,
+      namespace,
+      undefined, // container
+      false, // follow
+      undefined, // previous
+      undefined, // sinceSeconds
+      undefined, // sinceTime
+      tailLines, // tailLines
+      undefined, // timestamps
+      undefined // limitBytes
+    );
+
+    return {
+      content: [{
+        type: "text",
+        text: `Logs from pod ${namespace}/${podName}:\n\n${logResponse.body}`
+      }]
+    };
+  } catch (error: any) {
+    throw this.handleK8sError(error);
+  }
+}
+```
+</code></pre>
+<h3 id="exercise-66-multi-pod-log-collection">Exercise 6.6: Multi-Pod Log Collection</h3>
+<p>Extend the system to collect logs from all pods in a namespace.</p>
+<p>??? "Solution"
+    ```typescript
+    // Add to tools list
+    {
+      name: "collect_namespace_logs",
+      description: "Collect logs from all pods in a namespace",
+      inputSchema: {
+        type: "object",
+        properties: {
+          namespace: {
+            type: "string",
+            description: "Namespace to collect logs from"
+          },
+          tailLines: {
+            type: "number",
+            description: "Number of recent log lines per pod",
+            default: 50
+          }
+        },
+        required: ["namespace"]
+      }
+    }</p>
+<pre><code>// Add to tools call handler
+case "collect_namespace_logs":
+  return await this.handleCollectNamespaceLogs(args);
+
+private async handleCollectNamespaceLogs(args: any) {
+  const { namespace, tailLines = 50 } = args;
+
+  try {
+    // Get all pods in namespace
+    const podsResponse = await this.k8sCoreApi.listNamespacedPod(namespace);
+    const pods = podsResponse.body.items.filter(pod =&gt;
+      pod.status?.phase === 'Running' || pod.status?.phase === 'Succeeded'
+    );
+
+    if (pods.length === 0) {
+      return {
+        content: [{
+          type: "text",
+          text: `No running pods found in namespace ${namespace}`
+        }]
+      };
+    }
+
+    const allLogs: string[] = [];
+
+    for (const pod of pods) {
+      const podName = pod.metadata?.name!;
+      try {
+        const logResponse = await this.k8sCoreApi.readNamespacedPodLog(
+          podName,
+          namespace,
+          undefined,
+          false,
+          undefined,
+          undefined,
+          undefined,
+          tailLines
+        );
+
+        allLogs.push(`=== ${podName} ===\n${logResponse.body}\n`);
+      } catch (error: any) {
+        allLogs.push(`=== ${podName} ===\nError retrieving logs: ${error.message}\n`);
+      }
+    }
+
+    return {
+      content: [{
+        type: "text",
+        text: `Logs from ${pods.length} pods in namespace ${namespace}:\n\n${allLogs.join('\n')}`
+      }]
+    };
+  } catch (error: any) {
+    throw this.handleK8sError(error);
+  }
+}
+```
+</code></pre>
+<h3 id="exercise-67-all-namespace-log-collection">Exercise 6.7: All-Namespace Log Collection</h3>
+<p>Implement the core feature: collect logs from all pods across all namespaces.</p>
+<p>??? "Solution"
+    ```typescript
+    // Add to tools list
+    {
+      name: "collect_all_logs",
+      description: "Collect logs from all pods across all namespaces",
+      inputSchema: {
+        type: "object",
+        properties: {
+          tailLines: {
+            type: "number",
+            description: "Number of recent log lines per pod",
+            default: 25
+          },
+          maxPods: {
+            type: "number",
+            description: "Maximum number of pods to collect logs from",
+            default: 50
+          }
+        }
+      }
+    }</p>
+<pre><code>// Add to tools call handler
+case "collect_all_logs":
+  return await this.handleCollectAllLogs(args);
+
+private async handleCollectAllLogs(args: any) {
+  const { tailLines = 25, maxPods = 50 } = args;
+
+  try {
+    // Get all pods across all namespaces
+    const podsResponse = await this.k8sCoreApi.listPodForAllNamespaces();
+    const pods = podsResponse.body.items
+      .filter(pod =&gt;
+        pod.status?.phase === 'Running' || pod.status?.phase === 'Succeeded'
+      )
+      .slice(0, maxPods); // Limit for performance
+
+    if (pods.length === 0) {
+      return {
+        content: [{
+          type: "text",
+          text: "No running pods found in the cluster"
+        }]
+      };
+    }
+
+    const allLogs: string[] = [];
+    let processedCount = 0;
+
+    for (const pod of pods) {
+      const podName = pod.metadata?.name!;
+      const namespace = pod.metadata?.namespace!;
+
+      try {
+        const logResponse = await this.k8sCoreApi.readNamespacedPodLog(
+          podName,
+          namespace,
+          undefined,
+          false,
+          undefined,
+          undefined,
+          undefined,
+          tailLines
+        );
+
+        allLogs.push(`=== ${namespace}/${podName} ===\n${logResponse.body}\n`);
+        processedCount++;
+      } catch (error: any) {
+        allLogs.push(`=== ${namespace}/${podName} ===\nError retrieving logs: ${error.message}\n`);
+      }
+    }
+
+    const summary = `Collected logs from ${processedCount} out of ${pods.length} pods (limited to ${maxPods} max)\n\n`;
+
+    return {
+      content: [{
+        type: "text",
+        text: summary + allLogs.join('\n')
+      }]
+    };
+  } catch (error: any) {
+    throw this.handleK8sError(error);
+  }
+}
+```
+</code></pre>
+<h3 id="exercise-68-log-filtering-and-search">Exercise 6.8: Log Filtering and Search</h3>
+<p>Add filtering capabilities to search through logs.</p>
+<p>??? "Solution"
+    ```typescript
+    // Add to tools list
+    {
+      name: "search_logs",
+      description: "Search for specific patterns in pod logs",
+      inputSchema: {
+        type: "object",
+        properties: {
+          namespace: {
+            type: "string",
+            description: "Namespace to search in (optional)"
+          },
+          pattern: {
+            type: "string",
+            description: "Text pattern to search for"
+          },
+          caseSensitive: {
+            type: "boolean",
+            description: "Whether search should be case sensitive",
+            default: false
+          },
+          tailLines: {
+            type: "number",
+            description: "Number of recent log lines to search through",
+            default: 100
+          }
+        },
+        required: ["pattern"]
+      }
+    }</p>
+<pre><code>// Add to tools call handler
+case "search_logs":
+  return await this.handleSearchLogs(args);
+
+private async handleSearchLogs(args: any) {
+  const { namespace, pattern, caseSensitive = false, tailLines = 100 } = args;
+
+  try {
+    const podsResponse = namespace
+      ? await this.k8sCoreApi.listNamespacedPod(namespace)
+      : await this.k8sCoreApi.listPodForAllNamespaces();
+
+    const runningPods = podsResponse.body.items.filter(pod =&gt;
+      pod.status?.phase === 'Running' || pod.status?.phase === 'Succeeded'
+    );
+
+    const matches: string[] = [];
+    const flags = caseSensitive ? 'g' : 'gi';
+    const regex = new RegExp(pattern, flags);
+
+    for (const pod of runningPods) {
+      const podName = pod.metadata?.name!;
+      const podNamespace = pod.metadata?.namespace!;
+
+      try {
+        const logResponse = await this.k8sCoreApi.readNamespacedPodLog(
+          podName,
+          podNamespace,
+          undefined,
+          false,
+          undefined,
+          undefined,
+          undefined,
+          tailLines
+        );
+
+        const logs = logResponse.body;
+        const lines = logs.split('\n');
+
+        const matchingLines = lines
+          .map((line, index) =&gt; ({ line, index }))
+          .filter(({ line }) =&gt; regex.test(line))
+          .map(({ line, index }) =&gt; `  Line ${index + 1}: ${line}`);
+
+        if (matchingLines.length &gt; 0) {
+          matches.push(`=== ${podNamespace}/${podName} ===`);
+          matches.push(...matchingLines);
+          matches.push('');
+        }
+      } catch (error) {
+        // Skip pods where we can't read logs
+      }
+    }
+
+    if (matches.length === 0) {
+      return {
+        content: [{
+          type: "text",
+          text: `No logs matching pattern "${pattern}" found`
+        }]
+      };
+    }
+
+    return {
+      content: [{
+        type: "text",
+        text: `Found ${matches.length} matches for pattern "${pattern}":\n\n${matches.join('\n')}`
+      }]
+    };
+  } catch (error: any) {
+    throw this.handleK8sError(error);
+  }
+}
+```
+</code></pre>
+<h3 id="exercise-69-resource-integration">Exercise 6.9: Resource Integration</h3>
+<p>Create MCP resources for recent log summaries.</p>
+<p>??? "Solution"
+    ```typescript
+    constructor() {
+      this.server = new Server(
+        {
+          name: "k-agent-logs",
+          version: "1.0.0",
+        },
+        {
+          capabilities: {
+            tools: {},
+            resources: {},
+          },
+        }
+      );</p>
+<pre><code>  // ... rest of constructor
+}
+
+private setupHandlers() {
+  // ... existing tools setup ...
+
+  // Resources handlers
+  this.server.setRequestHandler("resources/list", async () =&gt; {
+    return {
+      resources: [
+        {
+          uri: "logs://cluster/summary",
+          name: "Cluster Logs Summary",
+          description: "Summary of recent logs from all pods",
+          mimeType: "application/json"
+        }
+      ]
+    };
+  });
+
+  this.server.setRequestHandler("resources/read", async (request) =&gt; {
+    const { uri } = request.params;
+
+    if (uri === "logs://cluster/summary") {
+      return {
+        contents: [{
+          uri,
+          mimeType: "application/json",
+          text: JSON.stringify(await this.getClusterLogsSummary(), null, 2)
+        }]
+      };
+    }
+
+    throw new Error(`Resource not found: ${uri}`);
+  });
+}
+
+private async getClusterLogsSummary() {
+  try {
+    const podsResponse = await this.k8sCoreApi.listPodForAllNamespaces();
+    const pods = podsResponse.body.items;
+
+    const summary = {
+      timestamp: new Date().toISOString(),
+      totalPods: pods.length,
+      runningPods: pods.filter(p =&gt; p.status?.phase === 'Running').length,
+      namespaces: [...new Set(pods.map(p =&gt; p.metadata?.namespace))].length,
+      podStatusCounts: pods.reduce((acc, pod) =&gt; {
+        const phase = pod.status?.phase || 'Unknown';
+        acc[phase] = (acc[phase] || 0) + 1;
+        return acc;
+      }, {} as Record&lt;string, number&gt;)
+    };
+
+    return summary;
+  } catch (error: any) {
+    return {
+      error: `Failed to get cluster summary: ${error.message}`,
+      timestamp: new Date().toISOString()
+    };
+  }
+}
+```
+</code></pre>
+<h3 id="exercise-610-error-handling-and-validation">Exercise 6.10: Error Handling and Validation</h3>
+<p>Implement comprehensive error handling and input validation.</p>
+<p>??? "Solution"
+    ```typescript
+    private validateToolArguments(toolName: string, args: any): void {
+      switch (toolName) {
+        case 'list_pods':
+          if (args?.namespace &amp;&amp; typeof args.namespace !== 'string') {
+            throw new Error('namespace must be a string');
+          }
+          break;</p>
+<pre><code>    case 'get_pod_logs':
+      if (!args?.namespace || typeof args.namespace !== 'string') {
+        throw new Error('namespace is required and must be a string');
+      }
+      if (!args?.podName || typeof args.podName !== 'string') {
+        throw new Error('podName is required and must be a string');
+      }
+      if (args?.tailLines &amp;&amp; (typeof args.tailLines !== 'number' || args.tailLines &lt; 1)) {
+        throw new Error('tailLines must be a positive number');
+      }
+      break;
+
+    case 'collect_namespace_logs':
+      if (!args?.namespace || typeof args.namespace !== 'string') {
+        throw new Error('namespace is required and must be a string');
+      }
+      if (args?.tailLines &amp;&amp; (typeof args.tailLines !== 'number' || args.tailLines &lt; 1)) {
+        throw new Error('tailLines must be a positive number');
+      }
+      break;
+
+    case 'collect_all_logs':
+      if (args?.tailLines &amp;&amp; (typeof args.tailLines !== 'number' || args.tailLines &lt; 1)) {
+        throw new Error('tailLines must be a positive number');
+      }
+      if (args?.maxPods &amp;&amp; (typeof args.maxPods !== 'number' || args.maxPods &lt; 1)) {
+        throw new Error('maxPods must be a positive number');
+      }
+      break;
+
+    case 'search_logs':
+      if (!args?.pattern || typeof args.pattern !== 'string') {
+        throw new Error('pattern is required and must be a string');
+      }
+      if (args?.namespace &amp;&amp; typeof args.namespace !== 'string') {
+        throw new Error('namespace must be a string');
+      }
+      break;
+  }
+}
+
+// Update tools call handler to include validation
+this.server.setRequestHandler("tools/call", async (request) =&gt; {
+  const { name, arguments: args } = request.params;
+
+  // Validate arguments
+  this.validateToolArguments(name, args);
+
+  switch (name) {
+    // ... existing cases
+  }
+});
+```
+</code></pre>
+<h3 id="exercise-611-package-configuration">Exercise 6.11: Package Configuration</h3>
+<p>Create proper package.json and tsconfig.json for the K-Agent.</p>
+<p>??? "Solution"
+    <strong>package.json:</strong>
+    <code>json
+    {
+      "name": "k-agent-logs",
+      "version": "1.0.0",
+      "description": "K-Agent MCP server for Kubernetes log collection",
+      "main": "dist/index.js",
+      "scripts": {
+        "build": "tsc",
+        "start": "node dist/index.js",
+        "dev": "tsx src/index.ts",
+        "test": "echo \"No tests specified\""
+      },
+      "keywords": ["mcp", "kubernetes", "logs", "monitoring"],
+      "author": "Your Name",
+      "license": "MIT",
+      "dependencies": {
+        "@kubernetes/client-node": "^0.20.0",
+        "@modelcontextprotocol/sdk": "^0.5.0"
+      },
+      "devDependencies": {
+        "@types/node": "^20.0.0",
+        "tsx": "^4.0.0",
+        "typescript": "^5.0.0"
+      }
+    }</code></p>
+<pre><code>**tsconfig.json:**
+```json
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
+```
+</code></pre>
+<h3 id="exercise-612-docker-configuration">Exercise 6.12: Docker Configuration</h3>
+<p>Create a Dockerfile for containerized deployment.</p>
+<p>??? "Solution"
+    ```dockerfile
+    FROM node:18-alpine</p>
+<pre><code># Install kubectl
+RUN apk add --no-cache curl &amp;&amp; \
+    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" &amp;&amp; \
+    install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl &amp;&amp; \
+    rm kubectl &amp;&amp; \
+    kubectl version --client
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+COPY tsconfig.json ./
+
+# Install dependencies
+RUN npm ci --only=production &amp;&amp; npm cache clean --force
+
+# Copy source code
+COPY src/ ./src/
+
+# Build TypeScript
+RUN npm run build
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs &amp;&amp; \
+    adduser -S kagent -u 1001
+
+# Change ownership
+RUN chown -R kagent:nodejs /app
+USER kagent
+
+EXPOSE 3000
+
+CMD ["npm", "start"]
+```
+</code></pre>
+<h3 id="exercise-613-testing-the-k-agent">Exercise 6.13: Testing the K-Agent</h3>
+<p>Create a test script to verify all functionality.</p>
+<p>??? "Solution"
+    <strong>test-kagent.js:</strong>
+    ```javascript
+    const { spawn } = require('child_process');</p>
+<pre><code>async function testKAgent() {
+  console.log('Testing K-Agent functionality...\n');
+
+  const server = spawn('node', ['dist/index.js'], {
+    stdio: ['pipe', 'pipe', 'pipe']
+  });
+
+  // Give server time to start
+  await new Promise(resolve =&gt; setTimeout(resolve, 2000));
+
+  const tests = [
+    {
+      name: 'List tools',
+      request: {
+        jsonrpc: '2.0',
+        id: 1,
+        method: 'tools/list',
+        params: {}
+      }
+    },
+    {
+      name: 'List pods',
+      request: {
+        jsonrpc: '2.0',
+        id: 2,
+        method: 'tools/call',
+        params: {
+          name: 'list_pods'
+        }
+      }
+    }
+  ];
+
+  for (const test of tests) {
+    console.log(`Running test: ${test.name}`);
+
+    server.stdin.write(JSON.stringify(test.request) + '\n');
+
+    // Wait for response
+    await new Promise(resolve =&gt; setTimeout(resolve, 1000));
+  }
+
+  server.kill();
+  console.log('\nTesting completed!');
+}
+
+testKAgent().catch(console.error);
+```
+</code></pre>
+<h3 id="exercise-614-production-deployment-manifest">Exercise 6.14: Production Deployment Manifest</h3>
+<p>Create Kubernetes deployment manifests for production deployment.</p>
+<p>??? "Solution"
+    <strong>k8s-deployment.yaml:</strong>
+    <code>yaml
+    apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      name: k-agent-sa
+      namespace: default
+    ---
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      name: k-agent-role
+    rules:
+    - apiGroups: [""]
+      resources: ["pods", "pods/log", "namespaces"]
+      verbs: ["get", "list", "watch"]
+    ---
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRoleBinding
+    metadata:
+      name: k-agent-binding
+    roleRef:
+      apiGroup: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: k-agent-role
+    subjects:
+    - kind: ServiceAccount
+      name: k-agent-sa
+      namespace: default
+    ---
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: k-agent-logs
+      namespace: default
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: k-agent-logs
+      template:
+        metadata:
+          labels:
+            app: k-agent-logs
+        spec:
+          serviceAccountName: k-agent-sa
+          containers:
+          - name: k-agent
+            image: your-registry/k-agent-logs:latest
+            ports:
+            - containerPort: 3000
+            env:
+            - name: NODE_ENV
+              value: "production"
+            resources:
+              requests:
+                memory: "128Mi"
+                cpu: "100m"
+              limits:
+                memory: "512Mi"
+                cpu: "500m"
+            livenessProbe:
+              httpGet:
+                path: /health
+                port: 3000
+              initialDelaySeconds: 30
+              periodSeconds: 10
+            readinessProbe:
+              httpGet:
+                path: /health
+                port: 3000
+              initialDelaySeconds: 5
+              periodSeconds: 5
+    ---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: k-agent-service
+      namespace: default
+    spec:
+      selector:
+        app: k-agent-logs
+      ports:
+      - port: 3000
+        targetPort: 3000
+      type: ClusterIP</code></p>
+<h3 id="exercise-615-complete-integration-test">Exercise 6.15: Complete Integration Test</h3>
+<p>Create a comprehensive integration test that exercises all K-Agent capabilities.</p>
+<p>??? "Solution"
+    <strong>integration-test.js:</strong>
+    ```javascript
+    const { spawn } = require('child_process');
+    const fs = require('fs');</p>
+<pre><code>async function runIntegrationTest() {
+  console.log('🚀 Starting K-Agent Integration Test\n');
+
+  const server = spawn('node', ['dist/index.js'], {
+    stdio: ['pipe', 'pipe', 'inherit']
+  });
+
+  let requestId = 1;
+
+  function sendRequest(method, params = {}) {
+    const request = {
+      jsonrpc: '2.0',
+      id: requestId++,
+      method,
+      params
+    };
+    server.stdin.write(JSON.stringify(request) + '\n');
+  }
+
+  // Wait for server to start
+  await new Promise(resolve =&gt; setTimeout(resolve, 3000));
+
+  console.log('📋 Testing tools/list...');
+  sendRequest('tools/list');
+
+  await new Promise(resolve =&gt; setTimeout(resolve, 1000));
+
+  console.log('📋 Testing tools/call - list_pods...');
+  sendRequest('tools/call', {
+    name: 'list_pods',
+    arguments: { namespace: 'default' }
+  });
+
+  await new Promise(resolve =&gt; setTimeout(resolve, 2000));
+
+  console.log('📋 Testing resources/list...');
+  sendRequest('resources/list');
+
+  await new Promise(resolve =&gt; setTimeout(resolve, 1000));
+
+  console.log('📋 Testing resources/read...');
+  sendRequest('resources/read', {
+    uri: 'logs://cluster/summary'
+  });
+
+  await new Promise(resolve =&gt; setTimeout(resolve, 2000));
+
+  console.log('🔍 Testing search functionality...');
+  sendRequest('tools/call', {
+    name: 'search_logs',
+    arguments: {
+      pattern: 'error|Error|ERROR',
+      tailLines: 50
+    }
+  });
+
+  // Wait for all responses
+  await new Promise(resolve =&gt; setTimeout(resolve, 5000));
+
+  server.kill();
+  console.log('\n✅ Integration test completed!');
+}
+
+// Run the test
+runIntegrationTest().catch(error =&gt; {
+  console.error('❌ Integration test failed:', error);
+  process.exit(1);
+});
+```
+</code></pre>
+<!--
+  Copyright (c) 2016-2025 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- Render date of last update -->
+
+
+<!-- Render date of creation -->
+
+
+<!-- ---------------------------------------------------------------------- -->
+
+<!-- Render authors -->
+
+
+<!-- ---------------------------------------------------------------------- -->
+
+<!-- Render committers from GitHub -->
+
+
+<!-- Render committers from GitLab -->
+
+
+<!-- Render committers -->
+
+
+<!-- ---------------------------------------------------------------------- -->
+
+<!-- Determine date of last update -->
+
+
+
+
+
+<!-- Determine date of creation -->
+
+
+
+
+
+<!-- Source file information -->
+
+<aside class="md-source-file">
+
+  <!-- Date of last update -->
+  
+  
+<span class="md-source-file__fact">
+  <span class="md-icon" title="Last update">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+  </span>
+  <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="January 26, 2026 00:56:59 UTC">January 26, 2026</span>
+</span>
+
+  
+
+  <!-- Authors (git-authors plugin) -->
+  
+
+  <!-- Authors (git-committers plugin) -->
+  
+  <!-- Fallback: Manual GitHub avatar for repository owner -->
+  <span class="md-source-file__fact">
+    <nav>
+      <a href="https://github.com/nirgeier" class="md-author" title="@nirgeier">
+        <img src="https://avatars.githubusercontent.com/u/555154?size=256" alt="Nir Geier" />
+      </a>
+    </nav>
+  </span>
+  
+</aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <!--
+  Copyright (c) 2016-2025 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- Footer -->
+<footer class="md-footer">
+  <div class="logo1"></div>
+  <div class="logo2"></div>
+
+  <!-- Link to previous and/or next page -->
+  
+    
+  
+
+  <!-- Further information -->
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      ©2021-2025 Nir Geier<br/><a href="https://visitor-badge.laobi.icu/badge?page_id=nirgeier" target="_blank" rel="noopener"><img src="https://visitor-badge.laobi.icu/badge?page_id=nirgeier" alt="Visitor Badge"></a>
+    </div>
+  
+  
+</div>
+
+      <!-- Social links -->
+      
+        
+<div class="md-social">
+    
+    
+    
+    
+    
+    <a href="https://github.com/nirgeier/AI-K8S-MCP" target="_blank" rel="noopener" title="View on GitHub"
+        class="md-social__link social-class__github">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://github.com/nirgeier/AI-K8S-MCP/network/members" target="_blank" rel="noopener" title="Fork this repo"
+        class="md-social__link social-class__fork">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0M5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0m6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5m-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://github.com/nirgeier/AI-K8S-MCP/stargazers" target="_blank" rel="noopener" title="Star this repo"
+        class="md-social__link social-class__star">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25m0 2.445L6.615 5.5a.75.75 0 0 1-.564.41l-3.097.45 2.24 2.184a.75.75 0 0 1 .216.664l-.528 3.084 2.769-1.456a.75.75 0 0 1 .698 0l2.77 1.456-.53-3.084a.75.75 0 0 1 .216-.664l2.24-2.183-3.096-.45a.75.75 0 0 1-.564-.41z"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://www.linkedin.com/in/nirgeier/" target="_blank" rel="noopener" title="Connect on LinkedIn"
+        class="md-social__link social-class__linkedin">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://discord.gg/U6xW23Ss" target="_blank" rel="noopener" title="Follow me on Discord"
+        class="md-social__link social-class__discord">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M492.5 69.8c-.2-.3-.4-.6-.8-.7-38.1-17.5-78.4-30-119.7-37.1-.4-.1-.8 0-1.1.1s-.6.4-.8.8c-5.5 9.9-10.5 20.2-14.9 30.6-44.6-6.8-89.9-6.8-134.4 0-4.5-10.5-9.5-20.7-15.1-30.6-.2-.3-.5-.6-.8-.8s-.7-.2-1.1-.2C162.5 39 122.2 51.5 84.1 69c-.3.1-.6.4-.8.7C7.1 183.5-13.8 294.6-3.6 404.2c0 .3.1.5.2.8s.3.4.5.6c44.4 32.9 94 58 146.8 74.2.4.1.8.1 1.1 0s.7-.4.9-.7c11.3-15.4 21.4-31.8 30-48.8.1-.2.2-.5.2-.8s0-.5-.1-.8-.2-.5-.4-.6-.4-.3-.7-.4c-15.8-6.1-31.2-13.4-45.9-21.9-.3-.2-.5-.4-.7-.6s-.3-.6-.3-.9 0-.6.2-.9.3-.5.6-.7c3.1-2.3 6.2-4.7 9.1-7.1.3-.2.6-.4.9-.4s.7 0 1 .1c96.2 43.9 200.4 43.9 295.5 0 .3-.1.7-.2 1-.2s.7.2.9.4c2.9 2.4 6 4.9 9.1 7.2.2.2.4.4.6.7s.2.6.2.9-.1.6-.3.9-.4.5-.6.6c-14.7 8.6-30 15.9-45.9 21.8-.2.1-.5.2-.7.4s-.3.4-.4.7-.1.5-.1.8.1.5.2.8c8.8 17 18.8 33.3 30 48.8.2.3.6.6.9.7s.8.1 1.1 0c52.9-16.2 102.6-41.3 147.1-74.2.2-.2.4-.4.5-.6s.2-.5.2-.8c12.3-126.8-20.5-236.9-86.9-334.5zm-302 267.7c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.4 59.2-52.8 59.2m195.4 0c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.2 59.2-52.8 59.2"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://stackoverflow.com/users/1755598/codewizard" target="_blank" rel="noopener" title="Follow me on Stack Overflow"
+        class="md-social__link social-class__stackoverflow">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M291 311 95.3 269.7 87.1 309l195.7 41zm51-87L188.5 95.7 163 126.5l153.5 128.3zm-31.2 39.7L129.5 179l-16.7 36.5L294 300zM262.3 32l-32 24 119.3 160.3 32-24zm20.5 328h-200v39.7h200zm39.7 80H43V320H3v160h359.5V320h-40z"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://wa.me/972548122310" target="_blank" rel="noopener" title="Follow me on WhatsApp"
+        class="md-social__link social-class__whatsapp">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157m-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1s56.2 81.2 56.1 130.5c0 101.8-84.9 184.6-186.6 184.6m101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8s-14.3 18-17.6 21.8c-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7s-12.5-30.1-17.1-41.2c-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2s-9.7 1.4-14.8 6.9c-5.1 5.6-19.4 19-19.4 46.3s19.9 53.7 22.6 57.4c2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4s4.6-24.1 3.2-26.4c-1.3-2.5-5-3.9-10.5-6.6"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="mailto:nirg@codewizard.co.il" target="_blank" rel="noopener" title="Email me"
+        class="md-social__link social-class__email">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4l208 156a48 48 0 0 0 57.6 0l208-156c12.1-9.1 19.2-23.3 19.2-38.4 0-26.5-21.5-48-48-48zM0 196v188c0 35.3 28.7 64 64 64h384c35.3 0 64-28.7 64-64V196L313.6 344.8c-34.1 25.6-81.1 25.6-115.2 0z"/></svg>
+    </a>
+    
+</div>
+      
+    </div>
+  </div>
+</footer>
+
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["announce.dismiss", "content.action.edit", "content.action.view", "content.code.annotate", "content.code.copy", "content.code.select", "content.footnote.tooltips", "content.tabs.link", "content.tooltips", "content.footer.last-updated", "content.footer.contributors", "navigation.expand", "navigation.footer", "navigation.indexes", "navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.sections", "navigation.tracking", "search.highlight", "search.share", "search.suggest", "toc.follow", "toc.integrate", "toc.sticky", "mermaid"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://buttons.github.io/buttons.js?v=1766553928"></script>
+      
+    
+  </body>
+</html>

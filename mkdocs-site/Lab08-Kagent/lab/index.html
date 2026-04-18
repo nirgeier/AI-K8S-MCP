@@ -1,0 +1,3972 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Hands-on labs for the K-Agent framework - Kubernetes-native MCP server">
+      
+      
+        <meta name="author" content="CodeWizard-IL">
+      
+      
+        <link rel="canonical" href="https://nirgeier.github.io/AI-K8S-MCP/Lab08-Kagent/lab/">
+      
+      
+        <link rel="prev" href="../../Lab07-MCP-Ollama/lab/">
+      
+      
+        <link rel="next" href="../../Lab09-Event-Monitor/lab/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Lab 08: Kagent - K-Agent Labs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%202a7%207%200%200%200-7%207c0%202.38%201.19%204.47%203%205.74V17a1%201%200%200%200%201%201h6a1%201%200%200%200%201-1v-2.26c1.81-1.27%203-3.36%203-5.74a7%207%200%200%200-7-7M9%2021a1%201%200%200%200%201%201h4a1%201%200%200%200%201-1v-1H9z%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Mulish";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/codewizard.css?v=1766553928">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#lab-08-k-agent-integration" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      <!--
+  Copyright (c) 2016-2025 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- Determine classes -->
+
+
+
+
+
+<!-- Header -->
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+
+    <!-- Link to home -->
+    <a href="../.." title="K-Agent Labs"
+      class="md-header__button md-logo" aria-label="K-Agent Labs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89 89">
+  <path d="M3.136,17.387l0,42.932l42.932,21.467l-42.932,-64.399Z" />
+  <path d="M21.91,8l42.933,64.398l-18.775,9.388l-42.932,-64.399l18.774,-9.387Z" style="fill-opacity: 0.5" />
+  <path d="M67.535,17.387l-27.262,18.156l21.878,32.818l5.384,2.691l0,-53.665Z" />
+  <path d="M67.535,17.387l0,53.666l18.774,-9.388l0,-53.665l-18.774,9.387Z" style="fill-opacity: 0.25" />
+</svg>
+
+    </a>
+
+    <!-- Button to open drawer -->
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+
+    <!-- Header title -->
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            K-Agent Labs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+            Lab 08: Kagent
+            
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="m-social__top">
+      <!-- Social links -->
+      
+      
+<div class="md-social">
+    
+    
+    
+    
+    
+    <a href="https://github.com/nirgeier/AI-K8S-MCP" target="_blank" rel="noopener" title="View on GitHub"
+        class="md-social__link social-class__github">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://github.com/nirgeier/AI-K8S-MCP/network/members" target="_blank" rel="noopener" title="Fork this repo"
+        class="md-social__link social-class__fork">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0M5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0m6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5m-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://github.com/nirgeier/AI-K8S-MCP/stargazers" target="_blank" rel="noopener" title="Star this repo"
+        class="md-social__link social-class__star">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25m0 2.445L6.615 5.5a.75.75 0 0 1-.564.41l-3.097.45 2.24 2.184a.75.75 0 0 1 .216.664l-.528 3.084 2.769-1.456a.75.75 0 0 1 .698 0l2.77 1.456-.53-3.084a.75.75 0 0 1 .216-.664l2.24-2.183-3.096-.45a.75.75 0 0 1-.564-.41z"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://www.linkedin.com/in/nirgeier/" target="_blank" rel="noopener" title="Connect on LinkedIn"
+        class="md-social__link social-class__linkedin">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://discord.gg/U6xW23Ss" target="_blank" rel="noopener" title="Follow me on Discord"
+        class="md-social__link social-class__discord">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M492.5 69.8c-.2-.3-.4-.6-.8-.7-38.1-17.5-78.4-30-119.7-37.1-.4-.1-.8 0-1.1.1s-.6.4-.8.8c-5.5 9.9-10.5 20.2-14.9 30.6-44.6-6.8-89.9-6.8-134.4 0-4.5-10.5-9.5-20.7-15.1-30.6-.2-.3-.5-.6-.8-.8s-.7-.2-1.1-.2C162.5 39 122.2 51.5 84.1 69c-.3.1-.6.4-.8.7C7.1 183.5-13.8 294.6-3.6 404.2c0 .3.1.5.2.8s.3.4.5.6c44.4 32.9 94 58 146.8 74.2.4.1.8.1 1.1 0s.7-.4.9-.7c11.3-15.4 21.4-31.8 30-48.8.1-.2.2-.5.2-.8s0-.5-.1-.8-.2-.5-.4-.6-.4-.3-.7-.4c-15.8-6.1-31.2-13.4-45.9-21.9-.3-.2-.5-.4-.7-.6s-.3-.6-.3-.9 0-.6.2-.9.3-.5.6-.7c3.1-2.3 6.2-4.7 9.1-7.1.3-.2.6-.4.9-.4s.7 0 1 .1c96.2 43.9 200.4 43.9 295.5 0 .3-.1.7-.2 1-.2s.7.2.9.4c2.9 2.4 6 4.9 9.1 7.2.2.2.4.4.6.7s.2.6.2.9-.1.6-.3.9-.4.5-.6.6c-14.7 8.6-30 15.9-45.9 21.8-.2.1-.5.2-.7.4s-.3.4-.4.7-.1.5-.1.8.1.5.2.8c8.8 17 18.8 33.3 30 48.8.2.3.6.6.9.7s.8.1 1.1 0c52.9-16.2 102.6-41.3 147.1-74.2.2-.2.4-.4.5-.6s.2-.5.2-.8c12.3-126.8-20.5-236.9-86.9-334.5zm-302 267.7c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.4 59.2-52.8 59.2m195.4 0c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.2 59.2-52.8 59.2"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://stackoverflow.com/users/1755598/codewizard" target="_blank" rel="noopener" title="Follow me on Stack Overflow"
+        class="md-social__link social-class__stackoverflow">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M291 311 95.3 269.7 87.1 309l195.7 41zm51-87L188.5 95.7 163 126.5l153.5 128.3zm-31.2 39.7L129.5 179l-16.7 36.5L294 300zM262.3 32l-32 24 119.3 160.3 32-24zm20.5 328h-200v39.7h200zm39.7 80H43V320H3v160h359.5V320h-40z"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://wa.me/972548122310" target="_blank" rel="noopener" title="Follow me on WhatsApp"
+        class="md-social__link social-class__whatsapp">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157m-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1s56.2 81.2 56.1 130.5c0 101.8-84.9 184.6-186.6 184.6m101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8s-14.3 18-17.6 21.8c-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7s-12.5-30.1-17.1-41.2c-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2s-9.7 1.4-14.8 6.9c-5.1 5.6-19.4 19-19.4 46.3s19.9 53.7 22.6 57.4c2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4s4.6-24.1 3.2-26.4c-1.3-2.5-5-3.9-10.5-6.6"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="mailto:nirg@codewizard.co.il" target="_blank" rel="noopener" title="Email me"
+        class="md-social__link social-class__email">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4l208 156a48 48 0 0 0 57.6 0l208-156c12.1-9.1 19.2-23.3 19.2-38.4 0-26.5-21.5-48-48-48zM0 196v188c0 35.3 28.7 64 64 64h384c35.3 0 64-28.7 64-64V196L313.6 344.8c-34.1 25.6-81.1 25.6-115.2 0z"/></svg>
+    </a>
+    
+</div>
+      
+    </div>
+
+    <!-- Color palette toggle -->
+    
+    
+    <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+    
+    
+
+    <!-- User preference: color palette -->
+    
+    <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+
+    <!-- Site language selector -->
+    
+
+    <!-- Button to open search modal -->
+    
+    
+
+    <!-- Check if search is actually enabled - see https://t.ly/DT_0V -->
+    
+    <label class="md-header__button md-icon" for="__search">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+    </label>
+
+    <!-- Search interface -->
+    <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+
+    <!-- Repository information -->
+    
+    <div class="md-header__source">
+      <a href="https://github.com/nirgeier/AI-K8S-MCP.git" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nirgeier/AI-K8S-MCP
+  </div>
+</a>
+    </div>
+    
+  </nav>
+
+  <!-- Navigation tabs (sticky) -->
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="K-Agent Labs" class="md-nav__button md-logo" aria-label="K-Agent Labs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89 89">
+  <path d="M3.136,17.387l0,42.932l42.932,21.467l-42.932,-64.399Z" />
+  <path d="M21.91,8l42.933,64.398l-18.775,9.388l-42.932,-64.399l18.774,-9.387Z" style="fill-opacity: 0.5" />
+  <path d="M67.535,17.387l-27.262,18.156l21.878,32.818l5.384,2.691l0,-53.665Z" />
+  <path d="M67.535,17.387l0,53.666l18.774,-9.388l0,-53.665l-18.774,9.387Z" style="fill-opacity: 0.25" />
+</svg>
+
+    </a>
+    K-Agent Labs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/nirgeier/AI-K8S-MCP.git" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nirgeier/AI-K8S-MCP
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../welcome/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Welcome
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../labs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Labs Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../.." class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Labs
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Labs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab00-Setup/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 00: Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab01-MCP-Fundamentals/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 01: MCP Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab02-First-MCP-Server/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 02: First MCP Server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab03-MCP-Tools/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 03: MCP Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab04-MCP-Resources/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 04: MCP Resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab05-MCP-Prompts/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 05: MCP Prompts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab06-MCP-Workflow/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 06: MCP Workflow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab07-MCP-Ollama/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07: MCP Ollama
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 08: Kagent
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 08: Kagent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learning-objectives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Learning Objectives
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-a-k-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is a K-Agent?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What is a K-Agent?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-k-agents-matter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why K-Agents Matter
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lab-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lab Architecture
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Lab Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core Components
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hands-on-exercise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hands-On Exercise
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Hands-On Exercise">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-project-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Project Setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-kubernetes-client-configuration-complete-server-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Kubernetes Client Configuration &amp; Complete Server Setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-pod-discovery-tool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Pod Discovery Tool
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 3: Pod Discovery Tool">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#update-setuphandlers-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Update setupHandlers() Method
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#add-handler-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Add Handler Methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-pod-discovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test Pod Discovery
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-log-collection-tool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Log Collection Tool
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 4: Log Collection Tool">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#add-collect_pod_logs-to-tools-array" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Add collect_pod_logs to Tools Array
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update-tool-handler-switch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Update Tool Handler Switch
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#implement-log-collection-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Implement Log Collection Methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-log-collection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test Log Collection
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-extensions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optional Extensions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Optional Extensions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#exercise-1-advanced-pod-filtering-and-sorting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exercise 1: Advanced Pod Filtering and Sorting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exercise-2-enhanced-log-analysis-with-search-and-export" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exercise 2: Enhanced Log Analysis with Search and Export
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exercise-3-real-time-pod-monitoring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exercise 3: Real-Time Pod Monitoring
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#common-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Issues
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debug-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Debug Commands
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-takeaways" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Takeaways
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's Next?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#additional-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Additional Resources
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab09-Event-Monitor/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09: K8S Event Monitor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../Tasks/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tasks
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tasks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tasks/000-Setup-RooCode/README.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup with RooCode
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tasks/001-MCP-Basics/README.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP Basics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tasks/002-MCP-FastMCP/README.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP FastMCP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Resources
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Resources
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step01-install-kagent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 01: Install Kagent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step02-create-mcp-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 02: Create MCP Server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step03-kmcp-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 03: Build with KMCP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step04-verify-registration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 04: Verify Registration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step05-create-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 05: Create Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step06-install-ingress/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 06: Install Ingress
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step07-deploy-prometheus-grafana/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 07: Prometheus & Grafana
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step08-expose-ingress/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 08: Expose Services
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/resources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 : K8S Resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step00-getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 00: Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step01-imports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 01: Imports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step02-skeleton-code/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 02: Skeleton Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step03-constructor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 03: Constructor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step04-list-tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 04: Register Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step05-call-tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 05: Tool Handlers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step06-list-resources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 06: Register Resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step07-read-resources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 07: Resource Handlers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step08-list_prompts.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 08: Register Prompts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step09-get_prompt/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 09: Prompt Handlers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step10-setup-handlers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 10: Setup Handlers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step11-run-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 11: Run Server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step12-main-entry-point/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 12: Main Entry Point
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../explanations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Explanations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/nirgeier/AI-K8S-MCP.git/edit/master/docs/Lab08-Kagent/lab.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/nirgeier/AI-K8S-MCP.git/raw/master/docs/Lab08-Kagent/lab.md" title="View source of this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
+    </a>
+  
+
+
+<h1 id="lab-08-k-agent-integration">Lab 08: K-Agent Integration</h1>
+<h2 id="overview">Overview</h2>
+<ul>
+<li>
+<p>Welcome to the advanced MCP lab!</p>
+</li>
+<li>
+<p>Now that you've mastered the fundamentals of MCP servers, tools, resources, and prompts, it's time to apply your knowledge to a real-world scenario: <strong>building and implementing a K-Agent</strong>.</p>
+</li>
+<li>
+<p>A K-Agent is an MCP server specifically designed to interact with Kubernetes clusters.</p>
+</li>
+<li>
+<p>In this lab, you'll build a focused K-Agent that communicates with a Kubernetes cluster and collects logs from all pods - a critical capability for monitoring, debugging, and operational intelligence.</p>
+</li>
+<li>
+<p>This lab bridges the gap between MCP theory and practical Kubernetes operations, showing how MCP servers can enhance DevOps workflows and provide AI-powered insights into cluster health and application behavior.</p>
+</li>
+</ul>
+<hr />
+<h2 id="learning-objectives">Learning Objectives</h2>
+<p>By the end of this lab, you will:</p>
+<ul>
+<li>Understand the concept and value of K-Agents (Kubernetes MCP servers)</li>
+<li>Use pre-configured Kubernetes cluster access</li>
+<li>Build MCP tools for pod log collection</li>
+<li>Implement error handling for cluster operations</li>
+</ul>
+<hr />
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Completed <a href="../Lab05-MCP-Prompts/">Lab 5 - MCP Prompts and Integration</a></li>
+<li><strong>A running Kubernetes cluster</strong> (OrbStack, Docker Desktop, Minikube, kind, or remote cluster)</li>
+<li><strong>kubectl installed and configured</strong> with access to your cluster (<code>kubectl cluster-info</code> should work)</li>
+<li>Basic understanding of Kubernetes concepts (pods, namespaces, kubectl)</li>
+<li>Familiarity with container orchestration principles</li>
+<li>Understanding of log aggregation and monitoring concepts</li>
+</ul>
+<p>!!! debug "Verify Kubernetes Setup"</p>
+<pre><code>* Before starting this lab, ensure your Kubernetes environment is ready:
+
+      ```bash
+      # Check cluster access
+      kubectl cluster-info
+
+      # Verify you can list pods
+      kubectl get pods --all-namespaces
+
+      # Check your kubeconfig
+      kubectl config view
+      ```
+</code></pre>
+<hr />
+<h2 id="what-is-a-k-agent">What is a K-Agent?</h2>
+<p>A <code>**K-Agent**</code> is an <code>MCP server</code> that specializes in Kubernetes operations.</p>
+<p>Unlike generic MCP servers, K-Agents are designed specifically for:</p>
+<ul>
+<li><strong>Cluster Communication</strong>: Secure, authenticated access to Kubernetes APIs</li>
+<li><strong>Operational Intelligence</strong>: Real-time insights into cluster health and performance</li>
+<li><strong>Log Analytics</strong>: Collection and analysis of application and system logs</li>
+<li><strong>Resource Management</strong>: Monitoring and managing Kubernetes resources</li>
+<li><strong>Troubleshooting</strong>: Automated diagnosis of cluster and application issues</li>
+</ul>
+<hr />
+<h3 id="why-k-agents-matter">Why K-Agents Matter</h3>
+<ul>
+<li>In modern DevOps environments, Kubernetes clusters generate enormous amounts of operational data.</li>
+</ul>
+<p>K-Agents provide:</p>
+<ul>
+<li><strong>AI-Powered Monitoring</strong>: Intelligent analysis of logs and metrics</li>
+<li><strong>Automated Troubleshooting</strong>: AI-assisted diagnosis of issues</li>
+<li><strong>Operational Insights</strong>: Pattern recognition in cluster behavior</li>
+<li><strong>Enhanced Observability</strong>: Structured access to distributed system data</li>
+<li><strong>Seamless Integration</strong>: MCP tools that interact directly with Kubernetes resources</li>
+<li><strong>Improved DevOps Workflows</strong>: Streamlined operations through AI-driven tools</li>
+<li><strong>Dashboarding and Alerts</strong>: Proactive monitoring with AI-generated alerts</li>
+<li><strong>Custom Tooling</strong>: Tailored MCP tools for specific Kubernetes tasks</li>
+</ul>
+<hr />
+<h2 id="lab-architecture">Lab Architecture</h2>
+<p>Your K-Agent will implement a focused set of capabilities:</p>
+<pre><code class="language-mermaid">graph TB
+    subgraph &quot;MCP Client (AI/Inspector)&quot;
+        Client[MCP Client]
+    end
+
+    subgraph &quot;K-Agent MCP Server&quot;
+        Server[K-Agent Server]
+        Tools[MCP Tools]
+        K8sClient[Kubernetes Client]
+
+        Server --&gt; Tools
+        Tools --&gt; K8sClient
+    end
+
+    subgraph &quot;Kubernetes Cluster&quot;
+        API[Kubernetes API]
+        Pods[Pods]
+        Logs[Container Logs]
+
+        API --&gt; Pods
+        Pods --&gt; Logs
+    end
+
+    Client --&gt;|&quot;stdio/JSON-RPC&quot;| Server
+    K8sClient --&gt;|&quot;REST API&quot;| API
+
+    Tools -.-&gt;|&quot;list_pods&quot;| API
+    Tools -.-&gt;|&quot;collect_pod_logs&quot;| Logs
+
+    style Server fill:#4CAF50
+    style Tools fill:#2196F3
+    style K8sClient fill:#FF9800
+    style API fill:#9C27B0
+</code></pre>
+<hr />
+<h3 id="core-components">Core Components</h3>
+<ol>
+<li>
+<p><strong>Kubernetes Client Integration</strong></p>
+<ul>
+<li>Secure cluster authentication</li>
+<li>API communication handling</li>
+<li>Error management for cluster operations</li>
+</ul>
+</li>
+<li>
+<p><strong>Log Collection Tools</strong></p>
+<ul>
+<li>Pod discovery across namespaces</li>
+<li>Log retrieval from all containers</li>
+<li>Structured log formatting</li>
+</ul>
+</li>
+<li>
+<p><strong>Resource Management</strong></p>
+<ul>
+<li>Namespace enumeration</li>
+<li>Pod status monitoring</li>
+<li>Health check capabilities</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h2 id="hands-on-exercise">Hands-On Exercise</h2>
+<h3 id="step-1-project-setup">Step 1: Project Setup</h3>
+<p>Create a new MCP server project with Kubernetes dependencies:</p>
+<pre><code class="language-bash"># Create project directory and navigate to it
+mkdir k-agent-logs
+cd k-agent-logs
+</code></pre>
+<p><br></p>
+<ul>
+<li>Create a new <code>package.json</code> file inside the <code>k-agent-logs</code> directory with the following content:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;k-agent-logs&quot;,
+  &quot;version&quot;: &quot;1.0.0&quot;,
+  &quot;description&quot;: &quot;K-Agent MCP server for Kubernetes log collection&quot;,
+  &quot;main&quot;: &quot;dist/index.js&quot;,
+  &quot;scripts&quot;: {
+    &quot;build&quot;: &quot;tsc&quot;,
+    &quot;dev&quot;: &quot;tsx src/index.ts&quot;,
+    &quot;start&quot;: &quot;node dist/index.js&quot;
+  },
+  &quot;keywords&quot;: [&quot;kubernetes&quot;, &quot;mcp&quot;, &quot;logs&quot;, &quot;monitoring&quot;],
+  &quot;author&quot;: &quot;&quot;,
+  &quot;license&quot;: &quot;ISC&quot;,
+  &quot;type&quot;: &quot;commonjs&quot;,
+  &quot;dependencies&quot;: {
+    &quot;@kubernetes/client-node&quot;: &quot;^1.4.0&quot;,
+    &quot;@modelcontextprotocol/sdk&quot;: &quot;^1.25.2&quot;
+  },
+  &quot;devDependencies&quot;: {
+    &quot;@types/node&quot;: &quot;^25.0.3&quot;,
+    &quot;tsx&quot;: &quot;^4.21.0&quot;,
+    &quot;typescript&quot;: &quot;^5.9.3&quot;
+  }
+}
+</code></pre>
+<hr />
+<ul>
+<li>Run the following command to install the dependencies:</li>
+</ul>
+<pre><code class="language-bash">npm install
+</code></pre>
+<p>This will create <code>node_modules/</code> and <code>package-lock.json</code> in your <code>k-agent-logs</code> directory.</p>
+<hr />
+<h3 id="step-2-kubernetes-client-configuration-complete-server-setup">Step 2: Kubernetes Client Configuration &amp; Complete Server Setup</h3>
+<p>Create an <code>src</code> directory, inside the <code>k-agent-logs</code> directory, and an empty file named <code>index.ts</code> inside it:</p>
+<pre><code class="language-bash">mkdir -p src &amp;&amp; touch src/index.ts
+</code></pre>
+<p><br></p>
+<p>Create your complete K-Agent server by pasting the following code inside <code>src/index.ts</code>:</p>
+<pre><code class="language-typescript">// Import MCP SDK components and Kubernetes client
+import { Server } from &quot;@modelcontextprotocol/sdk/server/index.js&quot;;
+import { StdioServerTransport } from &quot;@modelcontextprotocol/sdk/server/stdio.js&quot;;
+import {
+  CallToolRequestSchema,
+  ErrorCode,
+  ListResourcesRequestSchema,
+  ListToolsRequestSchema,
+  McpError,
+  ReadResourceRequestSchema,
+} from &quot;@modelcontextprotocol/sdk/types.js&quot;;
+import * as k8s from &quot;@kubernetes/client-node&quot;;
+
+class KAgentServer {
+  // Store Kubernetes API clients (for talking to your cluster)
+  private k8sConfig: k8s.KubeConfig;
+  private k8sAppsApi: k8s.AppsV1Api;
+  private k8sCoreApi: k8s.CoreV1Api;
+  private server: Server;
+
+  constructor() {
+    // Initialize connection to your Kubernetes cluster (uses ~/.kube/config)
+    this.k8sConfig = new k8s.KubeConfig();
+    this.k8sConfig.loadFromDefault();
+
+    this.k8sAppsApi = this.k8sConfig.makeApiClient(k8s.AppsV1Api);
+    this.k8sCoreApi = this.k8sConfig.makeApiClient(k8s.CoreV1Api);
+
+    // Create MCP server that AI tools can connect to
+    this.server = new Server(
+      {
+        name: &quot;k-agent-logs&quot;,
+        version: &quot;1.0.0&quot;,
+      },
+      {
+        capabilities: {
+          tools: {},
+          resources: {},
+        },
+      },
+    );
+
+    // Handle incoming MCP requests (you'll add tools here next)
+    this.setupHandlers();
+  }
+
+  private setupHandlers() {
+    // TODO: Implement MCP handlers
+  }
+
+  // Start the server and listen for connections
+  async run() {
+    const transport = new StdioServerTransport();
+    await this.server.connect(transport);
+    console.error(&quot;K-Agent MCP server running on stdio&quot;);
+  }
+}
+
+// Actually run the server
+const server = new KAgentServer();
+server.run().catch(console.error);
+</code></pre>
+<p><br></p>
+<p>Create a file named <code>tsconfig.json</code> inside the <code>k-agent-logs</code> directory (not inside <code>src</code>):</p>
+<pre><code class="language-bash">cd ..  # Go back to k-agent-logs directory
+touch tsconfig.json
+</code></pre>
+<p><br></p>
+<p>Paste the following content into <code>tsconfig.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;compilerOptions&quot;: {
+    &quot;target&quot;: &quot;ES2022&quot;,
+    &quot;module&quot;: &quot;commonjs&quot;,
+    &quot;lib&quot;: [&quot;ES2022&quot;],
+    &quot;outDir&quot;: &quot;./dist&quot;,
+    &quot;rootDir&quot;: &quot;./src&quot;,
+    &quot;strict&quot;: true,
+    &quot;esModuleInterop&quot;: true,
+    &quot;skipLibCheck&quot;: true,
+    &quot;forceConsistentCasingInFileNames&quot;: true,
+    &quot;resolveJsonModule&quot;: true,
+    &quot;declaration&quot;: true,
+    &quot;declarationMap&quot;: true,
+    &quot;sourceMap&quot;: true
+  },
+  &quot;include&quot;: [&quot;src/**/*&quot;],
+  &quot;exclude&quot;: [&quot;node_modules&quot;, &quot;dist&quot;]
+}
+</code></pre>
+<p><br></p>
+<p><strong>Test that it works:</strong></p>
+<pre><code class="language-bash">npm run dev
+</code></pre>
+<p>You should see: <code>K-Agent MCP server running on stdio</code></p>
+<p><br></p>
+<p>!!! warning "If you get errors:" - <code>Missing script: "dev"</code> → You didn't update package.json (go back to step 2) - <code>Cannot find module</code> → Make sure you're in the k-agent-logs directory - Other errors → Check that src/index.ts has the correct code</p>
+<hr />
+<h3 id="step-3-pod-discovery-tool">Step 3: Pod Discovery Tool</h3>
+<p>Implement pod enumeration across namespaces with the <code>list_pods</code> tool.</p>
+<p><br></p>
+<h4 id="update-setuphandlers-method">Update setupHandlers() Method</h4>
+<p>Open your <code>src/index.ts</code> file and find the <code>setupHandlers()</code> method. Replace the entire method with the following code:</p>
+<pre><code class="language-typescript">private setupHandlers() {
+  // List available tools
+  this.server.setRequestHandler(ListToolsRequestSchema, async () =&gt; {
+    return {
+      tools: [
+        {
+          name: &quot;list_pods&quot;,
+          description: &quot;List all pods across namespaces with their status&quot;,
+          inputSchema: {
+            type: &quot;object&quot;,
+            properties: {
+              namespace: {
+                type: &quot;string&quot;,
+                description: &quot;Optional: Filter by specific namespace&quot;
+              }
+            }
+          }
+        }
+      ]
+    };
+  });
+
+  // Handle tool calls
+  this.server.setRequestHandler(CallToolRequestSchema, async (request) =&gt; {
+    const { name, arguments: args } = request.params;
+
+    try {
+      switch (name) {
+        case &quot;list_pods&quot;:
+          return await this.handleListPods(args);
+        default:
+          throw new McpError(
+            ErrorCode.MethodNotFound,
+            `Unknown tool: ${name}`
+          );
+      }
+    } catch (error) {
+      throw new McpError(
+        ErrorCode.InternalError,
+        `Tool execution failed: ${error instanceof Error ? error.message : String(error)}`
+      );
+    }
+  });
+}
+</code></pre>
+<p><br></p>
+<h4 id="add-handler-methods">Add Handler Methods</h4>
+<p>Below the <code>setupHandlers()</code> method, <strong>before the <code>async run()</code> method</strong>, add the following new methods:</p>
+<pre><code class="language-typescript">private async handleListPods(args: any) {
+  const namespace = args?.namespace;
+  const pods = await this.getPods(namespace);
+
+  const podList = pods.map(pod =&gt; ({
+    name: pod.metadata?.name || 'unknown',
+    namespace: pod.metadata?.namespace || 'unknown',
+    status: pod.status?.phase || 'unknown',
+    containers: pod.spec?.containers?.map(c =&gt; c.name) || []
+  }));
+
+  return {
+    content: [
+      {
+        type: &quot;text&quot;,
+        text: JSON.stringify(podList, null, 2)
+      }
+    ]
+  };
+}
+
+private async getPods(namespace?: string): Promise&lt;k8s.V1Pod[]&gt; {
+  try {
+    if (namespace) {
+      const response = await this.k8sCoreApi.listNamespacedPod({ namespace });
+      return response.items || [];
+    } else {
+      const response = await this.k8sCoreApi.listPodForAllNamespaces();
+      return response.items || [];
+    }
+  } catch (error) {
+    throw this.handleK8sError(error);
+  }
+}
+
+private handleK8sError(error: any): Error {
+  if (error.response?.statusCode === 403) {
+    return new Error('Access denied: Insufficient permissions to access Kubernetes resources');
+  }
+
+  if (error.response?.statusCode === 404) {
+    return new Error('Resource not found: The specified pod or namespace may not exist');
+  }
+
+  return new Error(`Kubernetes operation failed: ${error.message}`);
+}
+</code></pre>
+<p><br></p>
+<p>!!! success "Complete <code>src/index.ts</code> After Step 3"
+Here's what your complete <code>src/index.ts</code> file should look like after completing Step 3:</p>
+<pre><code>```typescript
+// Import MCP SDK components and Kubernetes client
+import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import {
+  CallToolRequestSchema,
+  ErrorCode,
+  ListResourcesRequestSchema,
+  ListToolsRequestSchema,
+  McpError,
+  ReadResourceRequestSchema,
+} from "@modelcontextprotocol/sdk/types.js";
+import * as k8s from '@kubernetes/client-node';
+
+class KAgentServer {
+  // Store Kubernetes API clients (for talking to your cluster)
+  private k8sConfig: k8s.KubeConfig;
+  private k8sAppsApi: k8s.AppsV1Api;
+  private k8sCoreApi: k8s.CoreV1Api;
+  private server: Server;
+
+  constructor() {
+    // Initialize connection to your Kubernetes cluster (uses ~/.kube/config)
+    this.k8sConfig = new k8s.KubeConfig();
+    this.k8sConfig.loadFromDefault();
+
+    this.k8sAppsApi = this.k8sConfig.makeApiClient(k8s.AppsV1Api);
+    this.k8sCoreApi = this.k8sConfig.makeApiClient(k8s.CoreV1Api);
+
+    // Create MCP server that AI tools can connect to
+    this.server = new Server(
+      {
+        name: "k-agent-logs",
+        version: "1.0.0",
+      },
+      {
+        capabilities: {
+          tools: {},
+          resources: {},
+        },
+      }
+    );
+
+    // Handle incoming MCP requests
+    this.setupHandlers();
+  }
+
+  private setupHandlers() {
+    // List available tools
+    this.server.setRequestHandler(ListToolsRequestSchema, async () =&gt; {
+      return {
+        tools: [
+          {
+            name: "list_pods",
+            description: "List all pods across namespaces with their status",
+            inputSchema: {
+              type: "object",
+              properties: {
+                namespace: {
+                  type: "string",
+                  description: "Optional: Filter by specific namespace"
+                }
+              }
+            }
+          }
+        ]
+      };
+    });
+
+    // Handle tool calls
+    this.server.setRequestHandler(CallToolRequestSchema, async (request) =&gt; {
+      const { name, arguments: args } = request.params;
+
+      try {
+        switch (name) {
+          case "list_pods":
+            return await this.handleListPods(args);
+          default:
+            throw new McpError(
+              ErrorCode.MethodNotFound,
+              `Unknown tool: ${name}`
+            );
+        }
+      } catch (error) {
+        throw new McpError(
+          ErrorCode.InternalError,
+          `Tool execution failed: ${error instanceof Error ? error.message : String(error)}`
+        );
+      }
+    });
+  }
+
+  private async handleListPods(args: any) {
+    const namespace = args?.namespace;
+    const pods = await this.getPods(namespace);
+
+    const podList = pods.map(pod =&gt; ({
+      name: pod.metadata?.name || 'unknown',
+      namespace: pod.metadata?.namespace || 'unknown',
+      status: pod.status?.phase || 'unknown',
+      containers: pod.spec?.containers?.map(c =&gt; c.name) || []
+    }));
+
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(podList, null, 2)
+        }
+      ]
+    };
+  }
+
+  private async getPods(namespace?: string): Promise&lt;k8s.V1Pod[]&gt; {
+    try {
+      if (namespace) {
+        const response = await this.k8sCoreApi.listNamespacedPod({ namespace });
+        return response.items || [];
+      } else {
+        const response = await this.k8sCoreApi.listPodForAllNamespaces();
+        return response.items || [];
+      }
+    } catch (error) {
+      throw this.handleK8sError(error);
+    }
+  }
+
+  private handleK8sError(error: any): Error {
+    if (error.response?.statusCode === 403) {
+      return new Error('Access denied: Insufficient permissions to access Kubernetes resources');
+    }
+
+    if (error.response?.statusCode === 404) {
+      return new Error('Resource not found: The specified pod or namespace may not exist');
+    }
+
+    return new Error(`Kubernetes operation failed: ${error.message}`);
+  }
+
+  // Start the server and listen for connections
+  async run() {
+    const transport = new StdioServerTransport();
+    await this.server.connect(transport);
+    console.error("K-Agent MCP server running on stdio");
+  }
+}
+
+// Actually run the server
+const server = new KAgentServer();
+server.run().catch(console.error);
+```
+</code></pre>
+<p><br></p>
+<h4 id="test-pod-discovery">Test Pod Discovery</h4>
+<p>Test the pod listing functionality using the MCP Inspector by running:</p>
+<pre><code class="language-bash">npx @modelcontextprotocol/inspector node_modules/.bin/tsx src/index.ts
+</code></pre>
+<p>This will start the MCP Inspector connected to your K-Agent server and open a browser window.</p>
+<p><strong>Inside the MCP Inspector UI browser window:</strong></p>
+<ol>
+<li>Click the <strong>"Connect"</strong> button</li>
+<li>Click the <strong>"Tools"</strong> tab</li>
+<li>Click <strong>"List Tools"</strong> - you'll see the <code>list_pods</code> tool</li>
+<li>Click on <strong><code>list_pods</code></strong></li>
+<li>Optionally enter a namespace name</li>
+<li>Click <strong>"Run Tool"</strong> to test it</li>
+</ol>
+<p>You should see a JSON list of all pods with their status and container names.</p>
+<hr />
+<h3 id="step-4-log-collection-tool">Step 4: Log Collection Tool</h3>
+<p>Build the core log collection functionality with the <code>collect_pod_logs</code> tool.</p>
+<p><br></p>
+<h4 id="add-collect_pod_logs-to-tools-array">Add collect_pod_logs to Tools Array</h4>
+<p>In your <code>src/index.ts</code> file, locate the tools array inside <code>setupHandlers()</code> method.</p>
+<p>Add the following second tool code to the array:</p>
+<pre><code class="language-typescript">private setupHandlers() {
+  // List available tools
+  this.server.setRequestHandler(ListToolsRequestSchema, async () =&gt; {
+    return {
+      tools: [
+        {
+          name: &quot;list_pods&quot;,
+          description: &quot;List all pods across namespaces with their status&quot;,
+          inputSchema: {
+            type: &quot;object&quot;,
+            properties: {
+              namespace: {
+                type: &quot;string&quot;,
+                description: &quot;Optional: Filter by specific namespace&quot;
+              }
+            }
+          }
+        },
+        {
+          name: &quot;collect_pod_logs&quot;,
+          description: &quot;Collect logs from all containers in specified pods&quot;,
+          inputSchema: {
+            type: &quot;object&quot;,
+            properties: {
+              namespace: {
+                type: &quot;string&quot;,
+                description: &quot;Namespace to collect logs from&quot;
+              },
+              podName: {
+                type: &quot;string&quot;,
+                description: &quot;Specific pod name (optional - collects from all if not specified)&quot;
+              },
+              tailLines: {
+                type: &quot;number&quot;,
+                description: &quot;Number of recent log lines to retrieve&quot;,
+                default: 100
+              }
+            },
+            required: [&quot;namespace&quot;]
+          }
+        }
+      ]
+    };
+  });
+  // ... rest of setupHandlers
+}
+</code></pre>
+<p><br></p>
+<h4 id="update-tool-handler-switch">Update Tool Handler Switch</h4>
+<p>In the same <code>setupHandlers()</code> method, locate the switch statement and add the following case for <code>collect_pod_logs</code>:</p>
+<pre><code class="language-typescript">switch (name) {
+  case &quot;list_pods&quot;:
+    return await this.handleListPods(args);
+  case &quot;collect_pod_logs&quot;:
+    return await this.handleCollectPodLogs(args);
+  default:
+    throw new McpError(ErrorCode.MethodNotFound, `Unknown tool: ${name}`);
+}
+</code></pre>
+<p><br></p>
+<h4 id="implement-log-collection-methods">Implement Log Collection Methods</h4>
+<p>Below your existing handler methods (after <code>handleK8sError()</code>), <strong>before the <code>async run()</code> method</strong>, add the following new methods:</p>
+<pre><code class="language-typescript">private async handleCollectPodLogs(args: any) {
+  const { namespace, podName, tailLines = 100 } = args;
+
+  if (!namespace) {
+    throw new Error(&quot;Namespace is required&quot;);
+  }
+
+  const logs = await this.collectPodLogs(namespace, podName, tailLines);
+
+  return {
+    content: [
+      {
+        type: &quot;text&quot;,
+        text: logs
+      }
+    ]
+  };
+}
+
+private async collectPodLogs(namespace: string, podName?: string, tailLines: number = 100): Promise&lt;string&gt; {
+  const pods = podName
+    ? await this.getPods(namespace).then(pods =&gt; pods.filter(p =&gt; p.metadata?.name === podName))
+    : await this.getPods(namespace);
+
+  const allLogs: string[] = [];
+
+  for (const pod of pods) {
+    if (!pod.metadata?.name) continue;
+
+    const containers = pod.spec?.containers || [];
+    for (const container of containers) {
+      try {
+        const logs = await this.getPodLogs(namespace, pod.metadata.name, container.name, tailLines);
+        allLogs.push(`=== ${pod.metadata.name}/${container.name} ===\n${logs}\n`);
+      } catch (error) {
+        allLogs.push(`=== ${pod.metadata.name}/${container.name} ===\nError retrieving logs: ${error instanceof Error ? error.message : String(error)}\n`);
+      }
+    }
+  }
+
+  return allLogs.join('\n');
+}
+
+private async getPodLogs(namespace: string, podName: string, containerName: string, tailLines: number): Promise&lt;string&gt; {
+  try {
+    const response = await this.k8sCoreApi.readNamespacedPodLog({
+      name: podName,
+      namespace: namespace,
+      container: containerName,
+      tailLines: tailLines,
+      timestamps: true
+    });
+    return response || '';
+  } catch (error) {
+    throw this.handleK8sError(error);
+  }
+}
+</code></pre>
+<p>!!! success "Complete <code>src/index.ts</code> After Step 4"
+Here's what your complete <code>src/index.ts</code> file should look like after completing Step 4:</p>
+<pre><code>```typescript
+// Import MCP SDK components and Kubernetes client
+import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import {
+  CallToolRequestSchema,
+  ErrorCode,
+  ListResourcesRequestSchema,
+  ListToolsRequestSchema,
+  McpError,
+  ReadResourceRequestSchema,
+} from "@modelcontextprotocol/sdk/types.js";
+import * as k8s from '@kubernetes/client-node';
+
+class KAgentServer {
+  // Store Kubernetes API clients (for talking to your cluster)
+  private k8sConfig: k8s.KubeConfig;
+  private k8sAppsApi: k8s.AppsV1Api;
+  private k8sCoreApi: k8s.CoreV1Api;
+  private server: Server;
+
+  constructor() {
+    // Initialize connection to your Kubernetes cluster (uses ~/.kube/config)
+    this.k8sConfig = new k8s.KubeConfig();
+    this.k8sConfig.loadFromDefault();
+
+    this.k8sAppsApi = this.k8sConfig.makeApiClient(k8s.AppsV1Api);
+    this.k8sCoreApi = this.k8sConfig.makeApiClient(k8s.CoreV1Api);
+
+    // Create MCP server that AI tools can connect to
+    this.server = new Server(
+      {
+        name: "k-agent-logs",
+        version: "1.0.0",
+      },
+      {
+        capabilities: {
+          tools: {},
+          resources: {},
+        },
+      }
+    );
+
+    // Handle incoming MCP requests
+    this.setupHandlers();
+  }
+
+  private setupHandlers() {
+    // List available tools
+    this.server.setRequestHandler(ListToolsRequestSchema, async () =&gt; {
+      return {
+        tools: [
+          {
+            name: "list_pods",
+            description: "List all pods across namespaces with their status",
+            inputSchema: {
+              type: "object",
+              properties: {
+                namespace: {
+                  type: "string",
+                  description: "Optional: Filter by specific namespace"
+                }
+              }
+            }
+          },
+          {
+            name: "collect_pod_logs",
+            description: "Collect logs from all containers in specified pods",
+            inputSchema: {
+              type: "object",
+              properties: {
+                namespace: {
+                  type: "string",
+                  description: "Namespace to collect logs from"
+                },
+                podName: {
+                  type: "string",
+                  description: "Specific pod name (optional - collects from all if not specified)"
+                },
+                tailLines: {
+                  type: "number",
+                  description: "Number of recent log lines to retrieve",
+                  default: 100
+                }
+              },
+              required: ["namespace"]
+            }
+          }
+        ]
+      };
+    });
+
+    // Handle tool calls
+    this.server.setRequestHandler(CallToolRequestSchema, async (request) =&gt; {
+      const { name, arguments: args } = request.params;
+
+      try {
+        switch (name) {
+          case "list_pods":
+            return await this.handleListPods(args);
+          case "collect_pod_logs":
+            return await this.handleCollectPodLogs(args);
+          default:
+            throw new McpError(
+              ErrorCode.MethodNotFound,
+              `Unknown tool: ${name}`
+            );
+        }
+      } catch (error) {
+        throw new McpError(
+          ErrorCode.InternalError,
+          `Tool execution failed: ${error instanceof Error ? error.message : String(error)}`
+        );
+      }
+    });
+  }
+
+  private async handleListPods(args: any) {
+    const namespace = args?.namespace;
+    const pods = await this.getPods(namespace);
+
+    const podList = pods.map(pod =&gt; ({
+      name: pod.metadata?.name || 'unknown',
+      namespace: pod.metadata?.namespace || 'unknown',
+      status: pod.status?.phase || 'unknown',
+      containers: pod.spec?.containers?.map(c =&gt; c.name) || []
+    }));
+
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(podList, null, 2)
+        }
+      ]
+    };
+  }
+
+  private async handleCollectPodLogs(args: any) {
+    const { namespace, podName, tailLines = 100 } = args;
+
+    if (!namespace) {
+      throw new Error("Namespace is required");
+    }
+
+    const logs = await this.collectPodLogs(namespace, podName, tailLines);
+
+    return {
+      content: [
+        {
+          type: "text",
+          text: logs
+        }
+      ]
+    };
+  }
+
+  private async collectPodLogs(namespace: string, podName?: string, tailLines: number = 100): Promise&lt;string&gt; {
+    const pods = podName
+      ? await this.getPods(namespace).then(pods =&gt; pods.filter(p =&gt; p.metadata?.name === podName))
+      : await this.getPods(namespace);
+
+    const allLogs: string[] = [];
+
+    for (const pod of pods) {
+      if (!pod.metadata?.name) continue;
+
+      const containers = pod.spec?.containers || [];
+      for (const container of containers) {
+        try {
+          const logs = await this.getPodLogs(namespace, pod.metadata.name, container.name, tailLines);
+          allLogs.push(`=== ${pod.metadata.name}/${container.name} ===\n${logs}\n`);
+        } catch (error) {
+          allLogs.push(`=== ${pod.metadata.name}/${container.name} ===\nError retrieving logs: ${error instanceof Error ? error.message : String(error)}\n`);
+        }
+      }
+    }
+
+    return allLogs.join('\n');
+  }
+
+  private async getPods(namespace?: string): Promise&lt;k8s.V1Pod[]&gt; {
+    try {
+      if (namespace) {
+        const response = await this.k8sCoreApi.listNamespacedPod({ namespace });
+        return response.items || [];
+      } else {
+        const response = await this.k8sCoreApi.listPodForAllNamespaces();
+        return response.items || [];
+      }
+    } catch (error) {
+      throw this.handleK8sError(error);
+    }
+  }
+
+  private async getPodLogs(namespace: string, podName: string, containerName: string, tailLines: number): Promise&lt;string&gt; {
+    try {
+      const response = await this.k8sCoreApi.readNamespacedPodLog({
+        name: podName,
+        namespace: namespace,
+        container: containerName,
+        tailLines: tailLines,
+        timestamps: true
+      });
+      return response || '';
+    } catch (error) {
+      throw this.handleK8sError(error);
+    }
+  }
+
+  private handleK8sError(error: any): Error {
+    if (error.response?.statusCode === 403) {
+      return new Error('Access denied: Insufficient permissions to access Kubernetes resources');
+    }
+
+    if (error.response?.statusCode === 404) {
+      return new Error('Resource not found: The specified pod or namespace may not exist');
+    }
+
+    return new Error(`Kubernetes operation failed: ${error.message}`);
+  }
+
+  // Start the server and listen for connections
+  async run() {
+    const transport = new StdioServerTransport();
+    await this.server.connect(transport);
+    console.error("K-Agent MCP server running on stdio");
+  }
+}
+
+// Actually run the server
+const server = new KAgentServer();
+server.run().catch(console.error);
+```
+</code></pre>
+<p><br></p>
+<h4 id="test-log-collection">Test Log Collection</h4>
+<p>Test the log collection functionality with the MCP Inspector:</p>
+<pre><code class="language-bash">npx @modelcontextprotocol/inspector node_modules/.bin/tsx src/index.ts
+</code></pre>
+<p>This will start the MCP Inspector connected to your K-Agent server and open a browser window.</p>
+<p><strong>In the MCP Inspector UI browser window:</strong></p>
+<ol>
+<li>Click the <strong>"Connect"</strong> button</li>
+<li>Click the <strong>"Tools"</strong> tab</li>
+<li>Click <strong>"List Tools"</strong> - you'll see both <code>list_pods</code> and <code>collect_pod_logs</code></li>
+<li>Click on <strong><code>collect_pod_logs</code></strong></li>
+<li>In the <strong>namespace</strong> field, enter: <code>default</code></li>
+<li>Click <strong>"Run Tool"</strong></li>
+</ol>
+<p>You should see logs from all pods in the default namespace, formatted with pod and container names.</p>
+<hr />
+<h2 id="optional-extensions">Optional Extensions</h2>
+<p>!!! info "Prerequisites"
+These exercises assume you have completed <strong>Steps 1-4</strong> and have a fully functional K-Agent server with <code>list_pods</code> and <code>collect_pod_logs</code> tools. These exercises extend the functionality beyond the core implementation.</p>
+<hr />
+<h3 id="exercise-1-advanced-pod-filtering-and-sorting">Exercise 1: Advanced Pod Filtering and Sorting</h3>
+<p>Enhance the <code>list_pods</code> tool to support filtering by status, labels, and sorting by various criteria.</p>
+<p><strong>Update the list_pods tool schema</strong> in your <code>setupHandlers()</code> method to include new parameters:</p>
+<pre><code class="language-typescript">{
+  name: &quot;list_pods&quot;,
+  description: &quot;List all pods across namespaces with their status, with filtering and sorting options&quot;,
+  inputSchema: {
+    type: &quot;object&quot;,
+    properties: {
+      namespace: {
+        type: &quot;string&quot;,
+        description: &quot;Optional: Filter by specific namespace&quot;
+      },
+      status: {
+        type: &quot;string&quot;,
+        description: &quot;Optional: Filter by pod status (Running, Pending, Failed, etc.)&quot;,
+        enum: [&quot;Running&quot;, &quot;Pending&quot;, &quot;Failed&quot;, &quot;Succeeded&quot;, &quot;Unknown&quot;]
+      },
+      labelSelector: {
+        type: &quot;string&quot;,
+        description: &quot;Optional: Filter by label selector (e.g., 'app=nginx,env=prod')&quot;
+      },
+      sortBy: {
+        type: &quot;string&quot;,
+        description: &quot;Sort results by field&quot;,
+        enum: [&quot;name&quot;, &quot;namespace&quot;, &quot;status&quot;, &quot;age&quot;],
+        default: &quot;name&quot;
+      }
+    }
+  }
+}
+</code></pre>
+<p><br></p>
+<p><strong>Update the handleListPods method</strong> to support the new parameters:</p>
+<pre><code class="language-typescript">private async handleListPods(args: any) {
+  const { namespace, status, labelSelector, sortBy = 'name' } = args;
+  let pods = await this.getPods(namespace, labelSelector);
+
+  // Filter by status if specified
+  if (status) {
+    pods = pods.filter(pod =&gt; pod.status?.phase === status);
+  }
+
+  // Map to simplified format
+  const podList = pods.map(pod =&gt; ({
+    name: pod.metadata?.name || 'unknown',
+    namespace: pod.metadata?.namespace || 'unknown',
+    status: pod.status?.phase || 'unknown',
+    containers: pod.spec?.containers?.map(c =&gt; c.name) || [],
+    age: pod.metadata?.creationTimestamp
+      ? Math.floor((Date.now() - new Date(pod.metadata.creationTimestamp).getTime()) / 1000 / 60)
+      : 0,
+    labels: pod.metadata?.labels || {}
+  }));
+
+  // Sort results
+  const sortedPods = this.sortPods(podList, sortBy);
+
+  return {
+    content: [
+      {
+        type: &quot;text&quot;,
+        text: JSON.stringify(sortedPods, null, 2)
+      }
+    ]
+  };
+}
+</code></pre>
+<p><br></p>
+<p><strong>Update the getPods method</strong> to support label selectors:</p>
+<pre><code class="language-typescript">private async getPods(namespace?: string, labelSelector?: string): Promise&lt;k8s.V1Pod[]&gt; {
+  try {
+    if (namespace) {
+      const response = await this.k8sCoreApi.listNamespacedPod({
+        namespace,
+        labelSelector
+      });
+      return response.items || [];
+    } else {
+      const response = await this.k8sCoreApi.listPodForAllNamespaces({
+        labelSelector
+      });
+      return response.items || [];
+    }
+  } catch (error) {
+    throw this.handleK8sError(error);
+  }
+}
+</code></pre>
+<p><br></p>
+<p><strong>Add a sorting helper method</strong> after the <code>getPods</code> method:</p>
+<pre><code class="language-typescript">private sortPods(pods: any[], sortBy: string): any[] {
+  return pods.sort((a, b) =&gt; {
+    switch (sortBy) {
+      case 'namespace':
+        return a.namespace.localeCompare(b.namespace);
+      case 'status':
+        return a.status.localeCompare(b.status);
+      case 'age':
+        return b.age - a.age; // Newest first
+      case 'name':
+      default:
+        return a.name.localeCompare(b.name);
+    }
+  });
+}
+</code></pre>
+<p><br></p>
+<p><strong>Test the enhanced filtering:</strong></p>
+<pre><code class="language-bash">npx @modelcontextprotocol/inspector node_modules/.bin/tsx src/index.ts
+</code></pre>
+<p><strong>Try these test cases:</strong></p>
+<ul>
+<li>List only Running pods: Set <code>status</code> to "Running"</li>
+<li>Filter by labels: Set <code>labelSelector</code> to "app=nginx"</li>
+<li>Sort by age: Set <code>sortBy</code> to "age"</li>
+<li>Combine filters: Use namespace + status + sortBy together</li>
+</ul>
+<hr />
+<h3 id="exercise-2-enhanced-log-analysis-with-search-and-export">Exercise 2: Enhanced Log Analysis with Search and Export</h3>
+<p>Extend the <code>collect_pod_logs</code> tool to support log searching, filtering by severity, and exporting logs to files.</p>
+<p><strong>Add a new tool <code>analyze_logs</code></strong> to your tools array in <code>setupHandlers()</code>:</p>
+<pre><code class="language-typescript">{
+  name: &quot;analyze_logs&quot;,
+  description: &quot;Analyze and search through pod logs with filtering and export capabilities&quot;,
+  inputSchema: {
+    type: &quot;object&quot;,
+    properties: {
+      namespace: {
+        type: &quot;string&quot;,
+        description: &quot;Namespace to analyze logs from&quot;
+      },
+      podName: {
+        type: &quot;string&quot;,
+        description: &quot;Specific pod name (optional)&quot;
+      },
+      searchPattern: {
+        type: &quot;string&quot;,
+        description: &quot;Regex pattern to search for in logs&quot;
+      },
+      severityLevel: {
+        type: &quot;string&quot;,
+        description: &quot;Filter by log severity&quot;,
+        enum: [&quot;ERROR&quot;, &quot;WARN&quot;, &quot;INFO&quot;, &quot;DEBUG&quot;]
+      },
+      tailLines: {
+        type: &quot;number&quot;,
+        description: &quot;Number of recent log lines to analyze&quot;,
+        default: 100
+      },
+      exportToFile: {
+        type: &quot;boolean&quot;,
+        description: &quot;Export matching logs to a file&quot;,
+        default: false
+      }
+    },
+    required: [&quot;namespace&quot;]
+  }
+}
+</code></pre>
+<p><br></p>
+<p><strong>Add the case to your switch statement:</strong></p>
+<pre><code class="language-typescript">case &quot;analyze_logs&quot;:
+  return await this.handleAnalyzeLogs(args);
+</code></pre>
+<p><br></p>
+<p><strong>Implement the log analysis handler</strong> after your <code>handleCollectPodLogs</code> method:</p>
+<pre><code class="language-typescript">private async handleAnalyzeLogs(args: any) {
+  const { namespace, podName, searchPattern, severityLevel, tailLines = 100, exportToFile = false } = args;
+
+  if (!namespace) {
+    throw new Error(&quot;Namespace is required&quot;);
+  }
+
+  const logs = await this.collectPodLogs(namespace, podName, tailLines);
+  const analyzedLogs = this.analyzeLogs(logs, searchPattern, severityLevel);
+
+  if (exportToFile) {
+    const filename = await this.exportLogs(analyzedLogs, namespace, podName);
+    return {
+      content: [
+        {
+          type: &quot;text&quot;,
+          text: `Analysis complete. ${analyzedLogs.totalLines} lines analyzed, ${analyzedLogs.matchingLines} matches found.\nExported to: ${filename}\n\n${analyzedLogs.summary}`
+        }
+      ]
+    };
+  }
+
+  return {
+    content: [
+      {
+        type: &quot;text&quot;,
+        text: `Analysis Results:\n${analyzedLogs.summary}\n\nMatching Logs:\n${analyzedLogs.matches.join('\n')}`
+      }
+    ]
+  };
+}
+</code></pre>
+<p><br></p>
+<p><strong>Add the log analysis helper method:</strong></p>
+<pre><code class="language-typescript">private analyzeLogs(logs: string, searchPattern?: string, severityLevel?: string) {
+  const lines = logs.split('\n');
+  const matches: string[] = [];
+  const errors: string[] = [];
+  const warnings: string[] = [];
+
+  for (const line of lines) {
+    // Filter by severity if specified
+    if (severityLevel) {
+      if (!line.includes(severityLevel)) continue;
+    }
+
+    // Search for pattern if specified
+    if (searchPattern) {
+      const regex = new RegExp(searchPattern, 'i');
+      if (regex.test(line)) {
+        matches.push(line);
+      }
+    } else {
+      matches.push(line);
+    }
+
+    // Categorize by severity
+    if (line.includes('ERROR') || line.includes('error')) {
+      errors.push(line);
+    } else if (line.includes('WARN') || line.includes('warning')) {
+      warnings.push(line);
+    }
+  }
+
+  const summary = [
+    `Total Lines: ${lines.length}`,
+    `Matching Lines: ${matches.length}`,
+    `Errors Found: ${errors.length}`,
+    `Warnings Found: ${warnings.length}`,
+    searchPattern ? `Search Pattern: ${searchPattern}` : '',
+    severityLevel ? `Severity Filter: ${severityLevel}` : ''
+  ].filter(Boolean).join('\n');
+
+  return {
+    totalLines: lines.length,
+    matchingLines: matches.length,
+    matches: matches.slice(0, 100), // Limit to first 100 matches
+    errors,
+    warnings,
+    summary
+  };
+}
+</code></pre>
+<p><br></p>
+<p><strong>Add the export helper method</strong> (requires fs module - add <code>import * as fs from 'fs';</code> at the top):</p>
+<pre><code class="language-typescript">private async exportLogs(analyzedLogs: any, namespace: string, podName?: string): Promise&lt;string&gt; {
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const filename = `logs_${namespace}_${podName || 'all'}_${timestamp}.txt`;
+  const filepath = `/tmp/${filename}`;
+
+  const content = [
+    `Kubernetes Log Analysis Report`,
+    `Generated: ${new Date().toISOString()}`,
+    `Namespace: ${namespace}`,
+    podName ? `Pod: ${podName}` : 'All Pods',
+    ``,
+    analyzedLogs.summary,
+    ``,
+    `=== Matching Log Entries ===`,
+    analyzedLogs.matches.join('\n')
+  ].join('\n');
+
+  // Note: In a real implementation, you'd want to handle file system operations more carefully
+  // For this exercise, we'll just return the intended filename
+  return filepath;
+}
+</code></pre>
+<p><br></p>
+<p><strong>Test the log analysis:</strong></p>
+<pre><code class="language-bash">npx @modelcontextprotocol/inspector node_modules/.bin/tsx src/index.ts
+</code></pre>
+<p><strong>Try these test cases:</strong></p>
+<ul>
+<li>Search for errors: Set <code>searchPattern</code> to "error" and <code>severityLevel</code> to "ERROR"</li>
+<li>Find warnings: Set <code>severityLevel</code> to "WARN"</li>
+<li>Export logs: Set <code>exportToFile</code> to true</li>
+<li>Pattern matching: Set <code>searchPattern</code> to a specific error code or message</li>
+</ul>
+<hr />
+<h3 id="exercise-3-real-time-pod-monitoring">Exercise 3: Real-Time Pod Monitoring</h3>
+<p>Create a new tool to monitor pod health and events in real-time, providing insights into pod lifecycle changes.</p>
+<p><strong>Add the <code>monitor_pod_health</code> tool</strong> to your tools array:</p>
+<pre><code class="language-typescript">{
+  name: &quot;monitor_pod_health&quot;,
+  description: &quot;Monitor pod health, restart counts, and recent events&quot;,
+  inputSchema: {
+    type: &quot;object&quot;,
+    properties: {
+      namespace: {
+        type: &quot;string&quot;,
+        description: &quot;Namespace to monitor&quot;
+      },
+      podName: {
+        type: &quot;string&quot;,
+        description: &quot;Specific pod to monitor (optional)&quot;
+      },
+      includeEvents: {
+        type: &quot;boolean&quot;,
+        description: &quot;Include recent Kubernetes events&quot;,
+        default: true
+      }
+    },
+    required: [&quot;namespace&quot;]
+  }
+}
+</code></pre>
+<p><br></p>
+<p><strong>Add the case to your switch statement:</strong></p>
+<pre><code class="language-typescript">case &quot;monitor_pod_health&quot;:
+  return await this.handleMonitorPodHealth(args);
+</code></pre>
+<p><br></p>
+<p><strong>Implement the monitoring handler:</strong></p>
+<pre><code class="language-typescript">private async handleMonitorPodHealth(args: any) {
+  const { namespace, podName, includeEvents = true } = args;
+
+  if (!namespace) {
+    throw new Error(&quot;Namespace is required&quot;);
+  }
+
+  const pods = podName
+    ? await this.getPods(namespace).then(pods =&gt; pods.filter(p =&gt; p.metadata?.name === podName))
+    : await this.getPods(namespace);
+
+  const healthReports = [];
+
+  for (const pod of pods) {
+    if (!pod.metadata?.name) continue;
+
+    const health = this.analyzePodHealth(pod);
+    const events = includeEvents
+      ? await this.getPodEvents(namespace, pod.metadata.name)
+      : [];
+
+    healthReports.push({
+      pod: pod.metadata.name,
+      namespace: pod.metadata.namespace,
+      health,
+      events
+    });
+  }
+
+  return {
+    content: [
+      {
+        type: &quot;text&quot;,
+        text: JSON.stringify(healthReports, null, 2)
+      }
+    ]
+  };
+}
+</code></pre>
+<p><br></p>
+<p><strong>Add the health analysis method:</strong></p>
+<pre><code class="language-typescript">private analyzePodHealth(pod: k8s.V1Pod) {
+  const status = pod.status;
+  const conditions = status?.conditions || [];
+  const containerStatuses = status?.containerStatuses || [];
+
+  // Calculate restart counts
+  const totalRestarts = containerStatuses.reduce(
+    (sum, cs) =&gt; sum + (cs.restartCount || 0),
+    0
+  );
+
+  // Check readiness
+  const readyCondition = conditions.find(c =&gt; c.type === 'Ready');
+  const isReady = readyCondition?.status === 'True';
+
+  // Check container states
+  const containerHealth = containerStatuses.map(cs =&gt; ({
+    name: cs.name,
+    ready: cs.ready,
+    restartCount: cs.restartCount || 0,
+    state: cs.state?.running ? 'Running'
+      : cs.state?.waiting ? `Waiting: ${cs.state.waiting.reason}`
+      : cs.state?.terminated ? `Terminated: ${cs.state.terminated.reason}`
+      : 'Unknown',
+    lastState: cs.lastState?.terminated
+      ? `Previously terminated: ${cs.lastState.terminated.reason}`
+      : undefined
+  }));
+
+  // Overall health assessment
+  const healthStatus =
+    status?.phase === 'Running' &amp;&amp; isReady &amp;&amp; totalRestarts === 0 ? 'Healthy' :
+    status?.phase === 'Running' &amp;&amp; totalRestarts &gt; 0 ? 'Unstable' :
+    status?.phase === 'Pending' ? 'Starting' :
+    status?.phase === 'Failed' ? 'Failed' :
+    'Unknown';
+
+  return {
+    phase: status?.phase,
+    healthStatus,
+    isReady,
+    totalRestarts,
+    age: pod.metadata?.creationTimestamp
+      ? Math.floor((Date.now() - new Date(pod.metadata.creationTimestamp).getTime()) / 1000 / 60)
+      : 0,
+    conditions: conditions.map(c =&gt; ({
+      type: c.type,
+      status: c.status,
+      reason: c.reason,
+      message: c.message
+    })),
+    containers: containerHealth
+  };
+}
+</code></pre>
+<p><br></p>
+<p><strong>Add the events retrieval method:</strong></p>
+<pre><code class="language-typescript">private async getPodEvents(namespace: string, podName: string): Promise&lt;any[]&gt; {
+  try {
+    const response = await this.k8sCoreApi.listNamespacedEvent({
+      namespace,
+      fieldSelector: `involvedObject.name=${podName}`
+    });
+
+    const events = (response.items || [])
+      .sort((a, b) =&gt; {
+        const timeA = a.lastTimestamp || a.firstTimestamp || '';
+        const timeB = b.lastTimestamp || b.firstTimestamp || '';
+        return timeB.localeCompare(timeA);
+      })
+      .slice(0, 10) // Last 10 events
+      .map(event =&gt; ({
+        type: event.type,
+        reason: event.reason,
+        message: event.message,
+        count: event.count,
+        time: event.lastTimestamp || event.firstTimestamp
+      }));
+
+    return events;
+  } catch (error) {
+    console.error('Failed to retrieve events:', error);
+    return [];
+  }
+}
+</code></pre>
+<p><br></p>
+<p><strong>Test the monitoring functionality:</strong></p>
+<pre><code class="language-bash">npx @modelcontextprotocol/inspector node_modules/.bin/tsx src/index.ts
+</code></pre>
+<p><strong>Try these test cases:</strong></p>
+<ul>
+<li>Monitor a specific pod: Set <code>namespace</code> and <code>podName</code></li>
+<li>Check all pods in namespace: Set only <code>namespace</code></li>
+<li>Include events: Set <code>includeEvents</code> to true</li>
+<li>Look for unhealthy pods with high restart counts</li>
+</ul>
+<hr />
+<p>!!! tip "Extension Ideas"
+Now that you have a robust K-Agent, consider these additional enhancements:</p>
+<pre><code>- **Resource Metrics**: Add CPU/memory usage monitoring using the Metrics API
+- **Multi-Cluster Support**: Extend to work with multiple Kubernetes clusters
+- **Alerting**: Implement threshold-based alerts for restart counts or error rates
+- **Log Aggregation**: Integrate with log aggregation systems like ELK or Loki
+- **Historical Analysis**: Store and analyze trends over time
+- **Auto-Remediation**: Add tools to automatically restart or scale problematic pods
+</code></pre>
+<hr />
+<h2 id="troubleshooting">Troubleshooting</h2>
+<h3 id="common-issues">Common Issues</h3>
+<p><strong>"Kubernetes configuration not found"</strong></p>
+<ul>
+<li>Ensure <code>kubectl</code> is installed and configured</li>
+<li>Check <code>~/.kube/config</code> exists and is readable</li>
+</ul>
+<p><strong>"Pod not found" errors</strong></p>
+<ul>
+<li>Confirm pod names and namespaces are correct</li>
+<li>Check pod status with <code>kubectl get pods</code></li>
+</ul>
+<h3 id="debug-commands">Debug Commands</h3>
+<pre><code class="language-bash"># Check cluster access
+kubectl cluster-info
+
+# Verify service account permissions
+kubectl auth can-i list pods --as=system:serviceaccount:default:k-agent-sa
+
+# Check pod logs
+kubectl logs -n your-namespace your-pod-name
+</code></pre>
+<hr />
+<h2 id="key-takeaways">Key Takeaways</h2>
+<p>!!! success "What You Learned" - <strong>K-Agent Architecture</strong>: Building specialized MCP servers for Kubernetes operations - <strong>MCP Server Setup</strong>: Configuring TypeScript-based MCP servers with proper dependencies - <strong>Kubernetes Client Integration</strong>: Using the @kubernetes/client-node library to interact with clusters - <strong>Tool Implementation</strong>: Creating MCP tools for pod discovery and log collection - <strong>Error Handling</strong>: Managing Kubernetes API errors and edge cases - <strong>Testing with MCP Inspector</strong>: Using the Inspector to test and debug MCP tools</p>
+<p>Congratulations! You've built a functional K-Agent with two core capabilities:</p>
+<ul>
+<li><strong>Pod Discovery</strong> - List all pods across namespaces with status information</li>
+<li><strong>Log Collection</strong> - Retrieve logs from pod containers with timestamp support</li>
+</ul>
+<hr />
+<h2 id="whats-next">What's Next?</h2>
+<p>Your K-Agent provides a foundation for more advanced Kubernetes automation.</p>
+<p>Consider exploring:</p>
+<ul>
+<li>Adding filtering, log analysis, and health monitoring</li>
+<li>Integrating your K-Agent with other MCP clients</li>
+<li>Adding more tools for resource management (deployments, services, configmaps)</li>
+<li>Implementing resource watching for real-time cluster monitoring</li>
+<li>Building custom tools specific to your set Kubernetes workflows</li>
+</ul>
+<hr />
+<h2 id="additional-resources">Additional Resources</h2>
+<ul>
+<li><a href="https://kubernetes.io/docs/reference/kubernetes-api/">Kubernetes API Documentation</a></li>
+<li><a href="https://github.com/modelcontextprotocol/sdk">MCP SDK Reference</a></li>
+<li><a href="https://kubernetes.io/docs/concepts/cluster-administration/logging/">Log Aggregation Patterns</a></content></li>
+</ul>
+<!--
+  Copyright (c) 2016-2025 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- Render date of last update -->
+
+
+<!-- Render date of creation -->
+
+
+<!-- ---------------------------------------------------------------------- -->
+
+<!-- Render authors -->
+
+
+<!-- ---------------------------------------------------------------------- -->
+
+<!-- Render committers from GitHub -->
+
+
+<!-- Render committers from GitLab -->
+
+
+<!-- Render committers -->
+
+
+<!-- ---------------------------------------------------------------------- -->
+
+<!-- Determine date of last update -->
+
+
+
+
+
+<!-- Determine date of creation -->
+
+
+
+
+
+<!-- Source file information -->
+
+<aside class="md-source-file">
+
+  <!-- Date of last update -->
+  
+  
+<span class="md-source-file__fact">
+  <span class="md-icon" title="Last update">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+  </span>
+  <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="January 31, 2026 13:02:58 UTC">January 31, 2026</span>
+</span>
+
+  
+
+  <!-- Authors (git-authors plugin) -->
+  
+
+  <!-- Authors (git-committers plugin) -->
+  
+  <!-- Fallback: Manual GitHub avatar for repository owner -->
+  <span class="md-source-file__fact">
+    <nav>
+      <a href="https://github.com/nirgeier" class="md-author" title="@nirgeier">
+        <img src="https://avatars.githubusercontent.com/u/555154?size=256" alt="Nir Geier" />
+      </a>
+    </nav>
+  </span>
+  
+</aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <!--
+  Copyright (c) 2016-2025 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- Footer -->
+<footer class="md-footer">
+  <div class="logo1"></div>
+  <div class="logo2"></div>
+
+  <!-- Link to previous and/or next page -->
+  
+    
+      
+      <nav
+        class="md-footer__inner md-grid"
+        aria-label="Footer"
+        
+      >
+
+        <!-- Link to previous page -->
+        
+          
+          <a
+            href="../../Lab07-MCP-Ollama/lab/"
+            class="md-footer__link md-footer__link--prev"
+            aria-label="Previous: Lab 07: MCP Ollama"
+          >
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Lab 07: MCP Ollama
+              </div>
+            </div>
+          </a>
+        
+        
+        <!-- <ul class="social-badges">
+          <li><a href="https://visitor-badge.laobi.icu/badge?page_id=nirgeier" target="_blank" rel="noopener"><img src="https://visitor-badge.laobi.icu/badge?page_id=nirgeier" alt="Visitor Badge"></a></li>
+          <li><a href="https://www.linkedin.com/in/nirgeier/" target="_blank" rel="noopener"><i class="fab fa-linkedin" aria-hidden="true"></i><span class="sr-only">LinkedIn profile</span></a></li>
+          <li><a href="mailto:nirgeier@gmail.com"><img src="https://img.shields.io/badge/-nirgeier@gmail.com-fcc624?style=flat&logo=Gmail&logoColor=red" alt="Gmail Badge"></a></li>
+          <li><a href="mailto:nirg@codewizard.co.il"><img src="https://img.shields.io/badge/-nirg@codewizard.co.il-fcc624?style=flat&logo=microsoftoutlook&logoColor=blue" alt="Outlook Badge"></a></li>
+        </ul> -->
+        
+        <!-- Link to next page -->
+        
+          
+          <a
+            href="../../Lab09-Event-Monitor/lab/"
+            class="md-footer__link md-footer__link--next"
+            aria-label="Next: Lab 09: K8S Event Monitor"
+          >
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Lab 09: K8S Event Monitor
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+
+  <!-- Further information -->
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      ©2021-2025 Nir Geier<br/><a href="https://visitor-badge.laobi.icu/badge?page_id=nirgeier" target="_blank" rel="noopener"><img src="https://visitor-badge.laobi.icu/badge?page_id=nirgeier" alt="Visitor Badge"></a>
+    </div>
+  
+  
+</div>
+
+      <!-- Social links -->
+      
+        
+<div class="md-social">
+    
+    
+    
+    
+    
+    <a href="https://github.com/nirgeier/AI-K8S-MCP" target="_blank" rel="noopener" title="View on GitHub"
+        class="md-social__link social-class__github">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://github.com/nirgeier/AI-K8S-MCP/network/members" target="_blank" rel="noopener" title="Fork this repo"
+        class="md-social__link social-class__fork">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0M5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0m6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5m-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://github.com/nirgeier/AI-K8S-MCP/stargazers" target="_blank" rel="noopener" title="Star this repo"
+        class="md-social__link social-class__star">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25m0 2.445L6.615 5.5a.75.75 0 0 1-.564.41l-3.097.45 2.24 2.184a.75.75 0 0 1 .216.664l-.528 3.084 2.769-1.456a.75.75 0 0 1 .698 0l2.77 1.456-.53-3.084a.75.75 0 0 1 .216-.664l2.24-2.183-3.096-.45a.75.75 0 0 1-.564-.41z"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://www.linkedin.com/in/nirgeier/" target="_blank" rel="noopener" title="Connect on LinkedIn"
+        class="md-social__link social-class__linkedin">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://discord.gg/U6xW23Ss" target="_blank" rel="noopener" title="Follow me on Discord"
+        class="md-social__link social-class__discord">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M492.5 69.8c-.2-.3-.4-.6-.8-.7-38.1-17.5-78.4-30-119.7-37.1-.4-.1-.8 0-1.1.1s-.6.4-.8.8c-5.5 9.9-10.5 20.2-14.9 30.6-44.6-6.8-89.9-6.8-134.4 0-4.5-10.5-9.5-20.7-15.1-30.6-.2-.3-.5-.6-.8-.8s-.7-.2-1.1-.2C162.5 39 122.2 51.5 84.1 69c-.3.1-.6.4-.8.7C7.1 183.5-13.8 294.6-3.6 404.2c0 .3.1.5.2.8s.3.4.5.6c44.4 32.9 94 58 146.8 74.2.4.1.8.1 1.1 0s.7-.4.9-.7c11.3-15.4 21.4-31.8 30-48.8.1-.2.2-.5.2-.8s0-.5-.1-.8-.2-.5-.4-.6-.4-.3-.7-.4c-15.8-6.1-31.2-13.4-45.9-21.9-.3-.2-.5-.4-.7-.6s-.3-.6-.3-.9 0-.6.2-.9.3-.5.6-.7c3.1-2.3 6.2-4.7 9.1-7.1.3-.2.6-.4.9-.4s.7 0 1 .1c96.2 43.9 200.4 43.9 295.5 0 .3-.1.7-.2 1-.2s.7.2.9.4c2.9 2.4 6 4.9 9.1 7.2.2.2.4.4.6.7s.2.6.2.9-.1.6-.3.9-.4.5-.6.6c-14.7 8.6-30 15.9-45.9 21.8-.2.1-.5.2-.7.4s-.3.4-.4.7-.1.5-.1.8.1.5.2.8c8.8 17 18.8 33.3 30 48.8.2.3.6.6.9.7s.8.1 1.1 0c52.9-16.2 102.6-41.3 147.1-74.2.2-.2.4-.4.5-.6s.2-.5.2-.8c12.3-126.8-20.5-236.9-86.9-334.5zm-302 267.7c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.4 59.2-52.8 59.2m195.4 0c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.2 59.2-52.8 59.2"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://stackoverflow.com/users/1755598/codewizard" target="_blank" rel="noopener" title="Follow me on Stack Overflow"
+        class="md-social__link social-class__stackoverflow">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M291 311 95.3 269.7 87.1 309l195.7 41zm51-87L188.5 95.7 163 126.5l153.5 128.3zm-31.2 39.7L129.5 179l-16.7 36.5L294 300zM262.3 32l-32 24 119.3 160.3 32-24zm20.5 328h-200v39.7h200zm39.7 80H43V320H3v160h359.5V320h-40z"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://wa.me/972548122310" target="_blank" rel="noopener" title="Follow me on WhatsApp"
+        class="md-social__link social-class__whatsapp">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157m-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1s56.2 81.2 56.1 130.5c0 101.8-84.9 184.6-186.6 184.6m101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8s-14.3 18-17.6 21.8c-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7s-12.5-30.1-17.1-41.2c-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2s-9.7 1.4-14.8 6.9c-5.1 5.6-19.4 19-19.4 46.3s19.9 53.7 22.6 57.4c2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4s4.6-24.1 3.2-26.4c-1.3-2.5-5-3.9-10.5-6.6"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="mailto:nirg@codewizard.co.il" target="_blank" rel="noopener" title="Email me"
+        class="md-social__link social-class__email">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4l208 156a48 48 0 0 0 57.6 0l208-156c12.1-9.1 19.2-23.3 19.2-38.4 0-26.5-21.5-48-48-48zM0 196v188c0 35.3 28.7 64 64 64h384c35.3 0 64-28.7 64-64V196L313.6 344.8c-34.1 25.6-81.1 25.6-115.2 0z"/></svg>
+    </a>
+    
+</div>
+      
+    </div>
+  </div>
+</footer>
+
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["announce.dismiss", "content.action.edit", "content.action.view", "content.code.annotate", "content.code.copy", "content.code.select", "content.footnote.tooltips", "content.tabs.link", "content.tooltips", "content.footer.last-updated", "content.footer.contributors", "navigation.expand", "navigation.footer", "navigation.indexes", "navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.sections", "navigation.tracking", "search.highlight", "search.share", "search.suggest", "toc.follow", "toc.integrate", "toc.sticky", "mermaid"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://buttons.github.io/buttons.js?v=1766553928"></script>
+      
+    
+  </body>
+</html>

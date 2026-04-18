@@ -1,0 +1,4439 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Hands-on labs for the K-Agent framework - Kubernetes-native MCP server">
+      
+      
+        <meta name="author" content="CodeWizard-IL">
+      
+      
+        <link rel="canonical" href="https://nirgeier.github.io/AI-K8S-MCP/Lab05-MCP-Prompts/lab/">
+      
+      
+        <link rel="prev" href="../../Lab04-MCP-Resources/lab/">
+      
+      
+        <link rel="next" href="../../Lab06-MCP-Workflow/lab/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Lab 05: MCP Prompts - K-Agent Labs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M12%202a7%207%200%200%200-7%207c0%202.38%201.19%204.47%203%205.74V17a1%201%200%200%200%201%201h6a1%201%200%200%200%201-1v-2.26c1.81-1.27%203-3.36%203-5.74a7%207%200%200%200-7-7M9%2021a1%201%200%200%200%201%201h4a1%201%200%200%200%201-1v-1H9z%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Mulish";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/codewizard.css?v=1766553928">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#lab-5-mcp-prompts-and-complete-integration" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      <!--
+  Copyright (c) 2016-2025 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- Determine classes -->
+
+
+
+
+
+<!-- Header -->
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+
+    <!-- Link to home -->
+    <a href="../.." title="K-Agent Labs"
+      class="md-header__button md-logo" aria-label="K-Agent Labs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89 89">
+  <path d="M3.136,17.387l0,42.932l42.932,21.467l-42.932,-64.399Z" />
+  <path d="M21.91,8l42.933,64.398l-18.775,9.388l-42.932,-64.399l18.774,-9.387Z" style="fill-opacity: 0.5" />
+  <path d="M67.535,17.387l-27.262,18.156l21.878,32.818l5.384,2.691l0,-53.665Z" />
+  <path d="M67.535,17.387l0,53.666l18.774,-9.388l0,-53.665l-18.774,9.387Z" style="fill-opacity: 0.25" />
+</svg>
+
+    </a>
+
+    <!-- Button to open drawer -->
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+
+    <!-- Header title -->
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            K-Agent Labs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+            Lab 05: MCP Prompts
+            
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="m-social__top">
+      <!-- Social links -->
+      
+      
+<div class="md-social">
+    
+    
+    
+    
+    
+    <a href="https://github.com/nirgeier/AI-K8S-MCP" target="_blank" rel="noopener" title="View on GitHub"
+        class="md-social__link social-class__github">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://github.com/nirgeier/AI-K8S-MCP/network/members" target="_blank" rel="noopener" title="Fork this repo"
+        class="md-social__link social-class__fork">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0M5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0m6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5m-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://github.com/nirgeier/AI-K8S-MCP/stargazers" target="_blank" rel="noopener" title="Star this repo"
+        class="md-social__link social-class__star">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25m0 2.445L6.615 5.5a.75.75 0 0 1-.564.41l-3.097.45 2.24 2.184a.75.75 0 0 1 .216.664l-.528 3.084 2.769-1.456a.75.75 0 0 1 .698 0l2.77 1.456-.53-3.084a.75.75 0 0 1 .216-.664l2.24-2.183-3.096-.45a.75.75 0 0 1-.564-.41z"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://www.linkedin.com/in/nirgeier/" target="_blank" rel="noopener" title="Connect on LinkedIn"
+        class="md-social__link social-class__linkedin">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://discord.gg/U6xW23Ss" target="_blank" rel="noopener" title="Follow me on Discord"
+        class="md-social__link social-class__discord">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M492.5 69.8c-.2-.3-.4-.6-.8-.7-38.1-17.5-78.4-30-119.7-37.1-.4-.1-.8 0-1.1.1s-.6.4-.8.8c-5.5 9.9-10.5 20.2-14.9 30.6-44.6-6.8-89.9-6.8-134.4 0-4.5-10.5-9.5-20.7-15.1-30.6-.2-.3-.5-.6-.8-.8s-.7-.2-1.1-.2C162.5 39 122.2 51.5 84.1 69c-.3.1-.6.4-.8.7C7.1 183.5-13.8 294.6-3.6 404.2c0 .3.1.5.2.8s.3.4.5.6c44.4 32.9 94 58 146.8 74.2.4.1.8.1 1.1 0s.7-.4.9-.7c11.3-15.4 21.4-31.8 30-48.8.1-.2.2-.5.2-.8s0-.5-.1-.8-.2-.5-.4-.6-.4-.3-.7-.4c-15.8-6.1-31.2-13.4-45.9-21.9-.3-.2-.5-.4-.7-.6s-.3-.6-.3-.9 0-.6.2-.9.3-.5.6-.7c3.1-2.3 6.2-4.7 9.1-7.1.3-.2.6-.4.9-.4s.7 0 1 .1c96.2 43.9 200.4 43.9 295.5 0 .3-.1.7-.2 1-.2s.7.2.9.4c2.9 2.4 6 4.9 9.1 7.2.2.2.4.4.6.7s.2.6.2.9-.1.6-.3.9-.4.5-.6.6c-14.7 8.6-30 15.9-45.9 21.8-.2.1-.5.2-.7.4s-.3.4-.4.7-.1.5-.1.8.1.5.2.8c8.8 17 18.8 33.3 30 48.8.2.3.6.6.9.7s.8.1 1.1 0c52.9-16.2 102.6-41.3 147.1-74.2.2-.2.4-.4.5-.6s.2-.5.2-.8c12.3-126.8-20.5-236.9-86.9-334.5zm-302 267.7c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.4 59.2-52.8 59.2m195.4 0c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.2 59.2-52.8 59.2"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://stackoverflow.com/users/1755598/codewizard" target="_blank" rel="noopener" title="Follow me on Stack Overflow"
+        class="md-social__link social-class__stackoverflow">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M291 311 95.3 269.7 87.1 309l195.7 41zm51-87L188.5 95.7 163 126.5l153.5 128.3zm-31.2 39.7L129.5 179l-16.7 36.5L294 300zM262.3 32l-32 24 119.3 160.3 32-24zm20.5 328h-200v39.7h200zm39.7 80H43V320H3v160h359.5V320h-40z"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://wa.me/972548122310" target="_blank" rel="noopener" title="Follow me on WhatsApp"
+        class="md-social__link social-class__whatsapp">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157m-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1s56.2 81.2 56.1 130.5c0 101.8-84.9 184.6-186.6 184.6m101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8s-14.3 18-17.6 21.8c-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7s-12.5-30.1-17.1-41.2c-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2s-9.7 1.4-14.8 6.9c-5.1 5.6-19.4 19-19.4 46.3s19.9 53.7 22.6 57.4c2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4s4.6-24.1 3.2-26.4c-1.3-2.5-5-3.9-10.5-6.6"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="mailto:nirg@codewizard.co.il" target="_blank" rel="noopener" title="Email me"
+        class="md-social__link social-class__email">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4l208 156a48 48 0 0 0 57.6 0l208-156c12.1-9.1 19.2-23.3 19.2-38.4 0-26.5-21.5-48-48-48zM0 196v188c0 35.3 28.7 64 64 64h384c35.3 0 64-28.7 64-64V196L313.6 344.8c-34.1 25.6-81.1 25.6-115.2 0z"/></svg>
+    </a>
+    
+</div>
+      
+    </div>
+
+    <!-- Color palette toggle -->
+    
+    
+    <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+    
+    
+
+    <!-- User preference: color palette -->
+    
+    <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+
+    <!-- Site language selector -->
+    
+
+    <!-- Button to open search modal -->
+    
+    
+
+    <!-- Check if search is actually enabled - see https://t.ly/DT_0V -->
+    
+    <label class="md-header__button md-icon" for="__search">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+    </label>
+
+    <!-- Search interface -->
+    <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+
+    <!-- Repository information -->
+    
+    <div class="md-header__source">
+      <a href="https://github.com/nirgeier/AI-K8S-MCP.git" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nirgeier/AI-K8S-MCP
+  </div>
+</a>
+    </div>
+    
+  </nav>
+
+  <!-- Navigation tabs (sticky) -->
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="K-Agent Labs" class="md-nav__button md-logo" aria-label="K-Agent Labs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89 89">
+  <path d="M3.136,17.387l0,42.932l42.932,21.467l-42.932,-64.399Z" />
+  <path d="M21.91,8l42.933,64.398l-18.775,9.388l-42.932,-64.399l18.774,-9.387Z" style="fill-opacity: 0.5" />
+  <path d="M67.535,17.387l-27.262,18.156l21.878,32.818l5.384,2.691l0,-53.665Z" />
+  <path d="M67.535,17.387l0,53.666l18.774,-9.388l0,-53.665l-18.774,9.387Z" style="fill-opacity: 0.25" />
+</svg>
+
+    </a>
+    K-Agent Labs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/nirgeier/AI-K8S-MCP.git" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nirgeier/AI-K8S-MCP
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../welcome/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Welcome
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../labs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Labs Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../.." class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Labs
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Labs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab00-Setup/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 00: Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab01-MCP-Fundamentals/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 01: MCP Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab02-First-MCP-Server/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 02: First MCP Server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab03-MCP-Tools/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 03: MCP Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab04-MCP-Resources/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 04: MCP Resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 05: MCP Prompts
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 05: MCP Prompts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learning-objectives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Learning Objectives
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-makes-prompts-special" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Makes Prompts Special?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What Makes Prompts Special?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#when-to-use-prompts-vs-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to Use Prompts vs. Tools
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prompt-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt Architecture
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#project-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Project Setup
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Project Setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-create-your-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Create Your Project
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-install-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Install Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-configure-typescript" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Configure TypeScript
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-create-project-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Create Project Structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creating-your-first-prompt-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Creating Your First Prompt Server
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Creating Your First Prompt Server">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-basic-server-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Basic Server Setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-test-your-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Test Your Server
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-adding-arguments-and-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Adding Arguments and Validation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 3: Adding Arguments and Validation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#test-enhanced-prompts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test Enhanced Prompts
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integrating-resources-with-prompts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integrating Resources with Prompts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Integrating Resources with Prompts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-add-resource-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Add Resource Support
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-test-resource-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Test Resource Integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#complete-mcp-server-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Complete MCP Server Integration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Complete MCP Server Integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-combine-all-capabilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Combine All Capabilities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-test-complete-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Test Complete Integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hands-on-exercises" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hands-On Exercises
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Hands-On Exercises">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#exercise-1-custom-prompt-library" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exercise 1: Custom Prompt Library
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exercise-2-multi-step-workflow-prompt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exercise 2: Multi-Step Workflow Prompt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exercise-3-production-ready-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exercise 3: Production-Ready Server
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-takeaways" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Takeaways
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Next Steps
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's Next?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What&#39;s Next?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#further-experimentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Further experimentation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-topics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Advanced Topics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#real-world-applications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Real-World Applications
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#community-engagement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Community Engagement
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab06-MCP-Workflow/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 06: MCP Workflow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab07-MCP-Ollama/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07: MCP Ollama
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab08-Kagent/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 08: Kagent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Lab09-Event-Monitor/lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09: K8S Event Monitor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../Tasks/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tasks
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tasks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tasks/000-Setup-RooCode/README.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup with RooCode
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tasks/001-MCP-Basics/README.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP Basics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tasks/002-MCP-FastMCP/README.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP FastMCP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Resources
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Resources
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step01-install-kagent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 01: Install Kagent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step02-create-mcp-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 02: Create MCP Server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step03-kmcp-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 03: Build with KMCP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step04-verify-registration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 04: Verify Registration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step05-create-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 05: Create Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step06-install-ingress/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 06: Install Ingress
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step07-deploy-prometheus-grafana/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 07: Prometheus & Grafana
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/step08-expose-ingress/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 - 08: Expose Services
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab09-Event-Monitor/resources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 09 : K8S Resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step00-getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 00: Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step01-imports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 01: Imports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step02-skeleton-code/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 02: Skeleton Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step03-constructor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 03: Constructor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step04-list-tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 04: Register Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step05-call-tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 05: Tool Handlers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step06-list-resources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 06: Register Resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step07-read-resources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 07: Resource Handlers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step08-list_prompts.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 08: Register Prompts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step09-get_prompt/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 09: Prompt Handlers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step10-setup-handlers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 10: Setup Handlers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step11-run-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 11: Run Server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Resources/Lab07-MCP-Ollama/step12-main-entry-point/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 07 - 12: Main Entry Point
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../explanations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Explanations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/nirgeier/AI-K8S-MCP.git/edit/master/docs/Lab05-MCP-Prompts/lab.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/nirgeier/AI-K8S-MCP.git/raw/master/docs/Lab05-MCP-Prompts/lab.md" title="View source of this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
+    </a>
+  
+
+
+<h1 id="lab-5-mcp-prompts-and-complete-integration">Lab 5: MCP Prompts and Complete Integration</h1>
+<h2 id="overview">Overview</h2>
+<p>Congratulations on reaching the final lab!</p>
+<p>As you have already mastered tools and resources, now it's time to complete your MCP expertise with <strong>Prompts</strong>.</p>
+<p>Prompts are reusable templates that help users and LLMs perform common tasks consistently and effectively. They can embed resources, accept arguments, and create structured workflows that combine the best of human expertise with AI capabilities.</p>
+<p>In this lab, you'll learn how to create sophisticated prompt templates, integrate them with resources and tools, and build complete, production-ready MCP servers that showcase all three capabilities working together.</p>
+<hr />
+<h2 id="learning-objectives">Learning Objectives</h2>
+<p>By the end of this lab, you will:</p>
+<ul>
+<li>Understand the role of prompts in MCP ecosystems</li>
+<li>Create static and dynamic prompt templates</li>
+<li>Embed resources and arguments in prompts</li>
+<li>Implement prompt handlers with proper validation</li>
+<li>Build complete MCP servers combining all capabilities</li>
+<li>Apply production best practices for deployment</li>
+<li>Debug and troubleshoot complex MCP integrations</li>
+<li>Create reusable prompt libraries for common tasks</li>
+</ul>
+<hr />
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Completed <a href="../Lab04-MCP-Resources/">Lab 4 - Implementing MCP Resources</a></li>
+<li>Understanding of prompt engineering concepts</li>
+<li>Familiarity with template systems and variable substitution</li>
+<li>Experience with complex application architecture</li>
+</ul>
+<hr />
+<h2 id="what-makes-prompts-special">What Makes Prompts Special?</h2>
+<p>Prompts in MCP are more than just text templates - they're <strong>structured, reusable AI workflows</strong> that:</p>
+<ul>
+<li><strong>Standardize</strong> common tasks across different users and contexts</li>
+<li><strong>Combine expertise</strong> from domain specialists with AI capabilities</li>
+<li><strong>Integrate resources</strong> to provide rich context automatically</li>
+<li><strong>Accept parameters</strong> to customize behavior dynamically</li>
+<li><strong>Create consistency</strong> in AI interactions and outputs</li>
+</ul>
+<h3 id="when-to-use-prompts-vs-tools">When to Use Prompts vs. Tools</h3>
+<table>
+<thead>
+<tr>
+<th>Use Case</th>
+<th>Use Prompt</th>
+<th>Use Tool</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Code review</td>
+<td>✅ Prompt</td>
+<td>❌ Tool</td>
+<td>Needs structured guidance and context</td>
+</tr>
+<tr>
+<td>Data analysis</td>
+<td>✅ Prompt</td>
+<td>❌ Tool</td>
+<td>Requires analytical reasoning framework</td>
+</tr>
+<tr>
+<td>Content writing</td>
+<td>✅ Prompt</td>
+<td>❌ Tool</td>
+<td>Benefits from style guides and examples</td>
+</tr>
+<tr>
+<td>API calls</td>
+<td>❌ Prompt</td>
+<td>✅ Tool</td>
+<td>Direct action with predictable results</td>
+</tr>
+<tr>
+<td>Calculations</td>
+<td>❌ Prompt</td>
+<td>✅ Tool</td>
+<td>Mathematical precision required</td>
+</tr>
+<tr>
+<td>Research synthesis</td>
+<td>✅ Prompt</td>
+<td>❌ Tool</td>
+<td>Complex reasoning and integration needed</td>
+</tr>
+</tbody>
+</table>
+<h3 id="prompt-architecture">Prompt Architecture</h3>
+<pre><code class="language-typescript">interface Prompt {
+  name: string;              // Unique identifier
+  description: string;       // What the prompt does
+  arguments?: Argument[];    // Optional parameters
+  messages: Message[];       // The actual prompt content
+}
+
+interface Argument {
+  name: string;              // Parameter name
+  description: string;       // What it controls
+  required?: boolean;        // Is it mandatory?
+}
+
+interface Message {
+  role: &quot;user&quot; | &quot;assistant&quot;; // Who says this
+  content: Content;          // The message content
+}
+</code></pre>
+<hr />
+<h2 id="project-setup">Project Setup</h2>
+<h3 id="step-1-create-your-project">Step 1: Create Your Project</h3>
+<p>Let's start by creating a new MCP server project for prompts:</p>
+<pre><code class="language-bash">mkdir my-mcp-prompts-server  # &lt;-- next to the directory created in previous labs
+cd my-mcp-prompts-server
+npm init -y
+</code></pre>
+<h3 id="step-2-install-dependencies">Step 2: Install Dependencies</h3>
+<pre><code class="language-bash"># Core MCP SDK
+npm install @modelcontextprotocol/sdk
+
+# TypeScript and development tools
+npm install -D typescript @types/node tsx
+</code></pre>
+<h3 id="step-3-configure-typescript">Step 3: Configure TypeScript</h3>
+<p>Create a <code>tsconfig.json</code> file with the following content inside the <code>my-mcp-prompts-server</code> directory you have just created:</p>
+<pre><code class="language-json">{
+  &quot;compilerOptions&quot;: {
+    &quot;target&quot;: &quot;ES2022&quot;,
+    &quot;module&quot;: &quot;Node16&quot;,
+    &quot;moduleResolution&quot;: &quot;Node16&quot;,
+    &quot;outDir&quot;: &quot;./dist&quot;,
+    &quot;rootDir&quot;: &quot;./src&quot;,
+    &quot;strict&quot;: true,
+    &quot;esModuleInterop&quot;: true,
+    &quot;skipLibCheck&quot;: true,
+    &quot;forceConsistentCasingInFileNames&quot;: true
+  },
+  &quot;include&quot;: [&quot;src/**/*&quot;],
+  &quot;exclude&quot;: [&quot;node_modules&quot;, &quot;dist&quot;]
+}
+</code></pre>
+<h3 id="step-4-create-project-structure">Step 4: Create Project Structure</h3>
+<pre><code class="language-bash">mkdir src     # &lt;-- inside &quot;my-mcp-prompts-server&quot; directory
+touch src/index.ts   # and leave it empty for now
+</code></pre>
+<hr />
+<h2 id="creating-your-first-prompt-server">Creating Your First Prompt Server</h2>
+<h3 id="step-1-basic-server-setup">Step 1: Basic Server Setup</h3>
+<p>Let's create a basic MCP server that exposes prompts. Paste the following inside <code>src/index.ts</code>:</p>
+<pre><code class="language-typescript">#!/usr/bin/env node
+
+import { Server } from &quot;@modelcontextprotocol/sdk/server/index.js&quot;;
+import { StdioServerTransport } from &quot;@modelcontextprotocol/sdk/server/stdio.js&quot;;
+import {
+  ListPromptsRequestSchema,
+  GetPromptRequestSchema,
+} from &quot;@modelcontextprotocol/sdk/types.js&quot;;
+
+class PromptServer {
+  private server: Server;
+
+  constructor() {
+    this.server = new Server(
+      {
+        name: &quot;mcp-prompts-server&quot;,
+        version: &quot;1.0.0&quot;,
+      },
+      {
+        capabilities: {
+          prompts: {},
+        },
+      }
+    );
+
+    this.setupHandlers();
+    this.setupErrorHandling();
+  }
+
+  private setupHandlers(): void {
+    // List available prompts
+    this.server.setRequestHandler(ListPromptsRequestSchema, async () =&gt; {
+      return {
+        prompts: [
+          {
+            name: &quot;hello-prompt&quot;,
+            description: &quot;A simple greeting prompt&quot;,
+          },
+          {
+            name: &quot;code-review&quot;,
+            description: &quot;Comprehensive code review with best practices&quot;,
+            arguments: [
+              {
+                name: &quot;language&quot;,
+                description: &quot;Programming language (e.g., typescript, python)&quot;,
+                required: true,
+              },
+            ],
+          },
+        ],
+      };
+    });
+
+    // Get specific prompt
+    this.server.setRequestHandler(GetPromptRequestSchema, async (request) =&gt; {
+      const { name, arguments: args } = request.params;
+      return this.generatePrompt(name, args || {});
+    });
+  }
+
+  private generatePrompt(name: string, args: Record&lt;string, any&gt;): any {
+    switch (name) {
+      case &quot;hello-prompt&quot;:
+        return {
+          description: &quot;A simple greeting prompt&quot;,
+          messages: [
+            {
+              role: &quot;user&quot;,
+              content: {
+                type: &quot;text&quot;,
+                text: &quot;Hello! Please introduce yourself and explain what you can help me with today.&quot;,
+              },
+            },
+          ],
+        };
+
+      case &quot;code-review&quot;:
+        const language = args.language || &quot;typescript&quot;;
+        return {
+          description: `Code review for ${language}`,
+          messages: [
+            {
+              role: &quot;user&quot;,
+              content: {
+                type: &quot;text&quot;,
+                text: `Please perform a comprehensive code review of the following ${language} code. Focus on:
+
+## Code Quality &amp; Best Practices
+- **Readability**: Is the code easy to understand?
+- **Maintainability**: How easy will this be to modify later?
+- **Performance**: Are there any obvious performance issues?
+- **Error Handling**: Are errors handled appropriately?
+
+## ${language.toUpperCase()}-Specific Checks
+- Follow ${language} conventions and best practices
+- Use appropriate design patterns
+- Ensure proper type safety (if applicable)
+
+Please provide specific, actionable feedback with examples where possible.`,
+              },
+            },
+          ],
+        };
+
+      default:
+        throw new Error(`Unknown prompt: ${name}`);
+    }
+  }
+
+  private setupErrorHandling(): void {
+    this.server.onerror = (error) =&gt; {
+      console.error(&quot;[MCP Error]&quot;, error);
+    };
+
+    process.on(&quot;SIGINT&quot;, async () =&gt; {
+      await this.server.close();
+      process.exit(0);
+    });
+  }
+
+  async start(): Promise&lt;void&gt; {
+    const transport = new StdioServerTransport();
+    await this.server.connect(transport);
+    console.error(&quot;Prompt Server running on stdio&quot;);
+  }
+}
+
+// Main entry point
+async function main() {
+  const server = new PromptServer();
+  await server.start();
+}
+
+main().catch((error) =&gt; {
+  console.error(&quot;Fatal error:&quot;, error);
+  process.exit(1);
+});
+</code></pre>
+<hr />
+<h3 id="step-2-test-your-server">Step 2: Test Your Server</h3>
+<p><strong>Build and run the server:</strong></p>
+<pre><code class="language-bash">npm run build
+npx @modelcontextprotocol/inspector node dist/index.js
+</code></pre>
+<p>The MCP Inspector will launch a web interface.</p>
+<p><br></p>
+<p><strong>Test the prompts in the MCP Inspector UI:</strong></p>
+<ol>
+<li>
+<p><strong>List prompts</strong>: Click the "Prompts" tab, then click "List Prompts" to see your two prompts ("hello-prompt" and "code-review").</p>
+</li>
+<li>
+<p><strong>Get hello-prompt</strong>: In the same section, select "Get Prompt", enter "hello-prompt" as the name, and submit to see the greeting prompt content.</p>
+</li>
+<li>
+<p><strong>Get code-review</strong>: Select "Get Prompt", enter "code-review" as the name, and optionally provide arguments like {"language": "typescript"} in the arguments field, then submit to see the code review prompt.</p>
+</li>
+</ol>
+<hr />
+<h3 id="step-3-adding-arguments-and-validation">Step 3: Adding Arguments and Validation</h3>
+<p>Let's enhance our server with better argument handling. Update your existing <code>src/index.ts</code> file to add more arguments to the code-review prompt and include helper methods for dynamic content generation.</p>
+<p><strong>Update the code-review prompt definition in the <code>ListPromptsRequestSchema</code> handler:</strong></p>
+<pre><code class="language-typescript">// Update the code-review prompt definition
+{
+  name: &quot;code-review&quot;,
+  description: &quot;Comprehensive code review with best practices&quot;,
+  arguments: [
+    {
+      name: &quot;language&quot;,
+      description: &quot;Programming language (e.g., typescript, python, java)&quot;,
+      required: true,
+    },
+    {
+      name: &quot;complexity&quot;,
+      description: &quot;Code complexity level (beginner, intermediate, advanced)&quot;,
+      required: false,
+    },
+    {
+      name: &quot;focus&quot;,
+      description: &quot;Review focus areas (comma-separated: quality,security,performance)&quot;,
+      required: false,
+    },
+  ],
+}
+</code></pre>
+<p><br></p>
+<p><strong>Update the prompt generation:</strong></p>
+<pre><code class="language-typescript">case &quot;code-review&quot;:
+  const language = args.language || &quot;typescript&quot;;
+  const complexity = args.complexity || &quot;intermediate&quot;;
+  const focus = args.focus || &quot;quality&quot;;
+
+  return {
+    description: `Code review for ${language} (${complexity} level, focus: ${focus})`,
+    messages: [
+      {
+        role: &quot;user&quot;,
+        content: {
+          type: &quot;text&quot;,
+          text: `Please perform a comprehensive code review of the following ${language} code.
+
+**Complexity Level:** ${complexity}
+**Focus Areas:** ${focus}
+
+## Review Guidelines
+
+### Code Quality &amp; Best Practices
+- **Readability**: Is the code easy to understand?
+- **Maintainability**: How easy will this be to modify later?
+- **Performance**: Are there any obvious performance issues?
+
+### ${complexity.charAt(0).toUpperCase() + complexity.slice(1)} Level Expectations
+${this.getComplexityExpectations(complexity)}
+
+### Focus Area: ${focus.toUpperCase()}
+${this.getFocusAreaGuidance(focus)}
+
+Please provide specific, actionable feedback with examples where possible.`,
+        },
+      },
+    ],
+  };
+</code></pre>
+<p><br></p>
+<p><strong>Add helper methods:</strong></p>
+<pre><code class="language-typescript">private getComplexityExpectations(level: string): string {
+  const expectations: { [key: string]: string } = {
+    beginner: `- Clear, self-documenting code\n- Basic error handling\n- Simple, understandable logic`,
+    intermediate: `- Good separation of concerns\n- Comprehensive error handling\n- Appropriate design patterns\n- Unit test coverage`,
+    advanced: `- High performance and scalability\n- Complex architectural patterns\n- Extensive testing (unit, integration, e2e)\n- Advanced optimization techniques`,
+  };
+  return expectations[level] || &quot;- Standard coding practices&quot;;
+}
+
+private getFocusAreaGuidance(focus: string): string {
+  const guidance: { [key: string]: string } = {
+    quality: `**Code Quality Focus:**
+- Code readability and maintainability
+- Consistent naming conventions
+- Proper code organization
+- Documentation quality`,
+    security: `**Security Focus:**
+- Input validation and sanitization
+- Authentication and authorization
+- Data protection practices
+- Common vulnerability patterns`,
+    performance: `**Performance Focus:**
+- Algorithm efficiency
+- Memory usage optimization
+- Database query optimization
+- Caching strategies`,
+  };
+  return guidance[focus] || &quot;- General best practices&quot;;
+}
+</code></pre>
+<p><br></p>
+<p>Here's the complete updated <code>src/index.ts</code> with all the above enhancements, just for review purposes:</p>
+<pre><code class="language-typescript">#!/usr/bin/env node
+
+import { Server } from &quot;@modelcontextprotocol/sdk/server/index.js&quot;;
+import { StdioServerTransport } from &quot;@modelcontextprotocol/sdk/server/stdio.js&quot;;
+import {
+  ListPromptsRequestSchema,
+  GetPromptRequestSchema,
+} from &quot;@modelcontextprotocol/sdk/types.js&quot;;
+
+class PromptServer {
+  private server: Server;
+
+  constructor() {
+    this.server = new Server(
+      {
+        name: &quot;mcp-prompts-server&quot;,
+        version: &quot;1.0.0&quot;,
+      },
+      {
+        capabilities: {
+          prompts: {},
+        },
+      }
+    );
+
+    this.setupHandlers();
+    this.setupErrorHandling();
+  }
+
+  private setupHandlers(): void {
+    // List available prompts
+    this.server.setRequestHandler(ListPromptsRequestSchema, async () =&gt; {
+      return {
+        prompts: [
+          {
+            name: &quot;hello-prompt&quot;,
+            description: &quot;A simple greeting prompt&quot;,
+          },
+          {
+            name: &quot;code-review&quot;,
+            description: &quot;Comprehensive code review with best practices&quot;,
+            arguments: [
+              {
+                name: &quot;language&quot;,
+                description: &quot;Programming language (e.g., typescript, python, java)&quot;,
+                required: true,
+              },
+              {
+                name: &quot;complexity&quot;,
+                description: &quot;Code complexity level (beginner, intermediate, advanced)&quot;,
+                required: false,
+              },
+              {
+                name: &quot;focus&quot;,
+                description: &quot;Review focus areas (comma-separated: quality,security,performance)&quot;,
+                required: false,
+              },
+            ],
+          },
+        ],
+      };
+    });
+
+    // Get specific prompt
+    this.server.setRequestHandler(GetPromptRequestSchema, async (request) =&gt; {
+      const { name, arguments: args } = request.params;
+      return this.generatePrompt(name, args || {});
+    });
+  }
+
+  private generatePrompt(name: string, args: Record&lt;string, any&gt;): any {
+    switch (name) {
+      case &quot;hello-prompt&quot;:
+        return {
+          description: &quot;A simple greeting prompt&quot;,
+          messages: [
+            {
+              role: &quot;user&quot;,
+              content: {
+                type: &quot;text&quot;,
+                text: &quot;Hello! Please introduce yourself and explain what you can help me with today.&quot;,
+              },
+            },
+          ],
+        };
+
+      case &quot;code-review&quot;:
+        const language = args.language || &quot;typescript&quot;;
+        const complexity = args.complexity || &quot;intermediate&quot;;
+        const focus = args.focus || &quot;quality&quot;;
+
+        return {
+          description: `Code review for ${language} (${complexity} level, focus: ${focus})`,
+          messages: [
+            {
+              role: &quot;user&quot;,
+              content: {
+                type: &quot;text&quot;,
+                text: `Please perform a comprehensive code review of the following ${language} code.
+
+**Complexity Level:** ${complexity}
+**Focus Areas:** ${focus}
+
+## Review Guidelines
+
+### Code Quality &amp; Best Practices
+- **Readability**: Is the code easy to understand?
+- **Maintainability**: How easy will this be to modify later?
+- **Performance**: Are there any obvious performance issues?
+
+### ${complexity.charAt(0).toUpperCase() + complexity.slice(1)} Level Expectations
+${this.getComplexityExpectations(complexity)}
+
+### Focus Area: ${focus.toUpperCase()}
+${this.getFocusAreaGuidance(focus)}
+
+Please provide specific, actionable feedback with examples where possible.`,
+              },
+            },
+          ],
+        };
+
+      default:
+        throw new Error(`Unknown prompt: ${name}`);
+    }
+  }
+
+  private getComplexityExpectations(level: string): string {
+    const expectations: { [key: string]: string } = {
+      beginner: `- Clear, self-documenting code\n- Basic error handling\n- Simple, understandable logic`,
+      intermediate: `- Good separation of concerns\n- Comprehensive error handling\n- Appropriate design patterns\n- Unit test coverage`,
+      advanced: `- High performance and scalability\n- Complex architectural patterns\n- Extensive testing (unit, integration, e2e)\n- Advanced optimization techniques`,
+    };
+    return expectations[level] || &quot;- Standard coding practices&quot;;
+  }
+
+  private getFocusAreaGuidance(focus: string): string {
+    const guidance: { [key: string]: string } = {
+      quality: `**Code Quality Focus:**
+- Code readability and maintainability
+- Consistent naming conventions
+- Proper code organization
+- Documentation quality`,
+      security: `**Security Focus:**
+- Input validation and sanitization
+- Authentication and authorization
+- Data protection practices
+- Common vulnerability patterns`,
+      performance: `**Performance Focus:**
+- Algorithm efficiency
+- Memory usage optimization
+- Database query optimization
+- Caching strategies`,
+    };
+    return guidance[focus] || &quot;- General best practices&quot;;
+  }
+
+  private setupErrorHandling(): void {
+    this.server.onerror = (error) =&gt; {
+      console.error(&quot;[MCP Error]&quot;, error);
+    };
+
+    process.on(&quot;SIGINT&quot;, async () =&gt; {
+      await this.server.close();
+      process.exit(0);
+    });
+  }
+
+  async start(): Promise&lt;void&gt; {
+    const transport = new StdioServerTransport();
+    await this.server.connect(transport);
+    console.error(&quot;Prompt Server running on stdio&quot;);
+  }
+}
+
+// Main entry point
+async function main() {
+  const server = new PromptServer();
+  await server.start();
+}
+
+main().catch((error) =&gt; {
+  console.error(&quot;Fatal error:&quot;, error);
+  process.exit(1);
+});
+</code></pre>
+<p><br></p>
+<h4 id="test-enhanced-prompts">Test Enhanced Prompts</h4>
+<p><strong>Test with different arguments:</strong></p>
+<ol>
+<li>
+<p><strong>Basic code review</strong> (with default values):
+   <code>javascript
+   { name: "code-review", arguments: { language: "typescript" } }</code>
+   Expected: Returns a prompt with intermediate complexity and quality focus.</p>
+</li>
+<li>
+<p><strong>Advanced code review with focus</strong>:
+   <code>javascript
+   {
+     name: "code-review",
+     arguments: {
+       language: "python",
+       complexity: "advanced",
+       focus: "security"
+     }
+   }</code>
+   Expected: Returns a prompt with advanced complexity expectations and security focus guidance.</p>
+</li>
+</ol>
+<p><strong>How to test in MCP Inspector:</strong></p>
+<ol>
+<li>
+<p><strong>Start the server:</strong>
+   <code>bash
+   cd my-mcp-prompts-server
+   npm run build
+   npx @modelcontextprotocol/inspector node dist/index.js</code></p>
+</li>
+<li>
+<p><strong>Inside MCP Inspector UI, navigate to Prompts:</strong></p>
+<ul>
+<li>Click on the "Prompts" tab in the Inspector interface</li>
+</ul>
+</li>
+<li>
+<p><strong>Test List Prompts:</strong></p>
+<ul>
+<li>Click "List Prompts" button</li>
+<li>Verify you see "hello-prompt" and "code-review" with the updated arguments</li>
+</ul>
+</li>
+<li>
+<p><strong>Test Get Prompt - Basic:</strong></p>
+<ul>
+<li>Select "Get Prompt" from the dropdown or click the button</li>
+<li>Enter <code>code-review</code> in the "Name" field</li>
+<li>In the "Arguments" field, enter: <code>{"language": "typescript"}</code></li>
+<li>Click "Send Request"</li>
+<li>Check that the response includes intermediate complexity and quality focus</li>
+</ul>
+</li>
+<li>
+<p><strong>Test Get Prompt - Advanced:</strong></p>
+<ul>
+<li>Select "Get Prompt" again</li>
+<li>Enter <code>code-review</code> in the "Name" field</li>
+<li>In the "Arguments" field, enter:
+    <code>json
+    {
+      "language": "python",
+      "complexity": "advanced",
+      "focus": "security"
+    }</code></li>
+<li>Click "Send Request"</li>
+<li>Verify the prompt content includes advanced expectations and security guidance</li>
+</ul>
+</li>
+<li>
+<p><strong>Test without arguments:</strong></p>
+<ul>
+<li>Try <code>code-review</code> with no arguments</li>
+<li>Should use defaults: typescript, intermediate, quality</li>
+</ul>
+</li>
+</ol>
+<p><strong>Expected Results:</strong></p>
+<ul>
+<li>The prompt description should reflect the arguments (e.g., "Code review for python (advanced level, focus: security)")</li>
+<li>The prompt content should include the appropriate complexity expectations and focus area guidance</li>
+<li>Helper methods should dynamically insert the correct text based on arguments</li>
+</ul>
+<hr />
+<h2 id="integrating-resources-with-prompts">Integrating Resources with Prompts</h2>
+<p>Prompts become more powerful when integrated with resources! </p>
+<p>This allows prompts to dynamically include contextual information from your knowledge base, documentation, or data sources, creating richer and more informed AI interactions.</p>
+<h3 id="step-1-add-resource-support">Step 1: Add Resource Support</h3>
+<p><strong>Create a new project for the resource-prompt server:</strong></p>
+<pre><code class="language-bash"># Create new directory next to your previous server
+mkdir my-resource-prompt-server  # &lt;-- next to the directory created previously
+cd my-resource-prompt-server
+
+# Initialize and install dependencies
+npm init -y
+npm install @modelcontextprotocol/sdk
+npm install -D typescript @types/node tsx
+
+# Create TypeScript config (same as before)
+cat &gt; tsconfig.json &lt;&lt; 'EOF'
+{
+  &quot;compilerOptions&quot;: {
+    &quot;target&quot;: &quot;ES2022&quot;,
+    &quot;module&quot;: &quot;Node16&quot;,
+    &quot;moduleResolution&quot;: &quot;Node16&quot;,
+    &quot;outDir&quot;: &quot;./dist&quot;,
+    &quot;rootDir&quot;: &quot;./src&quot;,
+    &quot;strict&quot;: true,
+    &quot;esModuleInterop&quot;: true,
+    &quot;skipLibCheck&quot;: true,
+    &quot;forceConsistentCasingInFileNames&quot;: true
+  },
+  &quot;include&quot;: [&quot;src/**/*&quot;],
+  &quot;exclude&quot;: [&quot;node_modules&quot;, &quot;dist&quot;]
+}
+EOF
+
+# Create directory structure
+mkdir src # &lt;-- inside &quot;my-resource-prompt-server&quot; directory
+</code></pre>
+<p><br></p>
+<p><strong>Now create the server file <code>src/index.ts</code> with the following content that combines prompts with resources:</strong></p>
+<pre><code class="language-typescript">import {
+  ListPromptsRequestSchema,
+  GetPromptRequestSchema,
+  ListResourcesRequestSchema,
+  ReadResourceRequestSchema,
+} from &quot;@modelcontextprotocol/sdk/types.js&quot;;
+
+class ResourcePromptServer {
+  private server: Server;
+  private knowledgeBase: Map&lt;string, any&gt; = new Map();
+
+  constructor() {
+    this.server = new Server(
+      {
+        name: &quot;resource-prompt-server&quot;,
+        version: &quot;1.0.0&quot;,
+      },
+      {
+        capabilities: {
+          prompts: {},
+          resources: {},
+        },
+      }
+    );
+
+    this.initializeKnowledgeBase();
+    this.setupHandlers();
+    this.setupErrorHandling();
+  }
+
+  private initializeKnowledgeBase(): void {
+    this.knowledgeBase.set(&quot;best-practices&quot;, {
+      title: &quot;Development Best Practices&quot;,
+      content: `
+## Code Quality
+- Write self-documenting code
+- Use meaningful variable names
+- Keep functions small and focused
+
+## Testing
+- Write unit tests for all functions
+- Include integration tests
+- Test edge cases and error conditions
+      `,
+    });
+
+    this.knowledgeBase.set(&quot;security-guidelines&quot;, {
+      title: &quot;Security Guidelines&quot;,
+      content: `
+## Input Validation
+- Validate all user inputs
+- Use parameterized queries
+- Sanitize HTML content
+
+## Authentication
+- Use strong password policies
+- Implement multi-factor authentication
+      `,
+    });
+  }
+
+  private setupHandlers(): void {
+    // Resource handlers
+    this.server.setRequestHandler(ListResourcesRequestSchema, async () =&gt; {
+      const resources = Array.from(this.knowledgeBase.entries()).map(([key, doc]) =&gt; ({
+        uri: `kb://articles/${key}`,
+        name: doc.title,
+        description: `Knowledge base: ${doc.title}`,
+        mimeType: &quot;text/markdown&quot;,
+      }));
+
+      return { resources };
+    });
+
+    this.server.setRequestHandler(ReadResourceRequestSchema, async (request) =&gt; {
+      const uri = request.params.uri;
+      const content = this.readKnowledgeBase(uri);
+      return { contents: [content] };
+    });
+
+    // Prompt handlers
+    this.server.setRequestHandler(ListPromptsRequestSchema, async () =&gt; {
+      return {
+        prompts: [
+          {
+            name: &quot;contextual-code-review&quot;,
+            description: &quot;Code review with integrated best practices&quot;,
+            arguments: [
+              {
+                name: &quot;language&quot;,
+                description: &quot;Programming language&quot;,
+                required: true,
+              },
+              {
+                name: &quot;focusAreas&quot;,
+                description: &quot;Focus areas (comma-separated)&quot;,
+                required: false,
+              },
+            ],
+          },
+        ],
+      };
+    });
+
+    this.server.setRequestHandler(GetPromptRequestSchema, async (request) =&gt; {
+      const { name, arguments: args } = request.params;
+      return this.generatePrompt(name, args || {});
+    });
+  }
+
+  private readKnowledgeBase(uri: string): any {
+    const match = uri.match(/^kb:\/\/articles\/(.+)$/);
+    if (!match) throw new Error(`Invalid knowledge base URI: ${uri}`);
+
+    const key = match[1];
+    const article = this.knowledgeBase.get(key);
+
+    if (!article) throw new Error(`Article not found: ${key}`);
+
+    return {
+      uri,
+      mimeType: &quot;text/markdown&quot;,
+      text: article.content,
+    };
+  }
+
+  private generatePrompt(name: string, args: Record&lt;string, any&gt;): any {
+    switch (name) {
+      case &quot;contextual-code-review&quot;:
+        return this.createContextualCodeReviewPrompt(args);
+
+      default:
+        throw new Error(`Unknown prompt: ${name}`);
+    }
+  }
+
+  private createContextualCodeReviewPrompt(args: Record&lt;string, any&gt;): any {
+    const language = args.language || &quot;typescript&quot;;
+    const focusAreas = args.focusAreas ? args.focusAreas.split(',').map((s: string) =&gt; s.trim()) : [&quot;quality&quot;];
+
+    // Fetch relevant knowledge base articles
+    let contextContent = &quot;&quot;;
+
+    if (focusAreas.includes(&quot;quality&quot;)) {
+      const bestPractices = this.knowledgeBase.get(&quot;best-practices&quot;);
+      if (bestPractices) {
+        contextContent += `\n## Development Best Practices\n${bestPractices.content}`;
+      }
+    }
+
+    if (focusAreas.includes(&quot;security&quot;)) {
+      const securityGuidelines = this.knowledgeBase.get(&quot;security-guidelines&quot;);
+      if (securityGuidelines) {
+        contextContent += `\n## Security Guidelines\n${securityGuidelines.content}`;
+      }
+    }
+
+    return {
+      description: `Contextual code review for ${language} with focus on: ${focusAreas.join(', ')}`,
+      messages: [
+        {
+          role: &quot;user&quot;,
+          content: {
+            type: &quot;text&quot;,
+            text: `Please perform a comprehensive code review of the following ${language} code. Use the integrated knowledge base context to provide informed recommendations.
+
+## Review Context
+${contextContent}
+
+## Code to Review
+[Insert code here]
+
+## Review Focus Areas
+${focusAreas.map(area =&gt; `- **${area.charAt(0).toUpperCase() + area.slice(1)}**: Apply relevant guidelines from the context above`).join('\n')}
+
+## Review Structure
+1. **Summary**: Overall assessment and key findings
+2. **Strengths**: What the code does well
+3. **Areas for Improvement**: Specific recommendations with context references
+4. **Action Items**: Prioritized list of recommended changes
+
+Please reference specific guidelines from the provided context and explain how they apply to this code.`,
+          },
+        },
+      ],
+    };
+  }
+
+  private setupErrorHandling(): void {
+    this.server.onerror = (error) =&gt; {
+      console.error(&quot;[MCP Error]&quot;, error);
+    };
+
+    process.on(&quot;SIGINT&quot;, async () =&gt; {
+      await this.server.close();
+      process.exit(0);
+    });
+  }
+
+  async start(): Promise&lt;void&gt; {
+    const transport = new StdioServerTransport();
+    await this.server.connect(transport);
+    console.error(&quot;Resource-Prompt Server running on stdio&quot;);
+  }
+}
+</code></pre>
+<hr />
+<h3 id="step-2-test-resource-integration">Step 2: Test Resource Integration</h3>
+<p><strong>Build and run the resource-prompt server:</strong></p>
+<pre><code class="language-bash">cd my-resource-prompt-server
+npm run build
+npx @modelcontextprotocol/inspector node dist/index.js
+</code></pre>
+<p><strong>Test the enhanced server inside the MCP Inspector UI:</strong></p>
+<ol>
+<li>
+<p><strong>Navigate to Resources tab:</strong></p>
+<ul>
+<li>Click on the "Resources" tab</li>
+</ul>
+</li>
+<li>
+<p><strong>List resources:</strong></p>
+<ul>
+<li>Click "List Resources" button</li>
+<li>Verify you see the knowledge base articles ("Development Best Practices" and "Security Guidelines")</li>
+</ul>
+</li>
+<li>
+<p><strong>Read a resource:</strong></p>
+<ul>
+<li>Select "Read Resource" from the dropdown</li>
+<li>Enter <code>kb://articles/best-practices</code> in the "URI" field</li>
+<li>Click "Send Request"</li>
+<li>Check that the response includes the full content of the best practices article</li>
+</ul>
+</li>
+<li>
+<p><strong>Read another resource:</strong></p>
+<ul>
+<li>Select "Read Resource" again</li>
+<li>Enter <code>kb://articles/security-guidelines</code> in the "URI" field</li>
+<li>Click "Send Request"</li>
+<li>Verify the security guidelines content is returned</li>
+</ul>
+</li>
+<li>
+<p><strong>Navigate to Prompts tab:</strong></p>
+<ul>
+<li>Click on the "Prompts" tab</li>
+</ul>
+</li>
+<li>
+<p><strong>List prompts:</strong></p>
+<ul>
+<li>Click "List Prompts" button</li>
+<li>Verify you see the "contextual-code-review" prompt with its arguments</li>
+</ul>
+</li>
+<li>
+<p><strong>Get contextual prompt - Basic:</strong></p>
+<ul>
+<li>Select "Get Prompt"</li>
+<li>Enter <code>contextual-code-review</code> in the "Name" field</li>
+<li>In the "Arguments" field, enter: <code>{"language": "typescript"}</code></li>
+<li>Click "Send Request"</li>
+<li>Check that the prompt content includes the best practices from the knowledge base</li>
+</ul>
+</li>
+<li>
+<p><strong>Get contextual prompt - With focus areas:</strong></p>
+<ul>
+<li>Select "Get Prompt" again</li>
+<li>Enter <code>contextual-code-review</code> in the "Name" field</li>
+<li>In the "Arguments" field, enter:
+    <code>json
+    {
+      "language": "python",
+      "focusAreas": "quality,security"
+    }</code></li>
+<li>Click "Send Request"</li>
+<li>Verify the prompt includes both best practices and security guidelines from the knowledge base</li>
+</ul>
+</li>
+</ol>
+<p><br></p>
+<p><strong>Expected Results:</strong></p>
+<ul>
+<li>Resources should list the knowledge base articles with proper URIs and descriptions</li>
+<li>Reading resources should return the full markdown content of each article</li>
+<li>Prompts should dynamically include relevant knowledge base content based on the focus areas argument</li>
+<li>The contextual prompt should reference specific guidelines from the integrated resources</li>
+</ul>
+<hr />
+<h2 id="complete-mcp-server-integration">Complete MCP Server Integration</h2>
+<p>Complete MCP server integration combines all three core capabilities - tools, resources, and prompts - into a single server that can perform complex operations and provide rich, contextual AI interactions.</p>
+<h3 id="step-1-combine-all-capabilities">Step 1: Combine All Capabilities</h3>
+<p><strong>Create a new project for the complete MCP server:</strong></p>
+<pre><code class="language-bash"># Create new directory next to your previous servers
+mkdir my-complete-mcp-server
+cd my-complete-mcp-server
+
+# Initialize and install dependencies
+npm init -y
+npm install @modelcontextprotocol/sdk
+npm install -D typescript @types/node tsx
+
+# Create TypeScript config (same as before)
+cat &gt; tsconfig.json &lt;&lt; 'EOF'
+{
+  &quot;compilerOptions&quot;: {
+    &quot;target&quot;: &quot;ES2022&quot;,
+    &quot;module&quot;: &quot;Node16&quot;,
+    &quot;moduleResolution&quot;: &quot;Node16&quot;,
+    &quot;outDir&quot;: &quot;./dist&quot;,
+    &quot;rootDir&quot;: &quot;./src&quot;,
+    &quot;strict&quot;: true,
+    &quot;esModuleInterop&quot;: true,
+    &quot;skipLibCheck&quot;: true,
+    &quot;forceConsistentCasingInFileNames&quot;: true
+  },
+  &quot;include&quot;: [&quot;src/**/*&quot;],
+  &quot;exclude&quot;: [&quot;node_modules&quot;, &quot;dist&quot;]
+}
+EOF
+
+# Create directory structure
+mkdir src
+</code></pre>
+<p><br></p>
+<p><strong>Now create the server file <code>src/index.ts</code>, that combines tools, resources, and prompts, with the following content:</strong></p>
+<pre><code class="language-typescript">import {
+  ListToolsRequestSchema,
+  CallToolRequestSchema,
+  ListResourcesRequestSchema,
+  ReadResourceRequestSchema,
+  ListPromptsRequestSchema,
+  GetPromptRequestSchema,
+} from &quot;@modelcontextprotocol/sdk/types.js&quot;;
+
+class CompleteMCPServer {
+  private server: Server;
+  private knowledgeBase: Map&lt;string, any&gt; = new Map();
+
+  constructor() {
+    this.server = new Server(
+      {
+        name: &quot;complete-mcp-server&quot;,
+        version: &quot;1.0.0&quot;,
+      },
+      {
+        capabilities: {
+          tools: {},
+          resources: {},
+          prompts: {},
+        },
+      }
+    );
+
+    this.initializeKnowledgeBase();
+    this.setupHandlers();
+    this.setupErrorHandling();
+  }
+
+  private initializeKnowledgeBase(): void {
+    this.knowledgeBase.set(&quot;development-workflow&quot;, {
+      title: &quot;Complete Development Workflow&quot;,
+      content: `
+## Development Process
+1. Requirements gathering and analysis
+2. System design and architecture
+3. Implementation with best practices
+4. Code review and quality assurance
+5. Testing and validation
+6. Deployment and monitoring
+7. Maintenance and updates
+      `,
+    });
+  }
+
+  private setupHandlers(): void {
+    // Tool handlers
+    this.server.setRequestHandler(ListToolsRequestSchema, async () =&gt; {
+      return {
+        tools: [
+          {
+            name: &quot;analyze_codebase&quot;,
+            description: &quot;Analyze codebase structure and provide insights&quot;,
+            inputSchema: {
+              type: &quot;object&quot;,
+              properties: {
+                path: { type: &quot;string&quot;, description: &quot;Path to analyze&quot; },
+                analysisType: {
+                  type: &quot;string&quot;,
+                  enum: [&quot;structure&quot;, &quot;complexity&quot;, &quot;dependencies&quot;],
+                  default: &quot;structure&quot;
+                },
+              },
+              required: [&quot;path&quot;],
+            },
+          },
+        ],
+      };
+    });
+
+    this.server.setRequestHandler(CallToolRequestSchema, async (request) =&gt; {
+      const { name, arguments: args } = request.params;
+
+      switch (name) {
+        case &quot;analyze_codebase&quot;:
+          return this.analyzeCodebase(args);
+
+        default:
+          throw new Error(`Unknown tool: ${name}`);
+      }
+    });
+
+    // Resource handlers
+    this.server.setRequestHandler(ListResourcesRequestSchema, async () =&gt; {
+      const resources = [
+        ...Array.from(this.knowledgeBase.entries()).map(([key, doc]) =&gt; ({
+          uri: `kb://articles/${key}`,
+          name: doc.title,
+          description: `Knowledge: ${doc.title}`,
+          mimeType: &quot;text/markdown&quot;,
+        })),
+      ];
+
+      return { resources };
+    });
+
+    this.server.setRequestHandler(ReadResourceRequestSchema, async (request) =&gt; {
+      const uri = request.params.uri;
+      const content = await this.readResource(uri);
+      return { contents: [content] };
+    });
+
+    // Prompt handlers
+    this.server.setRequestHandler(ListPromptsRequestSchema, async () =&gt; {
+      return {
+        prompts: [
+          {
+            name: &quot;full-development-workflow&quot;,
+            description: &quot;Complete development workflow with integrated resources&quot;,
+            arguments: [
+              {
+                name: &quot;projectType&quot;,
+                description: &quot;Type of project (web, api, mobile)&quot;,
+                required: true,
+              },
+            ],
+          },
+          {
+            name: &quot;code-quality-assessment&quot;,
+            description: &quot;Comprehensive code quality assessment using all capabilities&quot;,
+            arguments: [
+              {
+                name: &quot;codeSample&quot;,
+                description: &quot;Code to assess&quot;,
+                required: true,
+              },
+            ],
+          },
+        ],
+      };
+    });
+
+    this.server.setRequestHandler(GetPromptRequestSchema, async (request) =&gt; {
+      const { name, arguments: args } = request.params;
+      return this.generateIntegratedPrompt(name, args || {});
+    });
+  }
+
+  private async analyzeCodebase(args: Record&lt;string, any&gt;): Promise&lt;any&gt; {
+    const targetPath = args.path || &quot;./&quot;;
+    const analysisType = args.analysisType || &quot;structure&quot;;
+
+    try {
+      const analysis = await this.performCodeAnalysis(targetPath, analysisType);
+
+      return {
+        content: [
+          {
+            type: &quot;text&quot;,
+            text: `## Codebase Analysis: ${analysisType.toUpperCase()}\n\n${analysis}`,
+          },
+        ],
+      };
+    } catch (error) {
+      throw new Error(`Codebase analysis failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+
+  private async performCodeAnalysis(targetPath: string, analysisType: string): Promise&lt;string&gt; {
+    // Simplified analysis - in real implementation, use proper code analysis tools
+    return `### Analysis Results
+- **Path**: ${targetPath}
+- **Type**: ${analysisType}
+- **Status**: Analysis completed successfully
+
+### Recommendations
+- Consider organizing files by feature
+- Add proper documentation
+- Implement consistent coding standards`;
+  }
+
+  private async readResource(uri: string): Promise&lt;any&gt; {
+    if (uri.startsWith('kb://')) {
+      return this.readKnowledgeBase(uri);
+    }
+
+    throw new Error(`Unknown resource URI: ${uri}`);
+  }
+
+  private readKnowledgeBase(uri: string): any {
+    const match = uri.match(/^kb:\/\/articles\/(.+)$/);
+    if (!match) throw new Error(`Invalid knowledge base URI: ${uri}`);
+
+    const key = match[1];
+    const article = this.knowledgeBase.get(key);
+
+    if (!article) throw new Error(`Article not found: ${key}`);
+
+    return {
+      uri,
+      mimeType: &quot;text/markdown&quot;,
+      text: article.content,
+    };
+  }
+
+  private async generateIntegratedPrompt(name: string, args: Record&lt;string, any&gt;): Promise&lt;any&gt; {
+    switch (name) {
+      case &quot;full-development-workflow&quot;:
+        return this.createFullWorkflowPrompt(args);
+
+      case &quot;code-quality-assessment&quot;:
+        return this.createQualityAssessmentPrompt(args);
+
+      default:
+        throw new Error(`Unknown prompt: ${name}`);
+    }
+  }
+
+  private async createFullWorkflowPrompt(args: Record&lt;string, any&gt;): Promise&lt;any&gt; {
+    const projectType = args.projectType || &quot;web&quot;;
+
+    const workflowDoc = this.knowledgeBase.get(&quot;development-workflow&quot;);
+
+    return {
+      description: `Complete ${projectType} development workflow`,
+      messages: [
+        {
+          role: &quot;user&quot;,
+          content: {
+            type: &quot;text&quot;,
+            text: `Guide me through a complete ${projectType} development project.
+
+## Development Workflow Reference
+${workflowDoc ? workflowDoc.content : &quot;Standard development practices apply&quot;}
+
+## Project Context
+- **Type**: ${projectType}
+- **Current Phase**: Planning
+
+Please provide a comprehensive development plan with specific phases, deliverables, and best practices.`,
+          },
+        },
+      ],
+    };
+  }
+
+  private async createQualityAssessmentPrompt(args: Record&lt;string, any&gt;): Promise&lt;any&gt; {
+    const codeSample = args.codeSample || &quot;[Insert code here]&quot;;
+
+    // Use tools to analyze the code
+    const analysisResult = await this.analyzeCodebase({ path: &quot;./&quot;, analysisType: &quot;structure&quot; });
+
+    return {
+      description: &quot;Comprehensive code quality assessment&quot;,
+      messages: [
+        {
+          role: &quot;user&quot;,
+          content: {
+            type: &quot;text&quot;,
+            text: `Perform a comprehensive code quality assessment of the following code.
+
+## Code to Assess
+\`\`\`
+${codeSample}
+\`\`\`
+
+## Automated Analysis Results
+${analysisResult.content[0].text}
+
+## Assessment Framework
+
+### 1. Code Quality Metrics
+- **Readability**: Is the code easy to understand?
+- **Maintainability**: How easy will this be to modify?
+- **Performance**: Are there any obvious issues?
+
+### 2. Best Practices
+- Does it follow coding standards?
+- Are there appropriate error handling?
+- Is the code well-structured?
+
+### 3. Recommendations
+Provide specific, prioritized recommendations for improvement.
+
+Please provide a thorough assessment.`,
+          },
+        },
+      ],
+    };
+  }
+
+  private setupErrorHandling(): void {
+    this.server.onerror = (error) =&gt; {
+      console.error(&quot;[MCP Error]&quot;, error);
+    };
+
+    process.on(&quot;SIGINT&quot;, async () =&gt; {
+      await this.server.close();
+      process.exit(0);
+    });
+  }
+
+  async start(): Promise&lt;void&gt; {
+    const transport = new StdioServerTransport();
+    await this.server.connect(transport);
+    console.error(&quot;Complete MCP Server running on stdio&quot;);
+  }
+}
+</code></pre>
+<hr />
+<h3 id="step-2-test-complete-integration">Step 2: Test Complete Integration</h3>
+<p><strong>Build and run the complete MCP server:</strong></p>
+<pre><code class="language-bash">cd my-complete-mcp-server
+npm run build
+npx @modelcontextprotocol/inspector node dist/index.js
+</code></pre>
+<p><strong>Test the complete integration inside the MCP Inspector UI:</strong></p>
+<ol>
+<li>
+<p><strong>Navigate to Tools tab:</strong></p>
+<ul>
+<li>Click on the "Tools" tab</li>
+</ul>
+</li>
+<li>
+<p><strong>List tools:</strong></p>
+<ul>
+<li>Click "List Tools" button</li>
+<li>Verify you see the "analyze_codebase" tool with its description and input schema</li>
+</ul>
+</li>
+<li>
+<p><strong>Call tool:</strong></p>
+<ul>
+<li>Select "Call Tool" from the dropdown</li>
+<li>Enter <code>analyze_codebase</code> in the "Name" field</li>
+<li>In the "Arguments" field, enter: <code>{"path": "./", "analysisType": "structure"}</code></li>
+<li>Click "Send Request"</li>
+<li>Check that the response includes a codebase analysis with recommendations</li>
+</ul>
+</li>
+<li>
+<p><strong>Navigate to Resources tab:</strong></p>
+<ul>
+<li>Click on the "Resources" tab</li>
+</ul>
+</li>
+<li>
+<p><strong>List resources:</strong></p>
+<ul>
+<li>Click "List Resources" button</li>
+<li>Verify you see the knowledge base article ("Complete Development Workflow")</li>
+</ul>
+</li>
+<li>
+<p><strong>Read resource:</strong></p>
+<ul>
+<li>Select "Read Resource" from the dropdown</li>
+<li>Enter <code>kb://articles/development-workflow</code> in the "URI" field</li>
+<li>Click "Send Request"</li>
+<li>Check that the response includes the full development workflow content</li>
+</ul>
+</li>
+<li>
+<p><strong>Navigate to Prompts tab:</strong></p>
+<ul>
+<li>Click on the "Prompts" tab</li>
+</ul>
+</li>
+<li>
+<p><strong>List prompts:</strong></p>
+<ul>
+<li>Click "List Prompts" button</li>
+<li>Verify you see the "full-development-workflow" and "code-quality-assessment" prompts with their arguments</li>
+</ul>
+</li>
+<li>
+<p><strong>Get full development workflow prompt:</strong></p>
+<ul>
+<li>Select "Get Prompt"</li>
+<li>Enter <code>full-development-workflow</code> in the "Name" field</li>
+<li>In the "Arguments" field, enter: <code>{"projectType": "web"}</code></li>
+<li>Click "Send Request"</li>
+<li>Check that the prompt content includes the development workflow from the knowledge base</li>
+</ul>
+</li>
+<li>
+<p><strong>Get code quality assessment prompt:</strong></p>
+<ul>
+<li>Select "Get Prompt" again</li>
+<li>Enter <code>code-quality-assessment</code> in the "Name" field</li>
+<li>In the "Arguments" field, enter: <code>{"codeSample": "function test() { return true; }"}</code></li>
+<li>Click "Send Request"</li>
+<li>Verify the prompt includes automated analysis results and assessment framework</li>
+</ul>
+</li>
+</ol>
+<p><br></p>
+<p><strong>Expected Results:</strong></p>
+<ul>
+<li>Tools should list the analysis tool with proper schema and description</li>
+<li>Calling tools should return structured analysis results</li>
+<li>Resources should list knowledge base articles with proper URIs</li>
+<li>Reading resources should return the full markdown content</li>
+<li>Prompts should list integrated prompts with their arguments</li>
+<li>Getting prompts should dynamically include tool results and resource content</li>
+<li>The complete integration should demonstrate all three capabilities working together seamlessly</li>
+</ul>
+<hr />
+<h2 id="hands-on-exercises">Hands-On Exercises</h2>
+<h3 id="exercise-1-custom-prompt-library">Exercise 1: Custom Prompt Library</h3>
+<p><strong>Goal:</strong> Create a specialized prompt library for a specific domain.</p>
+<p><strong>Steps:</strong></p>
+<ol>
+<li>Choose a domain (e.g., data science, DevOps, content writing)</li>
+<li>Create 3-5 domain-specific prompts</li>
+<li>Add appropriate arguments for customization</li>
+<li>Include domain-specific resources</li>
+<li>Test with the MCP Inspector</li>
+</ol>
+<p><strong>Requirements:</strong></p>
+<ul>
+<li>At least one prompt with required arguments</li>
+<li>At least one prompt with optional arguments</li>
+<li>Include resource integration</li>
+<li>Proper error handling</li>
+</ul>
+<details>
+<summary>Solution</summary>
+
+Choose data science domain.<br><br>
+
+Create 3 domain-specific prompts: data-exploration, model-training, visualization.<br><br>
+
+Add arguments: dataset (required), focus (optional).<br><br>
+
+Include domain-specific resources: data science best practices.<br><br>
+
+Example code structure:<br><br>
+
+
+<pre><code class="language-typescript">// In ListPromptsRequestSchema handler
+{
+  name: &quot;data-exploration&quot;,
+  description: &quot;Guide for exploratory data analysis&quot;,
+  arguments: [
+    {
+      name: &quot;dataset&quot;,
+      description: &quot;Dataset description&quot;,
+      required: true,
+    },
+    {
+      name: &quot;focus&quot;,
+      description: &quot;Analysis focus (distribution, correlation, outliers)&quot;,
+      required: false,
+    },
+  ],
+},
+{
+  name: &quot;model-training&quot;,
+  description: &quot;Guide for machine learning model training&quot;,
+  arguments: [
+    {
+      name: &quot;algorithm&quot;,
+      description: &quot;ML algorithm (linear, tree, neural)&quot;,
+      required: true,
+    },
+    {
+      name: &quot;target&quot;,
+      description: &quot;Target variable&quot;,
+      required: false,
+    },
+  ],
+},
+{
+  name: &quot;data-visualization&quot;,
+  description: &quot;Guide for creating effective data visualizations&quot;,
+  arguments: [
+    {
+      name: &quot;chartType&quot;,
+      description: &quot;Type of chart (bar, line, scatter)&quot;,
+      required: true,
+    },
+  ],
+}
+
+// In generatePrompt method
+case &quot;data-exploration&quot;:
+  const dataset = args.dataset || &quot;dataset&quot;;
+  const focus = args.focus || &quot;distribution&quot;;
+  return {
+    description: `Data exploration for ${dataset} focusing on ${focus}`,
+    messages: [
+      {
+        role: &quot;user&quot;,
+        content: {
+          type: &quot;text&quot;,
+          text: `Perform exploratory data analysis on the ${dataset} dataset.
+
+Focus areas: ${focus}
+
+Guidelines:
+- Examine data structure and types
+- Check for missing values and outliers
+- Analyze distributions and correlations
+- Generate summary statistics
+
+Provide insights and recommendations.`,
+        },
+      },
+    ],
+  };
+
+// Add resources in initializeKnowledgeBase
+this.knowledgeBase.set(&quot;data-science-practices&quot;, {
+  title: &quot;Data Science Best Practices&quot;,
+  content: `
+Data Quality
+- Validate data integrity
+- Handle missing values appropriately
+- Check for data consistency
+
+Analysis Process
+- Start with descriptive statistics
+- Use visualizations for insights
+- Test hypotheses systematically
+  `,
+});
+</code></pre>
+
+
+Test with MCP Inspector by listing prompts, getting prompts with different arguments, and verifying resource integration.
+</details>
+
+<h3 id="exercise-2-multi-step-workflow-prompt">Exercise 2: Multi-Step Workflow Prompt</h3>
+<p><strong>Goal:</strong> Create a prompt that guides users through complex, multi-step processes.</p>
+<p><strong>Steps:</strong></p>
+<ol>
+<li>Design a multi-step workflow (e.g., code review → testing → deployment)</li>
+<li>Create prompts for each step</li>
+<li>Add logic to chain prompts together</li>
+<li>Include progress tracking</li>
+<li>Test the complete workflow</li>
+</ol>
+<p><strong>Requirements:</strong></p>
+<ul>
+<li>Clear step progression</li>
+<li>State management between steps</li>
+<li>Error handling and recovery</li>
+<li>Progress indicators</li>
+</ul>
+<details>
+<summary>Solution</summary>
+
+Design a code review to deployment workflow with steps: review, testing, deployment.<br><br>
+
+Create prompts for each step with currentStep argument.<br><br>
+
+Add logic to chain prompts and track progress.<br><br>
+
+Example code structure:
+
+
+<pre><code class="language-typescript">// In ListPromptsRequestSchema handler
+{
+  name: &quot;workflow-step&quot;,
+  description: &quot;Multi-step development workflow guidance&quot;,
+  arguments: [
+    {
+      name: &quot;currentStep&quot;,
+      description: &quot;Current workflow step (review, testing, deployment)&quot;,
+      required: true,
+    },
+    {
+      name: &quot;projectType&quot;,
+      description: &quot;Type of project&quot;,
+      required: false,
+    },
+  ],
+}
+
+// In generatePrompt method
+case &quot;workflow-step&quot;:
+  const step = args.currentStep || &quot;review&quot;;
+  const projectType = args.projectType || &quot;web&quot;;
+  const workflowSteps = [&quot;review&quot;, &quot;testing&quot;, &quot;deployment&quot;];
+  const currentIndex = workflowSteps.indexOf(step);
+
+  return {
+    description: `${projectType} development workflow - Step ${currentIndex + 1}: ${step}`,
+    messages: [
+      {
+        role: &quot;user&quot;,
+        content: {
+          type: &quot;text&quot;,
+          text: `Guide for ${projectType} project ${step} phase.
+
+Progress: Step ${currentIndex + 1} of ${workflowSteps.length}
+Previous steps: ${workflowSteps.slice(0, currentIndex).join(', ') || 'None'}
+Next steps: ${workflowSteps.slice(currentIndex + 1).join(', ') || 'Complete'}
+
+${this.getStepGuidance(step, projectType)}
+
+Provide detailed guidance and check completion criteria before proceeding.`,
+        },
+      },
+    ],
+  };
+
+// Helper method
+private getStepGuidance(step: string, projectType: string): string {
+  const guidance: { [key: string]: { [key: string]: string } } = {
+    review: {
+      web: &quot;Code Review Guidelines:\n- Check code quality and standards\n- Verify security practices\n- Review performance considerations\n- Validate functionality&quot;,
+      api: &quot;API Review Guidelines:\n- Check endpoint design\n- Validate error handling\n- Review authentication\n- Test API contracts&quot;,
+    },
+    testing: {
+      web: &quot;Testing Guidelines:\n- Unit test coverage\n- Integration testing\n- User acceptance testing\n- Performance testing&quot;,
+      api: &quot;API Testing Guidelines:\n- Endpoint testing\n- Load testing\n- Security testing\n- Contract testing&quot;,
+    },
+    deployment: {
+      web: &quot;Deployment Guidelines:\n- Environment configuration\n- Database migrations\n- Rollback procedures\n- Monitoring setup&quot;,
+      api: &quot;API Deployment Guidelines:\n- API gateway configuration\n- Version management\n- Documentation publishing\n- Client notifications&quot;,
+    },
+  };
+  return guidance[step]?.[projectType] || &quot;Follow standard practices for this step.&quot;;
+}
+</code></pre>
+
+
+Test the workflow by calling the prompt with different currentStep values and verifying step progression and guidance.
+
+</details>
+
+<h3 id="exercise-3-production-ready-server">Exercise 3: Production-Ready Server</h3>
+<p><strong>Goal:</strong> Create a production-ready MCP server with all capabilities.</p>
+<p><strong>Steps:</strong></p>
+<ol>
+<li>Implement comprehensive error handling</li>
+<li>Add logging and monitoring</li>
+<li>Include health checks</li>
+<li>Add configuration management</li>
+<li>Implement rate limiting</li>
+<li>Create deployment scripts</li>
+</ol>
+<p><strong>Requirements:</strong></p>
+<ul>
+<li>Structured logging</li>
+<li>Health check endpoints</li>
+<li>Configuration validation</li>
+<li>Graceful shutdown</li>
+<li>Performance monitoring</li>
+</ul>
+<details>
+<summary>Solution</summary>
+
+Implement comprehensive error handling, logging, health checks, configuration management, rate limiting, and deployment scripts.<br><br>
+
+Example code structure:
+
+
+<pre><code class="language-typescript">import { Server } from &quot;@modelcontextprotocol/sdk/server/index.js&quot;;
+import { StdioServerTransport } from &quot;@modelcontextprotocol/sdk/server/stdio.js&quot;;
+
+class ProductionMCPServer {
+  private server: Server;
+  private config: any;
+  private requestCount = 0;
+  private startTime = Date.now();
+
+  constructor(configPath?: string) {
+    this.config = this.loadConfiguration(configPath);
+    this.server = new Server(
+      {
+        name: this.config.name,
+        version: this.config.version,
+      },
+      {
+        capabilities: {
+          tools: {},
+          resources: {},
+          prompts: {},
+        },
+      }
+    );
+
+    this.setupLogging();
+    this.setupHandlers();
+    this.setupErrorHandling();
+    this.setupHealthChecks();
+  }
+
+  private loadConfiguration(configPath?: string): any {
+    // Load from file or environment
+    return {
+      name: &quot;production-mcp-server&quot;,
+      version: &quot;1.0.0&quot;,
+      port: process.env.PORT || 3000,
+      logLevel: process.env.LOG_LEVEL || &quot;info&quot;,
+      rateLimit: parseInt(process.env.RATE_LIMIT || &quot;100&quot;),
+    };
+  }
+
+  private setupLogging(): void {
+    // Use a proper logging library in production
+    console.log = this.createLogger(&quot;info&quot;);
+    console.error = this.createLogger(&quot;error&quot;);
+  }
+
+  private createLogger(level: string): (...args: any[]) =&gt; void {
+    return (...args: any[]) =&gt; {
+      const timestamp = new Date().toISOString();
+      process.stderr.write(`[${timestamp}] ${level.toUpperCase()}: ${args.join(' ')}\n`);
+    };
+  }
+
+  private setupHandlers(): void {
+    // Add rate limiting to handlers
+    this.server.setRequestHandler(ListToolsRequestSchema, this.rateLimitedHandler(async () =&gt; {
+      return { tools: [] };
+    }));
+
+    // Add other handlers similarly
+  }
+
+  private rateLimitedHandler(handler: Function): Function {
+    return async (request: any) =&gt; {
+      this.requestCount++;
+      if (this.requestCount &gt; this.config.rateLimit) {
+        throw new Error(&quot;Rate limit exceeded&quot;);
+      }
+      return handler(request);
+    };
+  }
+
+  private setupHealthChecks(): void {
+    // Add health check endpoint (if using HTTP transport)
+    // For stdio, we can add a special tool
+    this.server.setRequestHandler(CallToolRequestSchema, async (request) =&gt; {
+      if (request.params.name === &quot;health_check&quot;) {
+        return {
+          content: [{
+            type: &quot;text&quot;,
+            text: JSON.stringify({
+              status: &quot;healthy&quot;,
+              uptime: Date.now() - this.startTime,
+              requestCount: this.requestCount,
+            }),
+          }],
+        };
+      }
+      // Handle other tools
+    });
+  }
+
+  private setupErrorHandling(): void {
+    this.server.onerror = (error) =&gt; {
+      console.error(&quot;Server error:&quot;, error);
+      // Send to monitoring service
+    };
+
+    process.on(&quot;SIGTERM&quot;, async () =&gt; {
+      console.log(&quot;Received SIGTERM, shutting down gracefully&quot;);
+      await this.server.close();
+      process.exit(0);
+    });
+
+    process.on(&quot;uncaughtException&quot;, (error) =&gt; {
+      console.error(&quot;Uncaught exception:&quot;, error);
+      process.exit(1);
+    });
+  }
+
+  async start(): Promise&lt;void&gt; {
+    const transport = new StdioServerTransport();
+    await this.server.connect(transport);
+    console.log(&quot;Production MCP Server running on stdio&quot;);
+  }
+}
+
+// Deployment script (deploy.sh)
+#!/bin/bash
+npm run build
+npm run test
+docker build -t mcp-server .
+docker run -p 3000:3000 mcp-server
+</code></pre>
+
+
+Test by running the server, checking logs, calling health check tool, and verifying graceful shutdown.
+
+</details>
+
+<hr />
+<h2 id="key-takeaways">Key Takeaways</h2>
+<p>✅ <strong>Prompts</strong> create reusable AI workflows with structured guidance</p>
+<p>✅ <strong>Resource integration</strong> provides contextually rich prompt experiences</p>
+<p>✅ <strong>Arguments</strong> make prompts flexible and customizable</p>
+<p>✅ <strong>Complete servers</strong> combine tools, resources, and prompts effectively</p>
+<p>✅ <strong>Dynamic prompts</strong> adapt to current data and context</p>
+<p>✅ <strong>Production readiness</strong> requires comprehensive error handling and monitoring</p>
+<p>✅ <strong>Workflow orchestration</strong> enables complex, multi-step AI processes</p>
+<p>✅ <strong>Domain specialization</strong> creates powerful, focused AI capabilities</p>
+
+<hr />
+<h2 id="next-steps">Next Steps</h2>
+<p>Congratulations! </p>
+<p>You've completed the comprehensive MCP learning series. </p>
+<p>You now posses the knowledge and skills to:</p>
+<p>✅ <strong>Build</strong> complete MCP servers with all three capabilities</p>
+<p>✅ <strong>Create</strong> sophisticated AI workflows and integrations</p>
+<p>✅ <strong>Deploy</strong> production-ready MCP solutions</p>
+<p>✅ <strong>Contribute</strong> to the MCP ecosystem</p>
+
+<hr />
+<h2 id="whats-next">What's Next?</h2>
+<h3 id="further-experimentation">Further experimentation</h3>
+<p>Go ahead and experiment further with MCP un the <a href="../Tasks/">MCP Lab Tasks</a> section, filled with hands-on exercises to deepen your understanding of MCP capabilities.</p>
+<h3 id="advanced-topics">Advanced Topics</h3>
+<ul>
+<li><strong>MCP Extensions</strong>: Custom protocol extensions</li>
+<li><strong>Multi-server Coordination</strong>: Server orchestration</li>
+<li><strong>Performance Optimization</strong>: Scaling MCP servers</li>
+<li><strong>Security Hardening</strong>: Advanced security patterns</li>
+</ul>
+<h3 id="real-world-applications">Real-World Applications</h3>
+<ul>
+<li><strong>Code Analysis Tools</strong>: Automated code review and improvement</li>
+<li><strong>DevOps Automation</strong>: Infrastructure and deployment automation</li>
+<li><strong>Data Science Workflows</strong>: AI-assisted data analysis</li>
+<li><strong>Content Creation</strong>: AI-powered content generation pipelines</li>
+</ul>
+<h3 id="community-engagement">Community Engagement</h3>
+<ul>
+<li><strong>Contribute to MCP</strong>: Join the open-source development</li>
+<li><strong>Share Your Servers</strong>: Publish your MCP servers</li>
+<li><strong>Build Integrations</strong>: Create MCP clients and tools</li>
+<li><strong>Teach Others</strong>: Help grow the MCP community</li>
+</ul>
+<hr />
+<p><strong>Your MCP journey has just begun!</strong> </p>
+<p><strong>The protocol provides endless possibilities for AI-human collaboration.</strong></p>
+<p><strong>Go forth and build amazing things!</strong></p>
+<!--
+  Copyright (c) 2016-2025 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- Render date of last update -->
+
+
+<!-- Render date of creation -->
+
+
+<!-- ---------------------------------------------------------------------- -->
+
+<!-- Render authors -->
+
+
+<!-- ---------------------------------------------------------------------- -->
+
+<!-- Render committers from GitHub -->
+
+
+<!-- Render committers from GitLab -->
+
+
+<!-- Render committers -->
+
+
+<!-- ---------------------------------------------------------------------- -->
+
+<!-- Determine date of last update -->
+
+
+
+
+
+<!-- Determine date of creation -->
+
+
+
+
+
+<!-- Source file information -->
+
+<aside class="md-source-file">
+
+  <!-- Date of last update -->
+  
+  
+<span class="md-source-file__fact">
+  <span class="md-icon" title="Last update">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+  </span>
+  <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="January 28, 2026 11:05:44 UTC">January 28, 2026</span>
+</span>
+
+  
+
+  <!-- Authors (git-authors plugin) -->
+  
+
+  <!-- Authors (git-committers plugin) -->
+  
+  <!-- Fallback: Manual GitHub avatar for repository owner -->
+  <span class="md-source-file__fact">
+    <nav>
+      <a href="https://github.com/nirgeier" class="md-author" title="@nirgeier">
+        <img src="https://avatars.githubusercontent.com/u/555154?size=256" alt="Nir Geier" />
+      </a>
+    </nav>
+  </span>
+  
+</aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <!--
+  Copyright (c) 2016-2025 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- Footer -->
+<footer class="md-footer">
+  <div class="logo1"></div>
+  <div class="logo2"></div>
+
+  <!-- Link to previous and/or next page -->
+  
+    
+      
+      <nav
+        class="md-footer__inner md-grid"
+        aria-label="Footer"
+        
+      >
+
+        <!-- Link to previous page -->
+        
+          
+          <a
+            href="../../Lab04-MCP-Resources/lab/"
+            class="md-footer__link md-footer__link--prev"
+            aria-label="Previous: Lab 04: MCP Resources"
+          >
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Lab 04: MCP Resources
+              </div>
+            </div>
+          </a>
+        
+        
+        <!-- <ul class="social-badges">
+          <li><a href="https://visitor-badge.laobi.icu/badge?page_id=nirgeier" target="_blank" rel="noopener"><img src="https://visitor-badge.laobi.icu/badge?page_id=nirgeier" alt="Visitor Badge"></a></li>
+          <li><a href="https://www.linkedin.com/in/nirgeier/" target="_blank" rel="noopener"><i class="fab fa-linkedin" aria-hidden="true"></i><span class="sr-only">LinkedIn profile</span></a></li>
+          <li><a href="mailto:nirgeier@gmail.com"><img src="https://img.shields.io/badge/-nirgeier@gmail.com-fcc624?style=flat&logo=Gmail&logoColor=red" alt="Gmail Badge"></a></li>
+          <li><a href="mailto:nirg@codewizard.co.il"><img src="https://img.shields.io/badge/-nirg@codewizard.co.il-fcc624?style=flat&logo=microsoftoutlook&logoColor=blue" alt="Outlook Badge"></a></li>
+        </ul> -->
+        
+        <!-- Link to next page -->
+        
+          
+          <a
+            href="../../Lab06-MCP-Workflow/lab/"
+            class="md-footer__link md-footer__link--next"
+            aria-label="Next: Lab 06: MCP Workflow"
+          >
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Lab 06: MCP Workflow
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+
+  <!-- Further information -->
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      ©2021-2025 Nir Geier<br/><a href="https://visitor-badge.laobi.icu/badge?page_id=nirgeier" target="_blank" rel="noopener"><img src="https://visitor-badge.laobi.icu/badge?page_id=nirgeier" alt="Visitor Badge"></a>
+    </div>
+  
+  
+</div>
+
+      <!-- Social links -->
+      
+        
+<div class="md-social">
+    
+    
+    
+    
+    
+    <a href="https://github.com/nirgeier/AI-K8S-MCP" target="_blank" rel="noopener" title="View on GitHub"
+        class="md-social__link social-class__github">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://github.com/nirgeier/AI-K8S-MCP/network/members" target="_blank" rel="noopener" title="Fork this repo"
+        class="md-social__link social-class__fork">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0M5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0m6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5m-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://github.com/nirgeier/AI-K8S-MCP/stargazers" target="_blank" rel="noopener" title="Star this repo"
+        class="md-social__link social-class__star">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25m0 2.445L6.615 5.5a.75.75 0 0 1-.564.41l-3.097.45 2.24 2.184a.75.75 0 0 1 .216.664l-.528 3.084 2.769-1.456a.75.75 0 0 1 .698 0l2.77 1.456-.53-3.084a.75.75 0 0 1 .216-.664l2.24-2.183-3.096-.45a.75.75 0 0 1-.564-.41z"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://www.linkedin.com/in/nirgeier/" target="_blank" rel="noopener" title="Connect on LinkedIn"
+        class="md-social__link social-class__linkedin">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://discord.gg/U6xW23Ss" target="_blank" rel="noopener" title="Follow me on Discord"
+        class="md-social__link social-class__discord">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M492.5 69.8c-.2-.3-.4-.6-.8-.7-38.1-17.5-78.4-30-119.7-37.1-.4-.1-.8 0-1.1.1s-.6.4-.8.8c-5.5 9.9-10.5 20.2-14.9 30.6-44.6-6.8-89.9-6.8-134.4 0-4.5-10.5-9.5-20.7-15.1-30.6-.2-.3-.5-.6-.8-.8s-.7-.2-1.1-.2C162.5 39 122.2 51.5 84.1 69c-.3.1-.6.4-.8.7C7.1 183.5-13.8 294.6-3.6 404.2c0 .3.1.5.2.8s.3.4.5.6c44.4 32.9 94 58 146.8 74.2.4.1.8.1 1.1 0s.7-.4.9-.7c11.3-15.4 21.4-31.8 30-48.8.1-.2.2-.5.2-.8s0-.5-.1-.8-.2-.5-.4-.6-.4-.3-.7-.4c-15.8-6.1-31.2-13.4-45.9-21.9-.3-.2-.5-.4-.7-.6s-.3-.6-.3-.9 0-.6.2-.9.3-.5.6-.7c3.1-2.3 6.2-4.7 9.1-7.1.3-.2.6-.4.9-.4s.7 0 1 .1c96.2 43.9 200.4 43.9 295.5 0 .3-.1.7-.2 1-.2s.7.2.9.4c2.9 2.4 6 4.9 9.1 7.2.2.2.4.4.6.7s.2.6.2.9-.1.6-.3.9-.4.5-.6.6c-14.7 8.6-30 15.9-45.9 21.8-.2.1-.5.2-.7.4s-.3.4-.4.7-.1.5-.1.8.1.5.2.8c8.8 17 18.8 33.3 30 48.8.2.3.6.6.9.7s.8.1 1.1 0c52.9-16.2 102.6-41.3 147.1-74.2.2-.2.4-.4.5-.6s.2-.5.2-.8c12.3-126.8-20.5-236.9-86.9-334.5zm-302 267.7c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.4 59.2-52.8 59.2m195.4 0c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.2 59.2-52.8 59.2"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://stackoverflow.com/users/1755598/codewizard" target="_blank" rel="noopener" title="Follow me on Stack Overflow"
+        class="md-social__link social-class__stackoverflow">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M291 311 95.3 269.7 87.1 309l195.7 41zm51-87L188.5 95.7 163 126.5l153.5 128.3zm-31.2 39.7L129.5 179l-16.7 36.5L294 300zM262.3 32l-32 24 119.3 160.3 32-24zm20.5 328h-200v39.7h200zm39.7 80H43V320H3v160h359.5V320h-40z"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="https://wa.me/972548122310" target="_blank" rel="noopener" title="Follow me on WhatsApp"
+        class="md-social__link social-class__whatsapp">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157m-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1s56.2 81.2 56.1 130.5c0 101.8-84.9 184.6-186.6 184.6m101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8s-14.3 18-17.6 21.8c-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7s-12.5-30.1-17.1-41.2c-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2s-9.7 1.4-14.8 6.9c-5.1 5.6-19.4 19-19.4 46.3s19.9 53.7 22.6 57.4c2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4s4.6-24.1 3.2-26.4c-1.3-2.5-5-3.9-10.5-6.6"/></svg>
+    </a>
+    
+    
+    
+    
+    
+    <a href="mailto:nirg@codewizard.co.il" target="_blank" rel="noopener" title="Email me"
+        class="md-social__link social-class__email">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4l208 156a48 48 0 0 0 57.6 0l208-156c12.1-9.1 19.2-23.3 19.2-38.4 0-26.5-21.5-48-48-48zM0 196v188c0 35.3 28.7 64 64 64h384c35.3 0 64-28.7 64-64V196L313.6 344.8c-34.1 25.6-81.1 25.6-115.2 0z"/></svg>
+    </a>
+    
+</div>
+      
+    </div>
+  </div>
+</footer>
+
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["announce.dismiss", "content.action.edit", "content.action.view", "content.code.annotate", "content.code.copy", "content.code.select", "content.footnote.tooltips", "content.tabs.link", "content.tooltips", "content.footer.last-updated", "content.footer.contributors", "navigation.expand", "navigation.footer", "navigation.indexes", "navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.sections", "navigation.tracking", "search.highlight", "search.share", "search.suggest", "toc.follow", "toc.integrate", "toc.sticky", "mermaid"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://buttons.github.io/buttons.js?v=1766553928"></script>
+      
+    
+  </body>
+</html>

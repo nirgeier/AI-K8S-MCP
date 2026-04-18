@@ -1,0 +1,11 @@
+apiVersion: kagent.dev/v1alpha2
+kind: ModelConfig
+metadata:
+  name: default-model-config
+  namespace: default
+spec:
+  provider: Ollama
+  model: gpt-oss:20b # The model already on your laptop
+  ollama:
+    # Use 'host.docker.internal' for Docker Desktop / Minikube
+    host: http://host.docker.internal:11434

@@ -1,0 +1,23 @@
+{
+  "name": "02-mcp-ollama",
+  "version": "1.0.0",
+  "description": "* In this lab, you'll master the art of creating sophisticated, production-ready `MCP` tools that can handle complex inputs, perform real-world operations, and return rich content types.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.25.3",
+    "@types/node": "^25.0.10",
+    "better-sqlite3": "^12.6.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13"
+  }
+}
