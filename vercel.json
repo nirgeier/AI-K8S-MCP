@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "buildCommand": "pip install -r requirements.txt && mkdocs build -f mkdocs.yml",
-  "outputDirectory": "mkdocs-site",
-  "installCommand": "pip install -r requirements.txt"
+  "framework": "other",
+  "outputDirectory": "mkdocs-site"
 }
