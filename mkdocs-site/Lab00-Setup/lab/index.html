@@ -769,23 +769,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="03. Install the K-Agent">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#verifty-k-agent-installation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Verifty K-Agent Installation
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -2085,8 +2068,8 @@
 
 <h1 id="lab-000-environment-setup">Lab 000 - Environment Setup</h1>
 <ul>
-<li>Welcome to <code>K-Agent</code> Labs! </li>
-<li>In this first lab, you'll set up your development environment with all the tools needed for the <code>K-Agent</code> infrastructure. </li>
+<li>Welcome to <code>K-Agent</code> Labs!</li>
+<li>In this first lab, you'll set up your development environment with all the tools needed for the <code>K-Agent</code> infrastructure.</li>
 <li>This lab covers <code>Docker</code>, <code>Kubernetes</code>, and the <code>K-Agent</code> labs environment container.</li>
 </ul>
 <hr />
@@ -2094,7 +2077,7 @@
 <ul>
 <li>Install and configure required tools (Docker, kubectl, Helm, Ollama, MCP Inspector, K-Agent etc.)</li>
 <li>Build and run the K-Agent labs environment (Docker container or locally)</li>
-<li>Verify Kubernetes cluster connectivity </li>
+<li>Verify Kubernetes cluster connectivity</li>
 <li>Prepare the MCP server setup</li>
 </ul>
 <hr />
@@ -2161,7 +2144,7 @@ sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 </code></pre>
 <p>=== "🐧 Linux (CentOS)"</p>
 <pre><code>```bash
-curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" 
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 ```
 </code></pre>
@@ -2243,9 +2226,11 @@ python3 --version
 brew install node
 ```
 </code></pre>
-<p>=== "🐧 Linux (Ubuntu/Debian)"
-    <code>bash
-    sudo apt-get install -y nodejs npm</code> </p>
+<p>=== "🐧 Linux (Ubuntu/Debian)"</p>
+<pre><code>```bash
+sudo apt-get install -y nodejs npm
+```
+</code></pre>
 <p>=== "🐧 Linux (CentOS)"</p>
 <pre><code>```bash
 sudo yum install -y nodejs npm
@@ -2266,17 +2251,19 @@ brew install ollama
 ollama serve
 ```
 </code></pre>
-<p>=== "🐧 Linux (Ubuntu/Debian)"
-    ```bash
-    curl -fsSL https://ollama.ai/install.sh | sh</p>
-<pre><code># Start Ollama service
+<p>=== "🐧 Linux (Ubuntu/Debian)"</p>
+<pre><code>```bash
+curl -fsSL https://ollama.ai/install.sh | sh
+
+# Start Ollama service
 ollama serve
 ```
 </code></pre>
-<p>=== "🐧 Linux (CentOS)"
-    ```bash
-    curl -fsSL https://ollama.ai/install.sh | sh</p>
-<pre><code># Start Ollama service
+<p>=== "🐧 Linux (CentOS)"</p>
+<pre><code>```bash
+curl -fsSL https://ollama.ai/install.sh | sh
+
+# Start Ollama service
 ollama serve
 ```
 </code></pre>
@@ -2293,14 +2280,14 @@ npm install -g @modelcontextprotocol/inspector
 ```
 </code></pre>
 <p>=== "🐧 Linux (Ubuntu/Debian)"
-    <code>bash
+<code>bash
     npm install -g @modelcontextprotocol/inspector</code></p>
 <p>=== "🐧 Linux (CentOS)"
-    <code>bash
+<code>bash
     npm install -g @modelcontextprotocol/inspector</code></p>
 <p>=== "☁️ GCP Cloud Shell"
-    <code>bash
-    npm install -g @modelcontextprotocol/inspector</code> </p>
+<code>bash
+    npm install -g @modelcontextprotocol/inspector</code></p>
 <h3 id="kubernetes-cluster-setup-minikube">Kubernetes Cluster Setup (minikube)</h3>
 <p>=== " macOS"</p>
 <pre><code>```bash
@@ -2308,11 +2295,11 @@ brew install minikube
 ```
 </code></pre>
 <p>=== "🐧 Linux (Ubuntu/Debian)"
-    <code>bash
+<code>bash
     curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-    sudo install minikube-linux-amd64 /usr/local/bin/minikube</code> 
+    sudo install minikube-linux-amd64 /usr/local/bin/minikube</code>
 === "🐧 Linux (CentOS)"
-    <code>bash
+<code>bash
     curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
     sudo install minikube-linux-amd64 /usr/local/bin/minikube</code>
 === "☁️ GCP Cloud Shell"</p>
@@ -2328,12 +2315,12 @@ brew install kind
 ```
 </code></pre>
 <p>=== "🐧 Linux (Ubuntu/Debian)"
-    <code>bash
+<code>bash
     curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-amd64
     chmod +x ./kind
     sudo mv ./kind /usr/local/bin/kind</code></p>
 <p>=== "🐧 Linux (CentOS)"
-    <code>bash
+<code>bash
     curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-amd64
     chmod +x ./kind
     sudo mv ./kind /usr/local/bin/kind</code></p>
@@ -2362,7 +2349,7 @@ node --version
 # Verify Ollama (if installed)
 ollama --version
 # Verify MCP Inspector
-mcp-inspector --version 
+mcp-inspector --version
 # Verify Kind (if installed)
 kind --version
 # Verify Minikube (if installed)
@@ -2376,31 +2363,33 @@ kubectl cluster-info
 <li>The <code>K-Agent</code> labs environment is the fundamental building block for all labs.</li>
 <li>Its an Open Source framework to write MCP tools and interact with Kubernetes clusters.</li>
 </ul>
-<p>=== " macOS" 
-    <code>bash
+<p>=== " macOS"
+<code>bash
     brew install kagent</code>
-=== "🐧 Linux (Ubuntu/Debian)" 
-    <code>bash
+=== "🐧 Linux (Ubuntu/Debian)"
+<code>bash
     curl https://raw.githubusercontent.com/kagent-dev/kagent/refs/heads/main/scripts/get-kagent | bash
 === "🐧 Linux (CentOS)"</code>bash
-    curl https://raw.githubusercontent.com/kagent-dev/kagent/refs/heads/main/scripts/get-kagent | bash
-    <code>=== "☁️ GCP Cloud Shell"</code>bash
-    curl https://raw.githubusercontent.com/kagent-dev/kagent/refs/heads/main/scripts/get-kagent | bash
-    ```</p>
-<h4 id="verifty-k-agent-installation">Verifty K-Agent Installation</h4>
-<p><code>bash
-  kagent version</code></p>
+curl https://raw.githubusercontent.com/kagent-dev/kagent/refs/heads/main/scripts/get-kagent | bash
+<code>=== "☁️ GCP Cloud Shell"</code>bash
+curl https://raw.githubusercontent.com/kagent-dev/kagent/refs/heads/main/scripts/get-kagent | bash</p>
+<pre><code>
+#### Verifty K-Agent Installation
+
+```bash
+kagent version
+</code></pre>
 <hr />
 <h2 id="04-ollama-setup">04. Ollama Setup</h2>
 <ul>
 <li>Ollama will be used as our LLLM model for the labs.</li>
 <li>Ollama is a local LLM server that allows you to run large language models on your machine.</li>
 <li>Ollama supports various models, for example: Qwen and Llama.</li>
-<li>We will ise the <code>qwen3-coder</code> model which is optimized for coding tasks or the <code>gpt-oos</code> model.  </li>
+<li>We will ise the <code>qwen3-coder</code> model which is optimized for coding tasks or the <code>gpt-oos</code> model.</li>
 </ul>
 <p>!!! info "Pulling Models (Ollama)"
-    * Pulling models can take a while depending on your internet speed and system performance.
-    * You can skip this step and return to it later when needed.</p>
+_ Pulling models can take a while depending on your internet speed and system performance.
+_ You can skip this step and return to it later when needed.</p>
 <h4 id="setup-ollama-models">Setup Ollama models</h4>
 <pre><code class="language-bash"># Start Ollama service
 ollama serve
@@ -2427,12 +2416,12 @@ ollama list
 <li>Let's verify your setup by running a simple test.</li>
 </ul>
 <h4 id="task-01-check-cluster-information">Task 01: Check Cluster Information</h4>
-<p>```bash</p>
-<p># Check cluster info
-  kubectl cluster-info
-  kubectl get nodes
-  kubectl get namespaces
-  ```</p>
+<pre><code class="language-bash">
+# Check cluster info
+kubectl cluster-info
+kubectl get nodes
+kubectl get namespaces
+</code></pre>
 <p><strong>Exercise 2: Test Container Environment</strong></p>
 <pre><code class="language-bash"># Start labs environment if not running
 cd labs-environment
@@ -2459,16 +2448,15 @@ Helm: v3.13.x
 <hr />
 <h2 id="08-troubleshooting">08. Troubleshooting</h2>
 <p>!!! warning "Container Won't Start"
-    If the container fails to start, check:
-    <code>bash
+If the container fails to start, check:
+<code>bash
     docker compose logs
     docker images | grep kagent
     docker ps -a</code></p>
 <p>!!! warning "Kubectl Not Working in Container"
-    If kubectl commands fail in the container:
-    ```bash
-    # Verify kubeconfig is mounted correctly
-    docker exec kagent-controller ls -la /root/.kube/</p>
+If kubectl commands fail in the container:
+```bash # Verify kubeconfig is mounted correctly
+docker exec kagent-controller ls -la /root/.kube/</p>
 <pre><code># Try copying kubeconfig again
 cp ~/.kube/config $(git rev-parse --show-toplevel)//runtime/.kube/config
 
@@ -2478,10 +2466,9 @@ docker compose restart
 ```
 </code></pre>
 <p>!!! warning "Platform Issues (M1/M2 Mac)"
-    If you encounter platform errors:
-    ```bash
-    # Verify platform in .env file
-    cat labs-environment/.env</p>
+If you encounter platform errors:
+```bash # Verify platform in .env file
+cat labs-environment/.env</p>
 <pre><code># Should show: TARGET_PLATFORM=linux/arm64
 # If not, update it manually
 ```
@@ -2555,7 +2542,7 @@ docker compose restart
   <span class="md-icon" title="Last update">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
   </span>
-  <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="January 26, 2026 00:56:59 UTC">January 26, 2026</span>
+  <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="April 18, 2026 21:06:55 UTC">April 18, 2026</span>
 </span>
 
   
