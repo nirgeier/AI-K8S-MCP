@@ -1,57 +1,62 @@
-name: Deploy MKdocs to GitHub Pages
+# -----------------------------------------------------------------------------
+# GitHub Actions Workflow: Deploy MkDocs to GitHub Pages
+#
+# This workflow automates the process of building and deploying an MkDocs site
+# to GitHub Pages using the traditional mkdocs gh-deploy command.
+#
+# Main Steps:
+#   1. Checkout the repository with full history.
+#   2. Set up Python environment.
+#   3. Install dependencies from requirements.txt.
+#   4. Build and deploy the MkDocs documentation site to gh-pages branch.
+#
+# This approach uses the mkdocs gh-deploy command which handles the GitHub Pages
+# deployment automatically without requiring special permissions.
+# -----------------------------------------------------------------------------
+
+name: Deploy GitHub Pages
 
 # DISABLED: Use 'vercel --prod' manually for deployment
 on:
   workflow_dispatch: null
   # Automatic push trigger disabled
 
+# Workflow permissions
 permissions:
   contents: write
 
+# Concurrency settings
+concurrency:
+  cancel-in-progress: false
+  group: "pages"
+
+# The deployment job
 jobs:
   deploy:
-    name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
-    
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
-      
-      - name: Set up Python
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-      
-      - name: Cache pip packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('mkdocs/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-      
+          cache: "pip"
+          python-version: "3.11"
+
       - name: Install dependencies
         run: |
+          python -m pip install --upgrade pip
           pip install -r mkdocs/requirements.txt
-      
+
       - name: Configure Git
         run: |
-          git config user.name github-actions[bot]
-          git config user.email github-actions[bot]@users.noreply.github.com
-      
-      - name: Generate mkdocs.yml
-        working-directory: 
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Deploy to GitHub Pages
         run: |
-          cat mkdocs/01-mkdocs-site.yml \
-              mkdocs/02-mkdocs-theme.yml \
-              mkdocs/03-mkdocs-extra.yml \
-              mkdocs/04-mkdocs-plugins.yml \
-              mkdocs/05-mkdocs-extensions.yml \
-              mkdocs/06-mkdocs-nav.yml > mkdocs.yml
-      
-      - name: Build and deploy
-        working-directory: 
-        run: |
-          mkdocs gh-deploy --force --clean --verbose
+          mkdocs gh-deploy --force
